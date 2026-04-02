@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ryan Wolfe — Jira Administrator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080c12;
+    --bg2: #0d1219;
+    --surface: #111827;
+    --surface2: #1a2332;
+    --accent: #00d4ff;
+    --accent2: #0066ff;
+    --accent3: #7b2fff;
+    --text: #e8edf5;
+    --text-muted: #6b7a8d;
+    --text-dim: #3d4f63;
+    --green: #00ff88;
+    --border: rgba(0, 212, 255, 0.15);
+    --glow: 0 0 20px rgba(0, 212, 255, 0.3);
+    --glow-strong: 0 0 40px rgba(0, 212, 255, 0.5);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    position: fixed;
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, background 0.2s;
+    box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent);
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(0, 212, 255, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: all 0.1s ease;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Grid background */
+  .grid-bg {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Noise overlay */
+  .noise {
+    position: fixed;
+    inset: 0;
+    opacity: 0.025;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Ambient glow blobs */
+  .blob {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
+    animation: drift 20s ease-in-out infinite;
+  }
+  .blob-1 { width: 600px; height: 600px; background: var(--accent2); top: -200px; left: -200px; }
+  .blob-2 { width: 500px; height: 500px; background: var(--accent3); bottom: -100px; right: -100px; animation-delay: -10s; }
+  .blob-3 { width: 400px; height: 400px; background: var(--accent); top: 40%; left: 60%; animation-delay: -5s; }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.05); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(8, 12, 18, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--text-muted); }
+
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--accent);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 48px 80px;
+    z-index: 2;
+  }
+
+  .hero-content { max-width: 900px; }
+
+  .hero-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.2s;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: inline-block;
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+  }
+
+  .hero-name {
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.4s;
+  }
+  .hero-name .accent-line {
+    display: block;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-title {
+    font-size: clamp(18px, 2.5vw, 26px);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.6s;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.8s;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1s;
+  }
+  .stat-item { }
+  .stat-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--accent);
+    display: block;
+    line-height: 1;
+    text-shadow: var(--glow);
+  }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-top: 6px;
+    display: block;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+  }
+
+  .btn-primary {
+    padding: 14px 28px;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: none;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+    transform: translateX(-100%);
+    transition: transform 0.5s;
+  }
+  .btn-primary:hover { box-shadow: 0 0 30px rgba(0, 212, 255, 0.6); transform: translateY(-2px); }
+  .btn-primary:hover::before { transform: translateX(100%); }
+
+  .btn-secondary {
+    padding: 14px 28px;
+    background: transparent;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border: 1px solid var(--border);
+    cursor: none;
+    transition: all 0.3s;
+    clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 12px 100%, 0 calc(100% - 12px));
+  }
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    background: rgba(0, 212, 255, 0.05);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+  }
+
+  /* Scrolling ticker */
+  .ticker {
+    position: relative;
+    z-index: 2;
+    padding: 16px 0;
+    background: rgba(0, 212, 255, 0.05);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .ticker-inner {
+    display: inline-flex;
+    animation: ticker 30s linear infinite;
+  }
+  .ticker-item {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0 32px;
+  }
+  .ticker-item span { color: var(--accent); margin-right: 8px; }
+
+  @keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* SECTIONS */
+  section {
+    position: relative;
+    z-index: 2;
+    padding: 100px 48px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 64px;
+  }
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-size: clamp(28px, 4vw, 44px);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, var(--border), transparent);
+  }
+
+  /* SKILLS */
+  #skills { background: var(--bg2); }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+
+  .skill-card {
+    background: var(--surface);
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    border: 1px solid transparent;
+  }
+  .skill-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,212,255,0.03), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .skill-card:hover {
+    border-color: var(--border);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), var(--glow);
+  }
+  .skill-card:hover::before { opacity: 1; }
+
+  .skill-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+  .skill-name {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .skill-desc {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    background: rgba(0, 212, 255, 0.08);
+    color: var(--accent);
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+  }
+
+  /* PORTFOLIO */
+  #portfolio { }
+
+  .projects-list { display: flex; flex-direction: column; gap: 2px; }
+
+  .project-card {
+    background: var(--surface);
+    border: 1px solid transparent;
+    padding: 40px 48px;
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 32px;
+    align-items: start;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .project-card::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--accent), var(--accent2));
+    transform: scaleY(0);
+    transition: transform 0.3s;
+  }
+  .project-card:hover {
+    border-color: var(--border);
+    background: var(--surface2);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .project-card:hover::after { transform: scaleY(1); }
+
+  .project-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    padding-top: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .project-body { }
+  .project-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    transition: color 0.2s;
+  }
+  .project-card:hover .project-title { color: var(--accent); }
+
+  .project-summary {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 16px;
+    max-width: 600px;
+  }
+
+  .project-tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .project-status {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    padding-top: 6px;
+  }
+  .status-live {
+    color: var(--green);
+    text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+  }
+  .status-live::before {
+    content: '● ';
+    animation: blink 1.5s ease-in-out infinite;
+  }
+  .status-building {
+    color: var(--text-dim);
+  }
+  .status-building::before { content: '○ '; }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* CERT */
+  #cert { background: var(--bg2); }
+
+  .cert-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    max-width: 900px;
+  }
+  .cert-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+  }
+  .cert-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .cert-name {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+  .cert-detail {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    line-height: 2;
+  }
+  .cert-detail strong { color: var(--accent); }
+
+  .cert-visual {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .cert-hex {
+    width: 160px;
+    height: 160px;
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,102,255,0.1));
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: pulse-hex 3s ease-in-out infinite;
+  }
+  .cert-hex::before {
+    content: '';
+    position: absolute;
+    inset: 3px;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    background: var(--surface);
+  }
+  .cert-hex-inner {
+    position: relative;
+    font-size: 48px;
+    z-index: 1;
+  }
+
+  @keyframes pulse-hex {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 255, 0); }
+    50% { box-shadow: 0 0 0 20px rgba(0, 212, 255, 0.05); }
+  }
+
+  /* CONTACT */
+  #contact { }
+
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    max-width: 800px;
+  }
+
+  .contact-item {
+    background: var(--surface);
+    padding: 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid transparent;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.3s;
+    cursor: none;
+  }
+  .contact-item:hover {
+    border-color: var(--border);
+    background: var(--surface2);
+    transform: translateX(4px);
+  }
+
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(0, 212, 255, 0.08);
+    border: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .contact-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .contact-value {
+    font-size: 14px;
+    color: var(--text);
+    font-weight: 600;
+  }
+  .contact-item:hover .contact-value { color: var(--accent); }
+
+  /* FOOTER */
+  footer {
+    position: relative;
+    z-index: 2;
+    padding: 32px 48px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+  .footer-cert {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+
+  /* Scanlines effect */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* Animations */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Glitch effect on name hover */
+  .hero-name:hover .accent-line {
+    animation: glitch 0.3s ease;
+  }
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 1px); filter: hue-rotate(20deg); }
+    40% { transform: translate(2px, -1px); filter: hue-rotate(-20deg); }
+    60% { transform: translate(-1px, 2px); }
+    80% { transform: translate(1px, -1px); filter: hue-rotate(10deg); }
+    100% { transform: translate(0); }
+  }
+
+  /* Terminal blink cursor */
+  .blink {
+    animation: blink 1s step-end infinite;
+    color: var(--accent);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    nav { padding: 16px 24px; }
+    .nav-links { display: none; }
+    .hero { padding: 100px 24px 60px; }
+    section { padding: 60px 24px; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    .project-card { grid-template-columns: 1fr; gap: 16px; padding: 28px 24px; }
+    .project-number { display: none; }
+    .cert-card { grid-template-columns: 1fr; gap: 32px; }
+    .contact-grid { grid-template-columns: 1fr; }
+    footer { flex-direction: column; gap: 8px; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div>
+<div class="scanlines"></div>
+<div class="noise"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">rw<span>//</span>portfolio</a>
+  <ul class="nav-links">
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#portfolio">Work</a></li>
+    <li><a href="#cert">Cert</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="resume.pdf" target="_blank">Resume ↗</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">Atlassian Platform Owner · Sacramento, CA</div>
+    <h1 class="hero-name">
+      Ryan Wolfe<span class="accent-line">Jira Admin.</span>
+    </h1>
+    <p class="hero-title">4 Years. Enterprise Scale. Zero Escalation Path.<span class="blink">_</span></p>
+    <p class="hero-desc">
+      I owned a 300+ user Atlassian Cloud environment from the ground up. Jira Software, Jira Service Management, Confluence. Built it, broke it, fixed it, and made it better. Every workflow, every automation rule, every permission scheme — mine to design, build, and defend.
+    </p>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-number">300+</span>
+        <span class="stat-label">Users Supported</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">55+</span>
+        <span class="stat-label">Jira Projects</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">100+</span>
+        <span class="stat-label">Automation Rules</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-number">53%</span>
+        <span class="stat-label">Manual Work Cut</span>
+      </div>
+    </div>
+    <div class="hero-cta">
+      <a href="#portfolio" class="btn-primary">View My Work</a>
+      <a href="#contact" class="btn-secondary">Get In Touch</a>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span>◆</span> Jira Software</span>
+    <span class="ticker-item"><span>◆</span> Jira Service Management</span>
+    <span class="ticker-item"><span>◆</span> Confluence Cloud</span>
+    <span class="ticker-item"><span>◆</span> JQL</span>
+    <span class="ticker-item"><span>◆</span> Jira Automation</span>
+    <span class="ticker-item"><span>◆</span> SQL</span>
+    <span class="ticker-item"><span>◆</span> ITSM Configuration</span>
+    <span class="ticker-item"><span>◆</span> SLA Management</span>
+    <span class="ticker-item"><span>◆</span> Access Governance</span>
+    <span class="ticker-item"><span>◆</span> Executive Reporting</span>
+    <span class="ticker-item"><span>◆</span> Requirements Gathering</span>
+    <span class="ticker-item"><span>◆</span> ACP-620 Certified</span>
+    <span class="ticker-item"><span>◆</span> Jira Software</span>
+    <span class="ticker-item"><span>◆</span> Jira Service Management</span>
+    <span class="ticker-item"><span>◆</span> Confluence Cloud</span>
+    <span class="ticker-item"><span>◆</span> JQL</span>
+    <span class="ticker-item"><span>◆</span> Jira Automation</span>
+    <span class="ticker-item"><span>◆</span> SQL</span>
+    <span class="ticker-item"><span>◆</span> ITSM Configuration</span>
+    <span class="ticker-item"><span>◆</span> SLA Management</span>
+    <span class="ticker-item"><span>◆</span> Access Governance</span>
+    <span class="ticker-item"><span>◆</span> Executive Reporting</span>
+    <span class="ticker-item"><span>◆</span> Requirements Gathering</span>
+    <span class="ticker-item"><span>◆</span> ACP-620 Certified</span>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-header reveal">
+    <span class="section-number">01</span>
+    <h2 class="section-title">Core Skills</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="skills-grid">
+    <div class="skill-card reveal">
+      <span class="skill-icon">⚙️</span>
+      <div class="skill-name">Jira Administration</div>
+      <div class="skill-desc">Full platform ownership. Workflows, permission schemes, issue types, screens, notification schemes. Built from zero, maintained at scale.</div>
+      <div class="skill-tags">
+        <span class="tag">Workflows</span>
+        <span class="tag">Permissions</span>
+        <span class="tag">Screens</span>
+        <span class="tag">Schemes</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🎯</span>
+      <div class="skill-name">JSM Service Desks</div>
+      <div class="skill-desc">~25 service desks built and maintained. Custom request types, SLAs, queue configs, approval workflows, portal design.</div>
+      <div class="skill-tags">
+        <span class="tag">SLA Config</span>
+        <span class="tag">Queues</span>
+        <span class="tag">Approvals</span>
+        <span class="tag">Portals</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">⚡</span>
+      <div class="skill-name">Automation</div>
+      <div class="skill-desc">100+ automation rules. Cross-project logic, scheduled triggers, conditional branching. Cut manual admin work by 53%.</div>
+      <div class="skill-tags">
+        <span class="tag">Jira Automation</span>
+        <span class="tag">Triggers</span>
+        <span class="tag">Conditions</span>
+        <span class="tag">Actions</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">📊</span>
+      <div class="skill-name">JQL & Reporting</div>
+      <div class="skill-desc">Advanced JQL filters, executive dashboards, Excel-based cross-team reporting with Power Query. Built for leadership, not just admins.</div>
+      <div class="skill-tags">
+        <span class="tag">JQL</span>
+        <span class="tag">Dashboards</span>
+        <span class="tag">Excel</span>
+        <span class="tag">SQL</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">📚</span>
+      <div class="skill-name">Confluence Admin</div>
+      <div class="skill-desc">Space governance, permission structures, page templates, JSM-integrated knowledge base. Documentation built to reduce support load.</div>
+      <div class="skill-tags">
+        <span class="tag">Spaces</span>
+        <span class="tag">Templates</span>
+        <span class="tag">Governance</span>
+        <span class="tag">KB Integration</span>
+      </div>
+    </div>
+    <div class="skill-card reveal">
+      <span class="skill-icon">🔐</span>
+      <div class="skill-name">Access Governance</div>
+      <div class="skill-desc">User lifecycle management, role-based access control, permission audits. 300+ accounts. Clean offboarding. No access sprawl.</div>
+      <div class="skill-tags">
+        <span class="tag">RBAC</span>
+        <span class="tag">Lifecycle Mgmt</span>
+        <span class="tag">Audits</span>
+        <span class="tag">Compliance</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio">
+  <div class="section-header reveal">
+    <span class="section-number">02</span>
+    <h2 class="section-title">Project Work</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="projects-list">
+
+    <div class="project-card reveal">
+      <div class="project-number">P-001</div>
+      <div class="project-body">
+        <div class="project-title">Intake Service Desk with Auto-Routing</div>
+        <div class="project-summary">Departments were submitting IT requests into a single inbox. No routing, no SLA, no accountability. Built a structured JSM intake portal that auto-categorized requests and routed linked child tickets to the correct department projects. Eliminated misrouted tickets entirely.</div>
+        <div class="project-tools">
+          <span class="tag">JSM</span>
+          <span class="tag">Jira Automation</span>
+          <span class="tag">Confluence</span>
+          <span class="tag">JQL</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-number">P-002</div>
+      <div class="project-body">
+        <div class="project-title">SEO Team Weekly Automation</div>
+        <div class="project-summary">Shadowed the SEO team through their weekly task creation cycle, documented every step and dependency, then automated the entire process. The full weekly Jira task set now generates automatically with correct assignees, due dates, and linked dependencies.</div>
+        <div class="project-tools">
+          <span class="tag">Jira Automation</span>
+          <span class="tag">Jira Software</span>
+          <span class="tag">Confluence</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-number">P-003</div>
+      <div class="project-body">
+        <div class="project-title">Executive Reporting Dashboard</div>
+        <div class="project-summary">Leadership needed cross-department visibility into project health and release status. Evaluated native dashboards, Marketplace apps, and Excel-based solutions against documented requirements. Built a JQL-powered Excel dashboard with documented refresh process and trained the team to maintain it independently.</div>
+        <div class="project-tools">
+          <span class="tag">JQL</span>
+          <span class="tag">Excel</span>
+          <span class="tag">Power Query</span>
+          <span class="tag">Jira Dashboards</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-number">P-004</div>
+      <div class="project-body">
+        <div class="project-title">JSM Service Desk Full Buildout</div>
+        <div class="project-summary">End-to-end JSM implementation: scoping, requirements gathering, portal configuration, workflow design, SLA setup, automation rules, approval chains, UAT, and team onboarding. Documented every phase so the department could operate without ongoing admin support.</div>
+        <div class="project-tools">
+          <span class="tag">JSM</span>
+          <span class="tag">Jira Automation</span>
+          <span class="tag">Confluence</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-number">P-005</div>
+      <div class="project-body">
+        <div class="project-title">Marketplace App Evaluation Framework</div>
+        <div class="project-summary">Built a repeatable evaluation process for Atlassian Marketplace apps: compatibility testing, performance impact assessment, sandbox testing of target features, cost vs. value analysis, and a deployment/rollback procedure. Used before every app deployment.</div>
+        <div class="project-tools">
+          <span class="tag">Atlassian Marketplace</span>
+          <span class="tag">Jira Admin</span>
+          <span class="tag">Sandbox Testing</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
+    </div>
+
+    <div class="project-card reveal">
+      <div class="project-number">P-006</div>
+      <div class="project-body">
+        <div class="project-title">Platform Governance Documentation</div>
+        <div class="project-summary">Full governance documentation set for an enterprise Atlassian environment: permission scheme maps, workflow configuration notes, automation rule index, and user lifecycle SOPs. Built so any incoming admin could run the platform without relying on institutional knowledge.</div>
+        <div class="project-tools">
+          <span class="tag">Confluence</span>
+          <span class="tag">Jira Admin</span>
+          <span class="tag">draw.io</span>
+          <span class="tag">RBAC</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CERT -->
+<section id="cert">
+  <div class="section-header reveal">
+    <span class="section-number">03</span>
+    <h2 class="section-title">Certification</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="cert-card reveal">
+    <div>
+      <div class="cert-badge">Atlassian Certified Professional</div>
+      <div class="cert-name">ACP-620: Managing Jira Projects for Cloud</div>
+      <div class="cert-detail">
+        ID: <strong>43YQPFE21B4QQYSE</strong><br>
+        Issued: <strong>February 2024</strong><br>
+        Valid Through: <strong>February 2028</strong><br><br>
+        Validates expertise in Jira project configuration, workflow design, permission schemes, reporting, and service management.
+      </div>
+    </div>
+    <div class="cert-visual">
+      <div class="cert-hex">
+        <span class="cert-hex-inner">🏆</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-header reveal">
+    <span class="section-number">04</span>
+    <h2 class="section-title">Contact</h2>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="contact-grid reveal">
+    <a href="mailto:rwolfe1979@gmail.com" class="contact-item">
+      <div class="contact-icon">✉</div>
+      <div>
+        <div class="contact-label">Email</div>
+        <div class="contact-value">rwolfe1979@gmail.com</div>
+      </div>
+    </a>
+    <a href="tel:5303218044" class="contact-item">
+      <div class="contact-icon">📞</div>
+      <div>
+        <div class="contact-label">Phone</div>
+        <div class="contact-value">530.321.8044</div>
+      </div>
+    </a>
+    <a href="https://www.linkedin.com/in/ryan-wolfe-73189080" target="_blank" class="contact-item">
+      <div class="contact-icon">in</div>
+      <div>
+        <div class="contact-label">LinkedIn</div>
+        <div class="contact-value">ryan-wolfe-73189080</div>
+      </div>
+    </a>
+    <a href="https://rwolfe1979.atlassian.net" target="_blank" class="contact-item">
+      <div class="contact-icon">⚡</div>
+      <div>
+        <div class="contact-label">Live Atlassian Instance</div>
+        <div class="contact-value">rwolfe1979.atlassian.net</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursor.style.left = mouseX + 'px';
+    cursor.style.top = mouseY + 'px';
+  });
+
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button, .project-card, .skill-card, .contact-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '16px';
+      cursor.style.height = '16px';
+      ring.style.width = '48px';
+      ring.style.height = '48px';
+      ring.style.borderColor = 'rgba(0, 212, 255, 0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '8px';
+      cursor.style.height = '8px';
+      ring.style.width = '32px';
+      ring.style.height = '32px';
+      ring.style.borderColor = 'rgba(0, 212, 255, 0.5)';
+    });
+  });
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(el => observer.observe(el));
+
+  // Stagger reveal within sections
+  document.querySelectorAll('.skills-grid .reveal, .projects-list .reveal').forEach((el, i) => {
+    el.style.transitionDelay = (i * 0.08) + 's';
+  });
+
+  // Counter animation
+  const counters = document.querySelectorAll('.stat-number');
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const text = el.textContent;
+        const num = parseInt(text.replace(/\D/g, ''));
+        const suffix = text.replace(/[\d]/g, '');
+        let start = 0;
+        const duration = 1500;
+        const step = num / (duration / 16);
+        const timer = setInterval(() => {
+          start += step;
+          if (start >= num) {
+            el.textContent = text;
+            clearInterval(timer);
+          } else {
+            el.textContent = Math.floor(start) + suffix;
+          }
+        }, 16);
+        countObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(c => countObserver.observe(c));
+</script>
+
+</body>
+</html>
