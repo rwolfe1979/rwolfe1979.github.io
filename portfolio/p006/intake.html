@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jira Project Intake & Standards Guide — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080c12;--bg2:#0d1219;--surface:#111827;--surface2:#1a2332;--accent:#00d4ff;--accent2:#0066ff;--accent3:#7b2fff;--text:#e8edf5;--text-muted:#6b7a8d;--text-dim:#3d4f63;--green:#00ff88;--border:rgba(0,212,255,0.15);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none;}
+  .cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;box-shadow:0 0 10px var(--accent),0 0 20px var(--accent);}
+  .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(0,212,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease;}
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+  .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+  .blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.05;pointer-events:none;z-index:0;animation:drift 20s ease-in-out infinite;}
+  .blob-1{width:500px;height:500px;background:var(--accent2);top:-100px;left:-100px;}
+  .blob-2{width:300px;height:300px;background:var(--accent3);bottom:-50px;right:-50px;animation-delay:-10s;}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-30px) scale(1.05);}66%{transform:translate(-20px,20px) scale(0.95);}}
+  .scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:1;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,12,18,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:.1em;text-decoration:none;}
+  .nav-logo span{color:var(--text-muted);}
+  .nav-back{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  /* Two-column layout */
+  .page-outer{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:90px 48px 80px;}
+
+  .breadcrumb{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:40px;display:flex;align-items:center;gap:12px;}
+  .breadcrumb a{color:var(--text-dim);text-decoration:none;transition:color .2s;}
+  .breadcrumb a:hover{color:var(--accent);}
+  .breadcrumb span{color:var(--accent);}
+
+  .doc-header{margin-bottom:48px;}
+  .doc-eyebrow{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+  .doc-eyebrow::before{content:'';display:inline-block;width:40px;height:1px;background:var(--accent);}
+  .doc-title-h1{font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:12px;}
+  .doc-meta-line{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;margin-bottom:24px;}
+  .doc-download{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);padding:10px 20px;transition:all .3s;}
+  .doc-download:hover{border-color:var(--accent);background:rgba(0,212,255,0.05);}
+
+  .doc-divider{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin:32px 0;}
+
+  .two-col{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start;}
+
+  /* TOC sidebar */
+  .toc{position:sticky;top:80px;}
+  .toc-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .toc-list{list-style:none;display:flex;flex-direction:column;gap:2px;}
+  .toc-list li a{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);text-decoration:none;letter-spacing:.05em;display:block;padding:6px 10px;border-left:2px solid transparent;transition:all .2s;line-height:1.4;}
+  .toc-list li a:hover{color:var(--accent);border-left-color:var(--accent);background:rgba(0,212,255,0.04);}
+  .toc-list li a.sub{padding-left:20px;font-size:9px;}
+  .toc-list li a.subsub{padding-left:30px;font-size:9px;color:var(--text-dim);}
+
+  /* Document content */
+  .doc-content{}
+  .doc-section{margin-bottom:48px;}
+  h2.section-h{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text);}
+  h3.sub-h{font-size:16px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px;margin-top:24px;color:var(--accent);}
+  h4.subsub-h{font-size:14px;font-weight:700;margin-bottom:10px;margin-top:20px;color:var(--text-muted);}
+  p.doc-p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:14px;}
+  p.doc-p strong{color:var(--text);}
+  ul.doc-ul{margin:12px 0 16px 0;display:flex;flex-direction:column;gap:8px;}
+  ul.doc-ul li{font-size:15px;line-height:1.6;color:var(--text-muted);padding-left:20px;position:relative;}
+  ul.doc-ul li::before{content:'◆';position:absolute;left:0;color:var(--accent);font-size:8px;top:6px;}
+  ul.doc-ul li strong{color:var(--text);}
+
+  /* Tables */
+  .doc-table-wrap{overflow-x:auto;margin:20px 0 24px;}
+  table.doc-table{width:100%;border-collapse:collapse;font-size:13px;}
+  table.doc-table th{background:rgba(0,212,255,0.08);color:var(--accent);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:12px 16px;text-align:left;border:1px solid rgba(0,212,255,0.12);white-space:nowrap;}
+  table.doc-table td{padding:12px 16px;border:1px solid rgba(255,255,255,0.05);color:var(--text-muted);vertical-align:top;line-height:1.5;}
+  table.doc-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  table.doc-table tr:hover td{background:rgba(0,212,255,0.03);}
+  .req-yes{color:var(--green);font-family:'Space Mono',monospace;font-size:11px;}
+  .req-no{color:var(--text-dim);font-family:'Space Mono',monospace;font-size:11px;}
+  .req-jsm{color:var(--accent);font-family:'Space Mono',monospace;font-size:11px;}
+
+  .doc-footer-note{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.05em;border-top:1px solid var(--border);padding-top:20px;margin-top:48px;}
+
+  .nav-doc{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:32px;border-top:1px solid var(--border);}
+  .nav-doc a{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-doc a:hover{color:var(--accent);}
+
+  footer{position:relative;z-index:2;padding:32px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .footer-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:.05em;}
+  .footer-cert{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;}
+
+  @media(max-width:900px){.two-col{grid-template-columns:1fr;}.toc{display:none;}}
+  @media(max-width:768px){nav{padding:16px 24px;}.page-outer{padding:90px 24px 60px;}footer{flex-direction:column;gap:8px;text-align:center;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← P-006 Overview</a>
+</nav>
+
+<div class="page-outer">
+
+  <div class="breadcrumb">
+    <a href="../../">Home</a><span>›</span><a href="index.html">P-006</a><span>›</span><span>Intake & Standards Guide</span>
+  </div>
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">P-006 · Document 01</div>
+    <h1 class="doc-title-h1">Jira Project Intake & Standards Guide</h1>
+    <div class="doc-meta-line">Atlassian Platform Governance &nbsp;·&nbsp; 2021–2026 &nbsp;·&nbsp; Last reviewed: January 2026</div>
+    <a href="../../assets/docs/P006_Jira_Project_Intake_Standards_Guide.pdf" target="_blank" class="doc-download">Download PDF ↗</a>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="two-col">
+
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#s1">1. Purpose</a></li>
+        <li><a href="#s2">2. Scope</a></li>
+        <li><a href="#s3">3. When to Request</a></li>
+        <li><a href="#s4">4. Intake Process</a></li>
+        <li><a href="#s41" class="sub">4.1 Submit a Request</a></li>
+        <li><a href="#s42" class="sub">4.2 Review and Approval</a></li>
+        <li><a href="#s43" class="sub">4.3 Configuration and Handoff</a></li>
+        <li><a href="#s5">5. Naming Conventions</a></li>
+        <li><a href="#s6">6. Standard Configuration</a></li>
+        <li><a href="#s61" class="sub">6.1 Issue Types</a></li>
+        <li><a href="#s611" class="subsub">6.1.1 JSM</a></li>
+        <li><a href="#s612" class="subsub">6.1.2 Jira Software</a></li>
+        <li><a href="#s62" class="sub">6.2 Screens & Custom Fields</a></li>
+        <li><a href="#s63" class="sub">6.3 Workflows</a></li>
+        <li><a href="#s64" class="sub">6.4 Permission Scheme</a></li>
+        <li><a href="#s65" class="sub">6.5 Notification Scheme</a></li>
+        <li><a href="#s7">7. Project Lead Responsibilities</a></li>
+        <li><a href="#s8">8. Review and Maintenance</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="s1">
+        <h2 class="section-h">1. Purpose</h2>
+        <p class="doc-p">This document defines the process for requesting a new Jira project, the standards every project must meet, and the criteria used to evaluate whether a project request is appropriate. It exists so that new projects are consistent, maintainable, and actually useful to the teams that use them.</p>
+      </div>
+
+      <div class="doc-section" id="s2">
+        <h2 class="section-h">2. Scope</h2>
+        <p class="doc-p">Applies to all Jira Software and Jira Service Management project requests across all departments. Any team requesting a new Jira project follows this process, regardless of department or seniority of the requestor.</p>
+      </div>
+
+      <div class="doc-section" id="s3">
+        <h2 class="section-h">3. When to Request a New Project</h2>
+        <p class="doc-p">Not every workflow needs its own Jira project. Before submitting a request, the requestor should confirm that the work meets at least one of the following criteria:</p>
+        <ul class="doc-ul">
+          <li>The work involves a distinct team, department, or cross-functional group with its own workflows and ownership</li>
+          <li>The work has a defined lifecycle — requests come in, get assigned, get resolved, and close</li>
+          <li>There is a need to track status, priority, or accountability that cannot be handled in an existing project</li>
+          <li>The team will actively manage and maintain the project on an ongoing basis</li>
+        </ul>
+        <p class="doc-p">If the request is better served by a board in an existing project, a new issue type, or a Confluence page, the administrator will advise the requestor accordingly before any configuration work begins.</p>
+      </div>
+
+      <div class="doc-section" id="s4">
+        <h2 class="section-h">4. Intake Process</h2>
+
+        <h3 class="sub-h" id="s41">4.1 Submit a Request</h3>
+        <p class="doc-p">All new project requests are submitted through the Jira Request Portal — a dedicated JSM service desk maintained independently by the Jira administrator, separate from the general IT service desk.</p>
+        <p class="doc-p">The request form collects the following information:</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Field</th><th>Required?</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Project name (proposed)</td><td><span class="req-yes">Yes</span></td><td>Must follow naming conventions in Section 5</td></tr>
+              <tr><td>Department or team owner</td><td><span class="req-yes">Yes</span></td><td>The team responsible for maintaining the project</td></tr>
+              <tr><td>Project lead</td><td><span class="req-yes">Yes</span></td><td>Single named individual, not a group</td></tr>
+              <tr><td>Project type</td><td><span class="req-yes">Yes</span></td><td>Jira Software (sprints/kanban) or Jira Service Management (service desk)</td></tr>
+              <tr><td>Customer type (JSM only)</td><td><span class="req-jsm">JSM only</span></td><td>Are people submitting tickets internal employees, external users, or both? Determines portal access configuration and whether external customer accounts are needed.</td></tr>
+              <tr><td>Customer volume estimate (JSM only)</td><td><span class="req-jsm">JSM only</span></td><td>Approximate number of customers expected. Informs queue structure and SLA design.</td></tr>
+              <tr><td>Business purpose</td><td><span class="req-yes">Yes</span></td><td>What problem does this project solve?</td></tr>
+              <tr><td>Estimated agent/user count</td><td><span class="req-yes">Yes</span></td><td>Approximate number of people who will actively work in this project</td></tr>
+              <tr><td>Permission level needed</td><td><span class="req-yes">Yes</span></td><td>What level of access do team members need? Options align to the standard permission tiers: View Only, View and Comment, View/Comment/Create, Member (agent), Lead, or Manager/Admin. Access is granted via Permission Groups tied to position — not configured per individual.</td></tr>
+              <tr><td>Workflow requirements</td><td><span class="req-no">No</span></td><td>Custom statuses, transitions, or approval steps needed</td></tr>
+              <tr><td>SLA requirements (JSM only)</td><td><span class="req-jsm">JSM only</span></td><td>Response and resolution targets, business hours calendar, and escalation rules</td></tr>
+              <tr><td>Screen and field requirements</td><td><span class="req-no">No</span></td><td>Any fields needed beyond the standard set. Existing custom fields are reused where possible.</td></tr>
+              <tr><td>Integration needs</td><td><span class="req-no">No</span></td><td>Links to other projects, Confluence spaces, or external tools</td></tr>
+              <tr><td>Requested go-live date</td><td><span class="req-no">No</span></td><td>Used for scheduling — not a commitment</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="sub-h" id="s42">4.2 Review and Approval</h3>
+        <p class="doc-p">The Jira administrator reviews each request within 3 business days. The review checks that:</p>
+        <ul class="doc-ul">
+          <li>The request includes complete information</li>
+          <li>The use case is appropriate for Jira and can't be met by an existing project</li>
+          <li>The proposed naming and structure follows platform standards</li>
+          <li>The permission level requested aligns to an existing tier and can be handled through the standard Permission Group structure</li>
+          <li>The request doesn't create a permission or governance conflict with existing projects</li>
+        </ul>
+        <p class="doc-p">If approved, the administrator schedules configuration and notifies the project lead. If the request needs clarification or the use case is better served another way, the administrator contacts the requestor directly before any work begins.</p>
+
+        <h3 class="sub-h" id="s43">4.3 Configuration and Handoff</h3>
+        <p class="doc-p">Once approved, the administrator configures the project according to the standards in Section 5 and the specific requirements captured in the request. This includes issue types and request type categories, screen and field configuration, workflow setup, and Permission Group assignment.</p>
+        <p class="doc-p">Before go-live, the project lead is walked through the configuration, confirms it matches their requirements, and signs off. The administrator documents the project in the internal project registry.</p>
+      </div>
+
+      <div class="doc-section" id="s5">
+        <h2 class="section-h">5. Project Naming Conventions</h2>
+        <p class="doc-p">All Jira projects follow a consistent naming pattern so that projects are identifiable at a glance in dashboards, filters, and reports.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Element</th><th>Standard</th><th>Example</th></tr></thead>
+            <tbody>
+              <tr><td>Project name — Jira Software</td><td>Department or team name in plain language. No abbreviations unless widely understood by the whole organization.</td><td>Product Roadmap, Marketing Campaigns</td></tr>
+              <tr><td>Project key — Jira Software</td><td>2–5 uppercase letters derived from the project name, unique across the instance.</td><td>PROD, MKT</td></tr>
+              <tr><td>Project name — JSM</td><td>Team or function name followed by "Desk" or "Support" to distinguish from Software projects.</td><td>IT Desk, Finance Support, Facilities Desk</td></tr>
+              <tr><td>Project key — JSM</td><td>Includes "SD" to identify it as a service desk. Format: [abbreviation]SD.</td><td>ITSD, FSD (Facilities), HRSD (HR)</td></tr>
+              <tr><td>Keys to avoid</td><td>Keys that duplicate or closely resemble existing keys. Check the key list before submitting.</td><td>If ITSD exists, don't use ITS or ITD</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section" id="s6">
+        <h2 class="section-h">6. Standard Configuration Applied to All Projects</h2>
+        <p class="doc-p">Every new project is configured with the following baseline settings. Deviations from these standards require documented justification and administrator sign-off.</p>
+
+        <h3 class="sub-h" id="s61">6.1 Issue Types and Request Type Categories</h3>
+        <p class="doc-p">Issue types are configured in two steps for both project types, starting with broad categories before defining the specific types within them.</p>
+
+        <h4 class="subsub-h" id="s611">6.1.1 Jira Service Management</h4>
+        <p class="doc-p"><strong>Step 1 — Define request categories.</strong> Incoming work is first grouped into broad categories that reflect the types of requests the service desk handles (for example: Access Requests, Hardware, Software, Onboarding, Reporting). Categories make the customer portal easier to navigate and allow issue types to be reused across similar request types.</p>
+        <p class="doc-p"><strong>Step 2 — Assign or build issue types per category.</strong> Each category maps to one or more issue types. A single issue type can back multiple request types within the same category. Standard issue types (Service Request, Incident, Change) are used where they fit. Custom issue types are built when the standard set doesn't match the team's workflow.</p>
+
+        <h4 class="subsub-h" id="s612">6.1.2 Jira Software</h4>
+        <p class="doc-p"><strong>Step 1 — Define work categories.</strong> Work is grouped by type: planned work (features, stories), unplanned work (bugs, incidents), operational tasks, and sub-tasks. Categories reflect how the team actually thinks about their workload.</p>
+        <p class="doc-p"><strong>Step 2 — Assign issue types per category.</strong> Standard issue types (Story, Task, Bug, Sub-task) are used where they fit. Custom issue types are added when the team's workflow requires a type that doesn't map cleanly to the standard set.</p>
+        <p class="doc-p">Both project types follow the same principle: categories come first, types come second. This prevents issue type sprawl and makes it easier to build screens and filters that work across similar projects.</p>
+
+        <h3 class="sub-h" id="s62">6.2 Screens and Custom Fields</h3>
+        <p class="doc-p">Screen configuration follows issue type setup. The goal is to reuse existing screens and custom fields wherever possible. New screens and fields are only created when the existing set genuinely can't meet the requirement.</p>
+        <ul class="doc-ul">
+          <li>Existing custom fields are audited before any new field is created. If a field already exists and collects the right data, it is reused even if it was originally built for a different project.</li>
+          <li>Screen reuse is attempted first. If an existing screen covers the fields needed for a new issue type, it is applied rather than duplicated.</li>
+          <li>When a custom screen is required, it is built to serve the specific issue type and configured for the correct contexts (create, edit, view) to avoid fields appearing where they're not relevant.</li>
+          <li>All custom fields are named clearly and documented with their purpose, field type, and which projects use them. This prevents duplicate fields being created under different names for the same purpose.</li>
+        </ul>
+
+        <h3 class="sub-h" id="s63">6.3 Workflows</h3>
+        <p class="doc-p">Projects are configured with a workflow appropriate to the team's process. Standard workflows are applied where they fit. Custom workflows are built when the team requires statuses, transitions, or conditions that the standard set can't support.</p>
+        <p class="doc-p">Custom workflows are documented before deployment. The documentation covers each status, transition logic, and any conditions or validators applied. This ensures the workflow can be maintained or modified without relying on institutional knowledge.</p>
+
+        <h3 class="sub-h" id="s64">6.4 Permission Scheme</h3>
+        <p class="doc-p">All projects use a single universal permission scheme. Permissions are not configured per project. Instead, access is controlled through Permission Groups that map to standardized project roles. This approach keeps the permission model consistent across the environment and eliminates discrepancies between projects.</p>
+        <p class="doc-p">The universal scheme defines the following project role tiers:</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Role Tier</th><th>What They Can Do</th></tr></thead>
+            <tbody>
+              <tr><td>View Only</td><td>Read access to the project — can see issues and comments but cannot create or edit</td></tr>
+              <tr><td>View and Comment</td><td>Can read and add comments to existing issues, but cannot create new issues</td></tr>
+              <tr><td>View, Comment, and Create</td><td>Can read, comment, and create new issues — standard for stakeholders who submit requests</td></tr>
+              <tr><td>Member / Agent</td><td>Full working access — can create, edit, transition, and resolve issues. Standard for team members and JSM agents.</td></tr>
+              <tr><td>Lead</td><td>Member-level access plus the ability to manage components, versions, and basic project configuration. Cannot modify permission schemes or global settings.</td></tr>
+              <tr><td>Manager / Admin</td><td>Full project administration rights within the project scope. Cannot modify global schemes or platform-level settings — those remain with the platform admin.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="doc-p">Permission Groups are assigned to these roles at the platform admin level. When a user is onboarded, they are added to the Permission Group that matches their position. This ensures they automatically have the correct access across all relevant projects without requiring individual project-level configuration.</p>
+        <p class="doc-p">Project leads rarely need to touch permissions directly. The administrator manages Permission Group assignments — a broader responsibility than what is typically expected of a project-level admin role.</p>
+
+        <h3 class="sub-h" id="s65">6.5 Notification Scheme</h3>
+        <p class="doc-p">All projects use a single universal notification scheme. Notification configuration is not done at the project level. This keeps notification behavior consistent across the environment and prevents the discrepancies that arise when individual teams customize their own schemes.</p>
+        <p class="doc-p">Teams can request adjustments to notification behavior through the standard change request process. Changes are evaluated against the universal scheme to determine whether a project-level override is warranted or whether the universal scheme should be updated for all projects.</p>
+      </div>
+
+      <div class="doc-section" id="s7">
+        <h2 class="section-h">7. Project Lead Responsibilities</h2>
+        <p class="doc-p">The project lead named at intake is accountable for the following on an ongoing basis:</p>
+        <ul class="doc-ul">
+          <li>Keeping the project active — requesting archival or closure when the project is no longer in use</li>
+          <li>Flagging access changes to the administrator when team members change roles or leave the team</li>
+          <li>Escalating configuration change requests to the Jira administrator through the Jira Request Portal</li>
+          <li>Responding to quarterly access audits within the required timeframe</li>
+        </ul>
+        <p class="doc-p">Project leads are not expected to manage permissions directly. Permission Group assignments are handled by the administrator. If a lead adds an individual user directly to a project role outside of the Permission Group structure, the administrator will review and standardize the assignment at the next audit.</p>
+      </div>
+
+      <div class="doc-section" id="s8">
+        <h2 class="section-h">8. Review and Maintenance</h2>
+        <p class="doc-p">The Jira administrator conducts a quarterly review of all active projects. Projects with no activity in 90 days are flagged for review. Project leads are notified and given 10 business days to confirm the project should remain active or to request archival.</p>
+      </div>
+
+      <div class="doc-footer-note">Document owner: Jira Administrator &nbsp;·&nbsp; Last reviewed: January 2026 &nbsp;·&nbsp; Next review: April 2026</div>
+
+      <div class="nav-doc">
+        <a href="index.html">← P-006 Overview</a>
+        <a href="onboarding.html">User Access & Onboarding Policy →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+
+  // Highlight active TOC item on scroll
+  const sections=document.querySelectorAll('[id^="s"]');
+  const tocLinks=document.querySelectorAll('.toc-list a');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        tocLinks.forEach(l=>l.style.color='');
+        const active=document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+        if(active)active.style.color='var(--accent)';
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

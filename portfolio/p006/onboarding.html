@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Access & Onboarding Policy — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080c12;--bg2:#0d1219;--surface:#111827;--surface2:#1a2332;--accent:#00d4ff;--accent2:#0066ff;--accent3:#7b2fff;--text:#e8edf5;--text-muted:#6b7a8d;--text-dim:#3d4f63;--green:#00ff88;--border:rgba(0,212,255,0.15);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none;}
+  .cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;box-shadow:0 0 10px var(--accent),0 0 20px var(--accent);}
+  .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(0,212,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease;}
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+  .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+  .blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.05;pointer-events:none;z-index:0;animation:drift 20s ease-in-out infinite;}
+  .blob-1{width:500px;height:500px;background:var(--accent3);top:-100px;right:-100px;}
+  .blob-2{width:300px;height:300px;background:var(--accent2);bottom:-50px;left:-50px;animation-delay:-10s;}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-30px) scale(1.05);}66%{transform:translate(-20px,20px) scale(0.95);}}
+  .scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:1;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,12,18,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:.1em;text-decoration:none;}
+  .nav-logo span{color:var(--text-muted);}
+  .nav-back{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  .page-outer{position:relative;z-index:2;max-width:1100px;margin:0 auto;padding:90px 48px 80px;}
+  .breadcrumb{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:40px;display:flex;align-items:center;gap:12px;}
+  .breadcrumb a{color:var(--text-dim);text-decoration:none;transition:color .2s;}
+  .breadcrumb a:hover{color:var(--accent);}
+  .breadcrumb span{color:var(--accent);}
+  .doc-header{margin-bottom:48px;}
+  .doc-eyebrow{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+  .doc-eyebrow::before{content:'';display:inline-block;width:40px;height:1px;background:var(--accent);}
+  .doc-title-h1{font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:12px;}
+  .doc-meta-line{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;margin-bottom:24px;}
+  .doc-download{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);padding:10px 20px;transition:all .3s;}
+  .doc-download:hover{border-color:var(--accent);background:rgba(0,212,255,0.05);}
+  .doc-divider{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin:32px 0;}
+
+  .two-col{display:grid;grid-template-columns:220px 1fr;gap:48px;align-items:start;}
+  .toc{position:sticky;top:80px;}
+  .toc-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .toc-list{list-style:none;display:flex;flex-direction:column;gap:2px;}
+  .toc-list li a{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);text-decoration:none;letter-spacing:.05em;display:block;padding:6px 10px;border-left:2px solid transparent;transition:all .2s;line-height:1.4;}
+  .toc-list li a:hover{color:var(--accent);border-left-color:var(--accent);background:rgba(0,212,255,0.04);}
+  .toc-list li a.sub{padding-left:20px;font-size:9px;}
+
+  .doc-section{margin-bottom:48px;}
+  h2.section-h{font-size:22px;font-weight:800;letter-spacing:-.02em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);color:var(--text);}
+  h3.sub-h{font-size:16px;font-weight:700;letter-spacing:-.01em;margin-bottom:12px;margin-top:24px;color:var(--accent);}
+  p.doc-p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:14px;}
+  p.doc-p strong{color:var(--text);}
+  ul.doc-ul{margin:12px 0 16px 0;display:flex;flex-direction:column;gap:8px;}
+  ul.doc-ul li{font-size:15px;line-height:1.6;color:var(--text-muted);padding-left:20px;position:relative;}
+  ul.doc-ul li::before{content:'◆';position:absolute;left:0;color:var(--accent);font-size:8px;top:6px;}
+  ul.doc-ul li strong{color:var(--text);}
+
+  .doc-table-wrap{overflow-x:auto;margin:20px 0 24px;}
+  table.doc-table{width:100%;border-collapse:collapse;font-size:13px;}
+  table.doc-table th{background:rgba(0,212,255,0.08);color:var(--accent);font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;padding:12px 16px;text-align:left;border:1px solid rgba(0,212,255,0.12);}
+  table.doc-table td{padding:12px 16px;border:1px solid rgba(255,255,255,0.05);color:var(--text-muted);vertical-align:top;line-height:1.5;}
+  table.doc-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  table.doc-table tr:hover td{background:rgba(0,212,255,0.03);}
+
+  /* Callout box */
+  .callout{background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.2);border-left:3px solid var(--accent);padding:20px 24px;margin:20px 0;}
+  .callout p{font-size:14px;line-height:1.7;color:var(--text-muted);margin:0;}
+  .callout strong{color:var(--accent);}
+
+  .doc-footer-note{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.05em;border-top:1px solid var(--border);padding-top:20px;margin-top:48px;}
+  .nav-doc{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:32px;border-top:1px solid var(--border);}
+  .nav-doc a{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-doc a:hover{color:var(--accent);}
+
+  footer{position:relative;z-index:2;padding:32px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .footer-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:.05em;}
+  .footer-cert{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;}
+
+  @media(max-width:900px){.two-col{grid-template-columns:1fr;}.toc{display:none;}}
+  @media(max-width:768px){nav{padding:16px 24px;}.page-outer{padding:90px 24px 60px;}footer{flex-direction:column;gap:8px;text-align:center;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← P-006 Overview</a>
+</nav>
+
+<div class="page-outer">
+
+  <div class="breadcrumb">
+    <a href="../../">Home</a><span>›</span><a href="index.html">P-006</a><span>›</span><span>User Access & Onboarding Policy</span>
+  </div>
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">P-006 · Document 02</div>
+    <h1 class="doc-title-h1">User Access & Onboarding Policy</h1>
+    <div class="doc-meta-line">Atlassian Platform Governance &nbsp;·&nbsp; 2021–2026 &nbsp;·&nbsp; Last reviewed: January 2026</div>
+    <a href="../../assets/docs/P006_User_Access_Onboarding_Policy.pdf" target="_blank" class="doc-download">Download PDF ↗</a>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="two-col">
+
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#s1">1. Purpose</a></li>
+        <li><a href="#s2">2. Scope</a></li>
+        <li><a href="#s3">3. Domain Ownership</a></li>
+        <li><a href="#s4">4. How Access Works</a></li>
+        <li><a href="#s5">5. Access Tiers</a></li>
+        <li><a href="#s6">6. Onboarding Process</a></li>
+        <li><a href="#s61" class="sub">6.1 How Requests Arrive</a></li>
+        <li><a href="#s62" class="sub">6.2 Sending the Invite</a></li>
+        <li><a href="#s63" class="sub">6.3 Group Assignment</a></li>
+        <li><a href="#s64" class="sub">6.4 Confirmation</a></li>
+        <li><a href="#s7">7. Access Changes</a></li>
+        <li><a href="#s8">8. Offboarding</a></li>
+        <li><a href="#s9">9. Guiding Principle</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="s1">
+        <h2 class="section-h">1. Purpose</h2>
+        <p class="doc-p">This document describes how user access to the Atlassian platform is provisioned, managed, and updated. It covers account setup, Group assignment, and the process for handling access changes when an employee's role changes.</p>
+        <div class="callout"><p><strong>Note:</strong> Offboarding and account deactivation are handled entirely by IT and are outside the scope of this document.</p></div>
+      </div>
+
+      <div class="doc-section" id="s2">
+        <h2 class="section-h">2. Scope</h2>
+        <p class="doc-p">Applies to all users on the Atlassian platform: Jira Software, Jira Service Management, and Confluence. Covers new hires, contractors, and returning employees. All access is managed at the Atlassian organization level, which means Group assignments apply across all products and projects simultaneously.</p>
+      </div>
+
+      <div class="doc-section" id="s3">
+        <h2 class="section-h">3. Domain Ownership and Account Control</h2>
+        <p class="doc-p">The organization's email domains were claimed through Atlassian's domain verification process. This was a one-time action that gave the Jira administrator full control over all Atlassian accounts on those domains. Every account associated with a claimed domain is fully managed by the administrator, including display names, Group memberships, and product access.</p>
+        <p class="doc-p">This is distinct from Atlassian Access (SSO/SCIM). Atlassian Access was not used in this environment. Accounts are personal Atlassian accounts tied to company email addresses, brought under organizational control through domain claim rather than identity provider integration. There is no automated provisioning or deprovisioning — all account management is performed manually by the administrator.</p>
+        <p class="doc-p">One consequence of domain claim: Atlassian populates display names from the email address prefix at account creation, typically in a format like "first.last" rather than "First Last." The administrator corrects display names as part of the onboarding process.</p>
+      </div>
+
+      <div class="doc-section" id="s4">
+        <h2 class="section-h">4. How Access Works: Groups and the Org Level</h2>
+        <p class="doc-p">Access across Jira Software, Jira Service Management, and Confluence is controlled through Groups managed at the Atlassian organization level. When a user is added to a Group, they receive the access that Group grants across all associated projects and spaces automatically — no project lead or space admin needs to add them individually.</p>
+        <p class="doc-p">This approach was intentional. Managing access at the org level ensures users have everything they need from day one. Individual project-level access grants create gaps: users end up missing access they should have, often because managers don't know all the places their team works. Org-level Group management eliminates that problem.</p>
+        <p class="doc-p">Groups serve two primary purposes:</p>
+        <ul class="doc-ul">
+          <li><strong>Permission-based access</strong> — Groups are assigned to project roles within the universal permission scheme, granting the appropriate access tier across all projects that use that role.</li>
+          <li><strong>Functional purposes</strong> — Some Groups are used for filtering and display rather than permissions. The most common example is a Supervisors group, which controls who appears in user picker fields so that only relevant users show up when someone is selecting an approver or assignee.</li>
+        </ul>
+        <p class="doc-p">A user can belong to multiple Groups. This is expected. A supervisor, for example, would be in their department's standard access Group and also in the Supervisors Group for user picker visibility.</p>
+      </div>
+
+      <div class="doc-section" id="s5">
+        <h2 class="section-h">5. Access Tiers</h2>
+        <p class="doc-p">The universal permission scheme defines the following access tiers. Each tier corresponds to a project role, and Groups are assigned to those roles to grant access at scale.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead><tr><th>Tier</th><th>What They Can Do</th><th>Typical Users</th></tr></thead>
+            <tbody>
+              <tr><td>View Only</td><td>Read access across assigned projects and spaces. Cannot create, edit, or comment.</td><td>Executives, cross-department stakeholders needing visibility</td></tr>
+              <tr><td>View and Comment</td><td>Can read and add comments. Cannot create new issues.</td><td>Stakeholders who need to provide input but don't work tickets</td></tr>
+              <tr><td>View, Comment, and Create</td><td>Can read, comment, and submit new requests or issues.</td><td>Standard requestors in JSM portals, contributors in Confluence</td></tr>
+              <tr><td>Member / Agent</td><td>Full working access. Can create, edit, transition, and resolve issues.</td><td>Team members, JSM agents</td></tr>
+              <tr><td>Lead</td><td>Member-level access plus the ability to manage components, versions, and basic project configuration. Cannot modify permission schemes or global settings.</td><td>Team leads, project owners</td></tr>
+              <tr><td>Manager / Admin</td><td>Full project administration rights within project scope. Platform-level settings remain with the Jira administrator.</td><td>Department managers with oversight responsibilities</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section" id="s6">
+        <h2 class="section-h">6. Onboarding Process</h2>
+
+        <h3 class="sub-h" id="s61">6.1 How Requests Arrive</h3>
+        <p class="doc-p">When IT processes a new hire, contractor, or returning employee, they submit a request to the Jira administrator through the Jira Request Portal. The request includes:</p>
+        <ul class="doc-ul">
+          <li>Full name</li>
+          <li>Work email address</li>
+          <li>Department</li>
+          <li>Position or job title</li>
+          <li>Direct manager</li>
+        </ul>
+        <p class="doc-p">IT initiates this request as part of their standard new hire process. The Jira administrator does not independently monitor HR activity — the IT request is the trigger.</p>
+
+        <h3 class="sub-h" id="s62">6.2 Sending the Atlassian Invite</h3>
+        <p class="doc-p">Once the request is received, the administrator sends an invitation to the user's work email through the Atlassian Admin console. Because the organization's email domains are claimed, the account is immediately under organizational control when the user accepts.</p>
+        <p class="doc-p">After the user claims their account, the administrator corrects the display name. Atlassian defaults to using the email prefix (e.g., "ryan.wolfe") as the display name. The administrator updates this to the user's proper name (e.g., "Ryan Wolfe") so they appear correctly in issue assignments, comments, and user picker fields across all products.</p>
+
+        <h3 class="sub-h" id="s63">6.3 Group Assignment</h3>
+        <p class="doc-p">With the account active and the display name corrected, the administrator assigns the user to the appropriate Group(s) based on their position and department. This is the step that grants access — once added to a Group, the user has the correct permissions across all relevant Jira projects, JSM service desks, and Confluence spaces without any further configuration.</p>
+        <p class="doc-p">Group assignment follows these principles:</p>
+        <ul class="doc-ul">
+          <li><strong>Position determines the primary access Group.</strong> A standard team member goes into the Group that grants Member-level access for their department. A lead goes into the Lead-level Group.</li>
+          <li><strong>Additional Groups are added when the role requires them.</strong> A supervisor is added to the Supervisors Group so they appear in user picker fields for approvals and assignments, regardless of their primary access tier.</li>
+          <li><strong>IT provides position information, but IT doesn't always know the full scope of what a role needs.</strong> When the position is new, unclear, or doesn't map cleanly to an existing Group, the administrator contacts the manager directly to understand what access the role requires before assigning anything.</li>
+          <li><strong>Users are never given broader access than their role requires.</strong> If there is uncertainty, the administrator starts with the most conservative access tier and adjusts after confirming with the manager.</li>
+        </ul>
+
+        <h3 class="sub-h" id="s64">6.4 Confirmation</h3>
+        <p class="doc-p">Once Group assignment is complete, the administrator confirms back to IT that onboarding is done. If any clarification was needed from the manager, that conversation is noted in the original request ticket.</p>
+      </div>
+
+      <div class="doc-section" id="s7">
+        <h2 class="section-h">7. Access Changes — Position or Role Updates</h2>
+        <p class="doc-p">When an employee changes positions, transfers departments, or takes on expanded responsibilities, their Group assignments need to be updated. The intended process is for IT to submit a change request through the Jira Request Portal with the same information as a new hire request, noting what has changed.</p>
+        <p class="doc-p">Regardless of how the change surfaces, the update follows the same logic as initial onboarding: assess the new role, determine the correct Group(s), remove Groups that no longer apply, and add the ones that do.</p>
+      </div>
+
+      <div class="doc-section" id="s8">
+        <h2 class="section-h">8. Offboarding</h2>
+        <p class="doc-p">Offboarding is handled entirely by IT. When an employee or contractor leaves, IT deactivates the account at the Atlassian organization level. Deactivation at this level disables access across all Atlassian products simultaneously — Jira, JSM, and Confluence — even without removing individual project or space permissions.</p>
+        <p class="doc-p">The Jira administrator has no role in the offboarding process. IT manages account deactivation as part of their standard separation procedure, which is kept confidential between IT and HR.</p>
+      </div>
+
+      <div class="doc-section" id="s9">
+        <h2 class="section-h">9. Guiding Principle: Org-Level Access Management</h2>
+        <p class="doc-p">Every access decision in this environment is made at the Atlassian organization level, not the project level. This is a deliberate design choice: when access is managed project by project, users end up with incomplete access because no single person has a full picture of everywhere a role needs to work.</p>
+        <p class="doc-p">Org-level Group management solves this. When a Group is configured correctly for a role, every user in that Group gets the right access everywhere, immediately, without anyone having to manually add them to individual projects. It also means that when someone leaves and IT deactivates their account, the removal is complete and immediate across the entire platform.</p>
+        <p class="doc-p">The trade-off is that the administrator carries more responsibility than a typical Jira admin role. There is no delegation of access management to project leads or space admins for routine provisioning. That responsibility sits with the administrator, which is why the intake and change request processes exist — to make sure the administrator has the information needed to do that job accurately.</p>
+      </div>
+
+      <div class="doc-footer-note">Document owner: Jira Administrator &nbsp;·&nbsp; Last reviewed: January 2026 &nbsp;·&nbsp; Next review: April 2026</div>
+
+      <div class="nav-doc">
+        <a href="intake.html">← Jira Project Intake Guide</a>
+        <a href="automation.html">Automation Rule Registry →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const sections=document.querySelectorAll('[id^="s"]');
+  const tocLinks=document.querySelectorAll('.toc-list a');
+  const observer=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        tocLinks.forEach(l=>l.style.color='');
+        const active=document.querySelector(`.toc-list a[href="#${entry.target.id}"]`);
+        if(active)active.style.color='var(--accent)';
+      }
+    });
+  },{rootMargin:'-20% 0px -70% 0px'});
+  sections.forEach(s=>observer.observe(s));
+</script>
+</body>
+</html>

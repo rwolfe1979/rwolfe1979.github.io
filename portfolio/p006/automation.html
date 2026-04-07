@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Automation Rule Registry — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#080c12;--bg2:#0d1219;--surface:#111827;--surface2:#1a2332;--accent:#00d4ff;--accent2:#0066ff;--accent3:#7b2fff;--text:#e8edf5;--text-muted:#6b7a8d;--text-dim:#3d4f63;--green:#00ff88;--border:rgba(0,212,255,0.15);}
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none;}
+  .cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;box-shadow:0 0 10px var(--accent),0 0 20px var(--accent);}
+  .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(0,212,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease;}
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+  .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+  .blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.05;pointer-events:none;z-index:0;animation:drift 20s ease-in-out infinite;}
+  .blob-1{width:400px;height:400px;background:var(--accent);top:-100px;right:100px;}
+  .blob-2{width:300px;height:300px;background:var(--accent3);bottom:-50px;left:-50px;animation-delay:-8s;}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-30px) scale(1.05);}66%{transform:translate(-20px,20px) scale(0.95);}}
+  .scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:1;}
+
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,12,18,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:.1em;text-decoration:none;}
+  .nav-logo span{color:var(--text-muted);}
+  .nav-back{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  .page-outer{position:relative;z-index:2;max-width:1200px;margin:0 auto;padding:90px 48px 80px;}
+  .breadcrumb{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:40px;display:flex;align-items:center;gap:12px;}
+  .breadcrumb a{color:var(--text-dim);text-decoration:none;transition:color .2s;}
+  .breadcrumb a:hover{color:var(--accent);}
+  .breadcrumb span{color:var(--accent);}
+
+  .doc-header{margin-bottom:40px;}
+  .doc-eyebrow{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:12px;}
+  .doc-eyebrow::before{content:'';display:inline-block;width:40px;height:1px;background:var(--accent);}
+  .doc-title-h1{font-size:clamp(28px,4vw,48px);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:12px;}
+  .doc-meta-line{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;margin-bottom:24px;}
+  .doc-download{display:inline-flex;align-items:center;gap:8px;font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--border);padding:10px 20px;transition:all .3s;}
+  .doc-download:hover{border-color:var(--accent);background:rgba(0,212,255,0.05);}
+  .doc-divider{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin:32px 0;}
+
+  /* Intro section */
+  .intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:40px;}
+  .intro-card{background:var(--surface);border:1px solid var(--border);padding:24px;}
+  .intro-card-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.2em;text-transform:uppercase;margin-bottom:10px;}
+  .intro-card-body{font-size:14px;color:var(--text-muted);line-height:1.65;}
+  .intro-card-body strong{color:var(--text);}
+
+  /* Status key */
+  .status-key{display:flex;gap:24px;margin-bottom:32px;font-family:'Space Mono',monospace;font-size:11px;}
+  .status-key-item{display:flex;align-items:center;gap:8px;color:var(--text-dim);}
+  .status-dot-active{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);}
+  .status-dot-disabled{width:8px;height:8px;border-radius:50%;background:var(--text-dim);}
+
+  /* Section headers */
+  .registry-section{margin-bottom:48px;}
+  .registry-section-header{display:flex;align-items:center;gap:16px;margin-bottom:20px;}
+  .registry-section-title{font-size:18px;font-weight:800;letter-spacing:-.02em;}
+  .registry-section-count{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;background:rgba(255,255,255,0.05);padding:4px 10px;}
+  .section-divider{flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+  /* Registry table */
+  .registry-table-wrap{overflow-x:auto;}
+  table.registry-table{width:100%;border-collapse:collapse;font-size:13px;}
+  table.registry-table th{background:rgba(0,212,255,0.08);color:var(--accent);font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:12px 14px;text-align:left;border:1px solid rgba(0,212,255,0.12);white-space:nowrap;}
+  table.registry-table td{padding:14px;border:1px solid rgba(255,255,255,0.04);color:var(--text-muted);vertical-align:top;line-height:1.55;}
+  table.registry-table tr:nth-child(even) td{background:rgba(255,255,255,0.02);}
+  table.registry-table tr:hover td{background:rgba(0,212,255,0.03);}
+  .rule-id{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);white-space:nowrap;}
+  .rule-name{font-weight:700;color:var(--text);font-size:13px;}
+  .scope-tag{font-family:'Space Mono',monospace;font-size:9px;padding:3px 8px;background:rgba(255,255,255,0.05);color:var(--text-dim);letter-spacing:.05em;white-space:nowrap;}
+  .trigger-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);}
+  .status-active{font-family:'Space Mono',monospace;font-size:10px;color:var(--green);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .status-active::before{content:'●';font-size:8px;}
+  .status-disabled{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .status-disabled::before{content:'○';font-size:8px;}
+  .reviewed-date{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);white-space:nowrap;}
+
+  /* Policy notes */
+  .policy-section{margin-bottom:48px;}
+  h2.section-h{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-bottom:16px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  p.doc-p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:14px;}
+  p.doc-p strong{color:var(--text);}
+  ul.doc-ul{margin:12px 0 16px 0;display:flex;flex-direction:column;gap:8px;}
+  ul.doc-ul li{font-size:15px;line-height:1.6;color:var(--text-muted);padding-left:20px;position:relative;}
+  ul.doc-ul li::before{content:'◆';position:absolute;left:0;color:var(--accent);font-size:8px;top:6px;}
+
+  .callout{background:rgba(0,212,255,0.04);border:1px solid rgba(0,212,255,0.2);border-left:3px solid var(--accent);padding:20px 24px;margin:20px 0;}
+  .callout p{font-size:14px;line-height:1.7;color:var(--text-muted);margin:0;}
+  .callout strong{color:var(--accent);}
+
+  .doc-footer-note{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.05em;border-top:1px solid var(--border);padding-top:20px;margin-top:48px;}
+  .nav-doc{display:flex;justify-content:space-between;align-items:center;margin-top:48px;padding-top:32px;border-top:1px solid var(--border);}
+  .nav-doc a{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-doc a:hover{color:var(--accent);}
+
+  footer{position:relative;z-index:2;padding:32px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .footer-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:.05em;}
+  .footer-cert{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;}
+
+  @media(max-width:768px){nav{padding:16px 24px;}.page-outer{padding:90px 24px 60px;}.intro-grid{grid-template-columns:1fr;}footer{flex-direction:column;gap:8px;text-align:center;}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← P-006 Overview</a>
+</nav>
+
+<div class="page-outer">
+
+  <div class="breadcrumb">
+    <a href="../../">Home</a><span>›</span><a href="index.html">P-006</a><span>›</span><span>Automation Rule Registry</span>
+  </div>
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">P-006 · Document 03</div>
+    <h1 class="doc-title-h1">Automation Rule Registry</h1>
+    <div class="doc-meta-line">Administrator-owned rules only &nbsp;·&nbsp; Last reviewed: January 2026</div>
+    <a href="../../assets/docs/P006_Automation_Rule_Registry.pdf" target="_blank" class="doc-download">Download PDF ↗</a>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="intro-grid">
+    <div class="intro-card">
+      <div class="intro-card-label">Scope</div>
+      <div class="intro-card-body">This registry covers <strong>administrator-owned rules only</strong> — rules built and maintained at the global or multi-project level. Project admins can create their own rules. Those are not tracked here, but a template is available for project admins who want consistent documentation.</div>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-label">Why This Exists</div>
+      <div class="intro-card-body">Undocumented automation rules create maintenance problems. Rules fire unexpectedly. Nobody knows what a rule was supposed to do. Changes break things. This registry answers three questions for anyone maintaining the environment: <strong>what does this do, why does it exist, and who owns the business logic.</strong></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>Change requests:</strong> To create, modify, or disable an admin-owned rule, submit a ticket through the Jira Request Portal. Changes are not made in response to verbal or chat requests. Rules that are no longer needed are disabled — not deleted — and the registry is updated with the disablement date and reason.</p>
+  </div>
+
+  <div class="status-key">
+    <div class="status-key-item"><div class="status-dot-active"></div> Active = currently running</div>
+    <div class="status-key-item"><div class="status-dot-disabled"></div> Disabled = turned off but preserved for reference</div>
+  </div>
+
+  <!-- SERVICE DESK RULES -->
+  <div class="registry-section">
+    <div class="registry-section-header">
+      <div class="registry-section-title">Service Desk Rules</div>
+      <div class="registry-section-count">6 rules</div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="registry-table-wrap">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>Rule ID</th>
+            <th>Rule Name</th>
+            <th>Scope</th>
+            <th>Trigger</th>
+            <th>What It Does</th>
+            <th>Affected Projects</th>
+            <th>Business Owner</th>
+            <th>Status</th>
+            <th>Last Reviewed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rule-id">AUT-001</span></td>
+            <td><span class="rule-name">Auto-assign incoming requests by type</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Issue created</span></td>
+            <td>Assigns new service requests to the correct agent queue based on request type. Removes unassigned status immediately on submission.</td>
+            <td>All JSM service desks</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Nov 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-002</span></td>
+            <td><span class="rule-name">SLA breach warning notification</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Scheduled (every 30 min)</span></td>
+            <td>Checks all open requests approaching SLA breach. Sends Slack notification to assigned agent and project lead 1 hour before breach.</td>
+            <td>All JSM service desks</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Nov 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-003</span></td>
+            <td><span class="rule-name">Auto-resolve stale requests</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Scheduled (daily)</span></td>
+            <td>Flags requests in "Waiting for Customer" status for 5+ business days. Sends reminder to customer. If no response in 3 more days, moves to Resolved with a closing comment.</td>
+            <td>All JSM service desks</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Oct 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-004</span></td>
+            <td><span class="rule-name">Escalate priority on reopen</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Status → Reopened</span></td>
+            <td>When a resolved ticket is reopened by the customer, raises priority to High and reassigns to the original agent. Notifies project lead.</td>
+            <td>All JSM service desks</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Sep 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-005</span></td>
+            <td><span class="rule-name">Link parent ticket on intake submission</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Issue created in intake desk</span></td>
+            <td>When a request is submitted through the central intake service desk, creates linked child tickets in the appropriate department project(s) based on request type and auto-assigns them.</td>
+            <td>IT Intake, all dept projects</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Dec 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-006</span></td>
+            <td><span class="rule-name">Onboarding checklist generation</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Issue created (type: New Employee)</span></td>
+            <td>Triggered when HR submits a new employee request. Creates sub-tasks across IT, Facilities, and HR projects covering all onboarding steps, with due dates offset from the start date.</td>
+            <td>HR Service Desk, IT Projects</td>
+            <td>HR / IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Nov 2025</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JIRA SOFTWARE RULES -->
+  <div class="registry-section">
+    <div class="registry-section-header">
+      <div class="registry-section-title">Jira Software Rules</div>
+      <div class="registry-section-count">2 rules</div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="registry-table-wrap">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>Rule ID</th>
+            <th>Rule Name</th>
+            <th>Scope</th>
+            <th>Trigger</th>
+            <th>What It Does</th>
+            <th>Affected Projects</th>
+            <th>Business Owner</th>
+            <th>Status</th>
+            <th>Last Reviewed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rule-id">AUT-010</span></td>
+            <td><span class="rule-name">SEO monthly task generation</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Scheduled (1st of month, 6:00 AM)</span></td>
+            <td>Generates the full monthly SEO task set automatically: creates all recurring tasks with correct assignees, due dates calculated from trigger date, and linked parent epic. Eliminates manual monthly setup.</td>
+            <td>SEO Project</td>
+            <td>SEO Team Lead</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Dec 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-011</span></td>
+            <td><span class="rule-name">Auto-transition on all subtasks complete</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Issue updated</span></td>
+            <td>When all sub-tasks on a parent issue move to Done, transitions the parent issue to In Review automatically. Notifies the assignee.</td>
+            <td>Engineering, Product</td>
+            <td>Engineering Lead</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Oct 2025</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CROSS-PLATFORM RULES -->
+  <div class="registry-section">
+    <div class="registry-section-header">
+      <div class="registry-section-title">Confluence & Cross-Platform Rules</div>
+      <div class="registry-section-count">2 rules</div>
+      <div class="section-divider"></div>
+    </div>
+    <div class="registry-table-wrap">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>Rule ID</th>
+            <th>Rule Name</th>
+            <th>Scope</th>
+            <th>Trigger</th>
+            <th>What It Does</th>
+            <th>Affected Projects</th>
+            <th>Business Owner</th>
+            <th>Status</th>
+            <th>Last Reviewed</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rule-id">AUT-020</span></td>
+            <td><span class="rule-name">JSM-to-Confluence knowledge base suggestion</span></td>
+            <td><span class="scope-tag">Project</span></td>
+            <td><span class="trigger-text">Issue resolved</span></td>
+            <td>When a JSM ticket is resolved and flagged as a new issue type (not a duplicate), prompts the agent to create a knowledge base article in the linked Confluence space. Pre-populates the article template with the ticket summary.</td>
+            <td>All JSM service desks</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Nov 2025</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-id">AUT-021</span></td>
+            <td><span class="rule-name">Project health label auto-update</span></td>
+            <td><span class="scope-tag">Global</span></td>
+            <td><span class="trigger-text">Scheduled (Monday 7:00 AM)</span></td>
+            <td>Evaluates each active project's open issue count, overdue count, and last activity date. Applies a health label (On Track / At Risk / Stalled) to the project. Used in executive dashboard filters.</td>
+            <td>All active projects</td>
+            <td>IT Admin</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">Dec 2025</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="doc-footer-note">Administrator-owned rules only &nbsp;·&nbsp; Last reviewed: January 2026 &nbsp;·&nbsp; Next review: April 2026 &nbsp;·&nbsp; To request a rule change, submit a ticket through the Jira Request Portal.</div>
+
+  <div class="nav-doc">
+    <a href="onboarding.html">← User Access & Onboarding Policy</a>
+    <a href="index.html">P-006 Overview →</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+</script>
+</body>
+</html>

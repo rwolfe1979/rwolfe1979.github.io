@@ -1,1 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-006: Platform Governance — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:#080c12;--bg2:#0d1219;--surface:#111827;--surface2:#1a2332;
+    --accent:#00d4ff;--accent2:#0066ff;--accent3:#7b2fff;
+    --text:#e8edf5;--text-muted:#6b7a8d;--text-dim:#3d4f63;
+    --green:#00ff88;--border:rgba(0,212,255,0.15);--glow:0 0 20px rgba(0,212,255,0.3);
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg);color:var(--text);font-family:'Syne',sans-serif;overflow-x:hidden;cursor:none;}
+  .cursor{position:fixed;width:8px;height:8px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s;box-shadow:0 0 10px var(--accent),0 0 20px var(--accent);}
+  .cursor-ring{position:fixed;width:32px;height:32px;border:1px solid rgba(0,212,255,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .1s ease;}
+  .grid-bg{position:fixed;inset:0;background-image:linear-gradient(rgba(0,212,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,0.03) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+  .noise{position:fixed;inset:0;opacity:0.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");pointer-events:none;z-index:1;}
+  .blob{position:fixed;border-radius:50%;filter:blur(80px);opacity:0.06;pointer-events:none;z-index:0;animation:drift 20s ease-in-out infinite;}
+  .blob-1{width:600px;height:600px;background:var(--accent2);top:-200px;left:-200px;}
+  .blob-2{width:400px;height:400px;background:var(--accent3);bottom:-100px;right:-100px;animation-delay:-10s;}
+  @keyframes drift{0%,100%{transform:translate(0,0) scale(1);}33%{transform:translate(30px,-30px) scale(1.05);}66%{transform:translate(-20px,20px) scale(0.95);}}
+  .scanlines{position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.03) 2px,rgba(0,0,0,0.03) 4px);pointer-events:none;z-index:1;}
 
+  nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 48px;display:flex;justify-content:space-between;align-items:center;background:rgba(8,12,18,0.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+  .nav-logo{font-family:'Space Mono',monospace;font-size:13px;color:var(--accent);letter-spacing:.1em;text-decoration:none;}
+  .nav-logo span{color:var(--text-muted);}
+  .nav-back{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;}
+  .nav-back:hover{color:var(--accent);}
+
+  .page-wrap{position:relative;z-index:2;max-width:960px;margin:0 auto;padding:100px 48px 80px;}
+
+  .breadcrumb{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:48px;display:flex;align-items:center;gap:12px;}
+  .breadcrumb a{color:var(--text-dim);text-decoration:none;transition:color .2s;}
+  .breadcrumb a:hover{color:var(--accent);}
+  .breadcrumb span{color:var(--accent);}
+
+  .project-header{margin-bottom:56px;}
+  .project-eyebrow{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:16px;display:flex;align-items:center;gap:12px;}
+  .project-eyebrow::before{content:'';display:inline-block;width:40px;height:1px;background:var(--accent);}
+  .project-title{font-size:clamp(36px,6vw,64px);font-weight:800;line-height:1;letter-spacing:-.03em;margin-bottom:24px;}
+  .project-title .accent-word{background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+  .project-summary{font-size:17px;line-height:1.75;color:var(--text-muted);max-width:700px;margin-bottom:32px;}
+  .project-meta{display:flex;gap:32px;flex-wrap:wrap;margin-bottom:28px;}
+  .meta-label{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;margin-bottom:6px;}
+  .meta-value{font-size:14px;font-weight:600;}
+  .status-badge{display:inline-flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:10px;color:var(--green);letter-spacing:.1em;text-transform:uppercase;}
+  .status-badge::before{content:'●';animation:blink 1.5s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;}
+  .tag{font-family:'Space Mono',monospace;font-size:10px;padding:4px 10px;background:rgba(0,212,255,0.08);color:var(--accent);letter-spacing:.05em;border:1px solid rgba(0,212,255,0.15);}
+
+  .divider{height:1px;background:linear-gradient(90deg,var(--border),transparent);margin:48px 0;}
+
+  .section-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.2em;text-transform:uppercase;margin-bottom:24px;display:flex;align-items:center;gap:12px;}
+  .section-label::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent);}
+
+  /* Context block */
+  .context-block{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);padding:32px;margin-bottom:32px;}
+  .context-block p{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:16px;}
+  .context-block p:last-child{margin-bottom:0;}
+
+  /* Screenshots */
+  .screenshots{display:flex;flex-direction:column;gap:32px;margin-bottom:16px;}
+  .screenshot-label{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:12px;}
+  .screenshot-img{width:100%;border:1px solid var(--border);display:block;transition:border-color .3s;}
+  .screenshot-img:hover{border-color:rgba(0,212,255,0.4);}
+  .screenshot-caption{font-size:13px;color:var(--text-dim);margin-top:10px;line-height:1.5;}
+
+  /* Document cards */
+  .doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-bottom:16px;}
+  .doc-card{background:var(--surface);border:1px solid transparent;padding:32px;text-decoration:none;color:inherit;transition:all .3s;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;}
+  .doc-card::after{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--accent),var(--accent2));transform:scaleY(0);transition:transform .3s;}
+  .doc-card:hover{border-color:var(--border);background:var(--surface2);transform:translateY(-4px);box-shadow:0 20px 40px rgba(0,0,0,0.4);}
+  .doc-card:hover::after{transform:scaleY(1);}
+  .doc-icon{font-size:28px;}
+  .doc-number{font-family:'Space Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:.15em;text-transform:uppercase;}
+  .doc-title{font-size:16px;font-weight:700;letter-spacing:-.02em;line-height:1.3;transition:color .2s;}
+  .doc-card:hover .doc-title{color:var(--accent);}
+  .doc-desc{font-size:13px;color:var(--text-muted);line-height:1.6;flex:1;}
+  .doc-actions{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap;}
+  .doc-link{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:opacity .2s;}
+  .doc-link:hover{opacity:.7;}
+  .doc-link-pdf{color:var(--text-dim);}
+
+  .back-link{display:inline-flex;align-items:center;gap:10px;font-family:'Space Mono',monospace;font-size:11px;color:var(--text-muted);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;transition:color .2s;margin-top:48px;}
+  .back-link:hover{color:var(--accent);}
+
+  footer{position:relative;z-index:2;padding:32px 48px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .footer-text{font-family:'Space Mono',monospace;font-size:11px;color:var(--text-dim);letter-spacing:.05em;}
+  .footer-cert{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:.1em;}
+
+  @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+  .fade-in{opacity:0;animation:fadeUp .7s ease forwards;}
+  .fade-in.d1{animation-delay:.1s;}.fade-in.d2{animation-delay:.2s;}.fade-in.d3{animation-delay:.3s;}.fade-in.d4{animation-delay:.4s;}
+
+  @media(max-width:768px){
+    nav{padding:16px 24px;}
+    .page-wrap{padding:90px 24px 60px;}
+    .doc-grid{grid-template-columns:1fr;}
+    footer{flex-direction:column;gap:8px;text-align:center;}
+  }
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="../../" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span><span>P-006</span><span>›</span><span>Platform Governance</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">P-006 · Platform Governance</div>
+    <h1 class="project-title">Platform <span class="accent-word">Governance</span> Documentation</h1>
+    <p class="project-summary">I was the only person who knew how the platform worked. That's a bad situation. If I left, someone needed to be able to pick it up without calling me. This is the governance package I built to make that possible — three documents covering how projects get created, how users get access, and how automation rules get tracked.</p>
+    <div class="project-meta">
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Atlassian Cloud</div></div>
+      <div><div class="meta-label">Primary Tool</div><div class="meta-value">Confluence</div></div>
+      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 20 departments</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Confluence</span><span class="tag">JSM</span><span class="tag">Jira Admin</span>
+      <span class="tag">RBAC</span><span class="tag">Access Governance</span><span class="tag">Automation</span><span class="tag">Technical Documentation</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>A 300-user Atlassian environment with one administrator and no documentation is a single point of failure. Every configuration decision lived in my head. Permission schemes, workflow logic, automation rule dependencies, onboarding processes — none of it written down.</p>
+    <p>That's fine until it isn't. Someone has to maintain the platform after you. Audits happen. New IT staff come in. The question isn't whether someone else will need to understand the system — it's when. This governance package was built so the answer to that question was something they could actually find.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Screenshots</div>
+  <div class="screenshots fade-in d3">
+    <div>
+      <div class="screenshot-label">Space Homepage — Profile & Navigation</div>
+      <img src="../../assets/images/APG_Home.png" alt="Atlassian Platform Governance space homepage" class="screenshot-img">
+      <div class="screenshot-caption">The APG Confluence space homepage, built as a professional profile with navigation to each governance document.</div>
+    </div>
+    <div>
+      <div class="screenshot-label">Jira Project Intake & Standards Guide</div>
+      <img src="../../assets/images/APG_Intake.png" alt="Jira Project Intake Standards Guide in Confluence" class="screenshot-img">
+      <div class="screenshot-caption">Two-column layout with a live Table of Contents macro on the left. Heading hierarchy feeds the TOC automatically.</div>
+    </div>
+    <div>
+      <div class="screenshot-label">Admin Automation Registry Table</div>
+      <img src="../../assets/images/APG_Automation_Registry.png" alt="Admin Automation Registry in Confluence" class="screenshot-img">
+      <div class="screenshot-caption">The automation registry table showing admin-owned rules organized by product area. Disabled rules stay in the registry with a status update — never deleted.</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Governance Documents</div>
+  <div class="doc-grid fade-in d3">
+    <a href="intake.html" class="doc-card">
+      <div class="doc-icon">📋</div>
+      <div class="doc-number">Document 01</div>
+      <div class="doc-title">Jira Project Intake & Standards Guide</div>
+      <div class="doc-desc">How new Jira projects are requested and approved. Covers the intake form, naming conventions, issue type structure, screen and field standards, the universal permission scheme, and project lead responsibilities.</div>
+      <div class="doc-actions">
+        <span class="doc-link">Read Online →</span>
+        <a href="../../assets/docs/P006_Jira_Project_Intake_Standards_Guide.pdf" target="_blank" class="doc-link doc-link-pdf" onclick="event.stopPropagation()">PDF ↗</a>
+      </div>
+    </a>
+    <a href="onboarding.html" class="doc-card">
+      <div class="doc-icon">🔐</div>
+      <div class="doc-number">Document 02</div>
+      <div class="doc-title">User Access & Onboarding Policy</div>
+      <div class="doc-desc">How user accounts are provisioned, how domain claiming works, how Groups control access across all products simultaneously, and how the onboarding flow runs from IT to the Jira administrator.</div>
+      <div class="doc-actions">
+        <span class="doc-link">Read Online →</span>
+        <a href="../../assets/docs/P006_User_Access_Onboarding_Policy.pdf" target="_blank" class="doc-link doc-link-pdf" onclick="event.stopPropagation()">PDF ↗</a>
+      </div>
+    </a>
+    <a href="automation.html" class="doc-card">
+      <div class="doc-icon">⚡</div>
+      <div class="doc-number">Document 03</div>
+      <div class="doc-title">Automation Rule Registry</div>
+      <div class="doc-desc">A registry of administrator-owned automation rules running across JSM and Jira Software. Each rule is documented by trigger, scope, action, affected projects, business owner, and review status.</div>
+      <div class="doc-actions">
+        <span class="doc-link">Read Online →</span>
+        <a href="../../assets/docs/P006_Automation_Rule_Registry.pdf" target="_blank" class="doc-link doc-link-pdf" onclick="event.stopPropagation()">PDF ↗</a>
+      </div>
+    </a>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+</script>
+</body>
+</html>
