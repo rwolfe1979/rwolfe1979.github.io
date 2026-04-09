@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-005: Marketplace App Evaluation — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="../../" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span><span>P-005</span><span>›</span><span>App Evaluation Framework</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">P-005 · App Evaluation Framework</div>
+    <h1 class="project-title-h1">Marketplace App <span class="accent-word">Evaluation Framework</span></h1>
+    <p class="project-summary-text">Before any Marketplace app went into production, I ran it through the same evaluation: compatibility with our Jira version, performance impact in sandbox, functional testing of the specific features we actually needed, and a cost vs. value check. I also documented a rollback procedure before deploying anything. Most apps didn't make it past sandbox.</p>
+    <div class="project-meta">
+      <div><div class="meta-label">Status</div><div class="meta-value"><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;">○ Coming Soon</span></div></div>
+      <div><div class="meta-label">Primary Tool</div><div class="meta-value">Atlassian Marketplace</div></div>
+      <div><div class="meta-label">Scope</div><div class="meta-value">300+ users · Jira + JSM + Confluence</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Atlassian Marketplace</span><span class="tag">Jira Admin</span><span class="tag">Sandbox Testing</span><span class="tag">Requirements Gathering</span><span class="tag">Process Documentation</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>App requests came in without any structure. A team would find something in the Marketplace, ask for it, and expect it to be live by the end of the week. There was no process for evaluating whether an app was safe, compatible, or actually worth the cost.</p>
+    <p>A bad Marketplace app in a 300-user environment can cause performance issues or break existing automation rules. I needed a repeatable process that protected the environment while still being responsive to legitimate requests.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Full write-up coming soon</div>
+  <div class="context-block fade-in d3">
+    <p>This project page is in progress. Check back for the full breakdown: the evaluation framework, sandbox testing process, documentation templates, and examples of apps that passed and failed review.</p>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+</script>
+</body>
+</html>
