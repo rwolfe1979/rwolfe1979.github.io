@@ -1,1 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-002: SEO Monthly Automation — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
 
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="../../" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span><span>P-002</span><span>›</span><span>SEO Monthly Automation</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">P-002 · Jira Automation</div>
+    <h1 class="project-title-h1">SEO Team <span class="accent-word">Monthly</span> Automation</h1>
+    <p class="project-summary-text">The SEO team was spending days every month manually creating the same Jira tickets for every client. I shadowed one full cycle, documented every step, and built a scheduled automation that generates the entire monthly work set on the first of each month. They stopped thinking about it.</p>
+    <div class="project-meta">
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Software Cloud</div></div>
+      <div><div class="meta-label">Built</div><div class="meta-value">2023</div></div>
+      <div><div class="meta-label">Scale at handoff</div><div class="meta-value">45+ clients</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Jira Automation</span>
+      <span class="tag">Jira Software</span>
+      <span class="tag">Scheduled Triggers</span>
+      <span class="tag">If/Then Logic</span>
+      <span class="tag">Requirements Gathering</span>
+      <span class="tag">Confluence</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>Every month, the SEO team manager manually created every Jira ticket for every client. With around 10 clients at the start, that process took a couple of days — squeezed between their actual work. The task set was predictable: same types, same assignees, same due date logic month after month. The Custom tier added complexity because each client had a different combination of tasks and quantities that changed over time.</p>
+    <p>As the client roster grew, doing this manually would have taken a week or more per month. It was the kind of problem that only gets worse.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Automation Flow</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">On the first of each month, a scheduled trigger creates one epic-level work item per client. The package type on that epic determines which automations fire. PackageA and PackageB each run a single automation producing a fixed task set. Custom clients trigger four automations running in parallel, each handling a subset of the possible task types with if/then logic that checks the Client ID to determine quantities.</p>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="fade-in d3" style="margin-bottom: 48px;">
+    <svg width="100%" viewBox="0 0 680 1010" role="img" style="display:block;">
+      <title>SEO Monthly Automation Flow</title>
+      <desc>Scheduled trigger creates one epic per client. A diamond decision block routes by package type to PackageA, PackageB, or Custom automations. All paths converge at assignment automations then outcome.</desc>
+      <style>
+        .f-teal-fill { fill: #0d4f4a; stroke: #00d4ff; stroke-width: 0.5; }
+        .f-purple-fill { fill: #2d1f6e; stroke: #7b2fff; stroke-width: 0.5; }
+        .f-coral-fill { fill: #5c2018; stroke: #d4522a; stroke-width: 0.5; }
+        .f-gray-fill { fill: #111827; stroke: rgba(0,212,255,0.25); stroke-width: 0.5; }
+        .f-th { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; fill: #e8edf5; }
+        .f-ts { font-family: 'Syne', sans-serif; font-size: 11px; font-weight: 400; fill: #6b7a8d; }
+        .f-line { stroke: rgba(0,212,255,0.4); stroke-width: 1; fill: none; }
+        .f-dot { fill: rgba(0,212,255,0.6); }
+        .f-legend-box { fill: #111827; stroke: rgba(0,212,255,0.15); stroke-width: 0.5; stroke-dasharray: 4 3; }
+      </style>
+
+      <!-- TRIGGER -->
+      <rect x="190" y="24" width="300" height="44" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="51" text-anchor="middle">Scheduled trigger — 1st of month</text>
+
+      <line x1="340" y1="68" x2="340" y2="100" class="f-line"/>
+
+      <!-- EPIC CREATION -->
+      <rect x="190" y="100" width="300" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="123" text-anchor="middle">Epic created per client</text>
+      <text class="f-ts" x="340" y="143" text-anchor="middle">Package type + Client ID set on epic</text>
+
+      <line x1="340" y1="156" x2="340" y2="182" class="f-line"/>
+
+      <!-- DIAMOND -->
+      <polygon points="340,182 430,210 340,238 250,210" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="215" text-anchor="middle">Package type?</text>
+
+      <!-- Branch: PackageA left -->
+      <line x1="250" y1="210" x2="90" y2="210" class="f-line"/>
+      <line x1="90" y1="210" x2="90" y2="258" class="f-line"/>
+      <text class="f-ts" x="90" y="250" text-anchor="middle">PackageA</text>
+
+      <!-- Branch: PackageB down -->
+      <line x1="340" y1="238" x2="340" y2="258" class="f-line"/>
+      <text class="f-ts" x="340" y="250" text-anchor="middle">PackageB</text>
+
+      <!-- Branch: Custom right -->
+      <line x1="430" y1="210" x2="570" y2="210" class="f-line"/>
+      <line x1="570" y1="210" x2="570" y2="258" class="f-line"/>
+      <text class="f-ts" x="570" y="250" text-anchor="middle">Custom</text>
+
+      <!-- PACKAGE A -->
+      <rect x="15" y="258" width="150" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="90" y="281" text-anchor="middle">PackageA</text>
+      <text class="f-ts" x="90" y="301" text-anchor="middle">1 automation fires</text>
+      <line x1="90" y1="314" x2="90" y2="346" class="f-line"/>
+      <rect x="15" y="346" width="150" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="90" y="362" text-anchor="middle">~10 work items</text>
+      <text class="f-ts" x="90" y="380" text-anchor="middle">Fixed set, all clients</text>
+
+      <!-- PACKAGE B -->
+      <rect x="265" y="258" width="150" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="340" y="281" text-anchor="middle">PackageB</text>
+      <text class="f-ts" x="340" y="301" text-anchor="middle">1 automation fires</text>
+      <line x1="340" y1="314" x2="340" y2="346" class="f-line"/>
+      <rect x="265" y="346" width="150" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="362" text-anchor="middle">~20 work items</text>
+      <text class="f-ts" x="340" y="380" text-anchor="middle">Fixed set, all clients</text>
+
+      <!-- CUSTOM top -->
+      <rect x="488" y="258" width="164" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="570" y="281" text-anchor="middle">Custom</text>
+      <text class="f-ts" x="570" y="301" text-anchor="middle">4 automations, parallel</text>
+
+      <!-- Fan from custom -->
+      <line x1="570" y1="314" x2="570" y2="332" class="f-line"/>
+      <line x1="527" y1="332" x2="617" y2="332" class="f-line"/>
+      <line x1="527" y1="332" x2="527" y2="346" class="f-line"/>
+      <line x1="617" y1="332" x2="617" y2="346" class="f-line"/>
+      <circle cx="570" cy="332" r="3" class="f-dot"/>
+
+      <!-- Auto 1 -->
+      <rect x="486" y="346" width="82" height="44" rx="6" class="f-coral-fill"/>
+      <text class="f-th" x="527" y="362" text-anchor="middle">Auto #1</text>
+      <text class="f-ts" x="527" y="380" text-anchor="middle">3 types</text>
+      <line x1="527" y1="390" x2="527" y2="408" class="f-line"/>
+
+      <!-- Auto 2 -->
+      <rect x="576" y="346" width="82" height="44" rx="6" class="f-coral-fill"/>
+      <text class="f-th" x="617" y="362" text-anchor="middle">Auto #2</text>
+      <text class="f-ts" x="617" y="380" text-anchor="middle">3 types</text>
+      <line x1="617" y1="390" x2="617" y2="408" class="f-line"/>
+
+      <!-- Auto 3 -->
+      <rect x="486" y="408" width="82" height="44" rx="6" class="f-coral-fill"/>
+      <text class="f-th" x="527" y="424" text-anchor="middle">Auto #3</text>
+      <text class="f-ts" x="527" y="442" text-anchor="middle">2 types</text>
+      <line x1="527" y1="452" x2="527" y2="470" class="f-line"/>
+
+      <!-- Auto 4 -->
+      <rect x="576" y="408" width="82" height="44" rx="6" class="f-coral-fill"/>
+      <text class="f-th" x="617" y="424" text-anchor="middle">Auto #4</text>
+      <text class="f-ts" x="617" y="442" text-anchor="middle">1 type</text>
+      <line x1="617" y1="452" x2="617" y2="470" class="f-line"/>
+
+      <!-- Merge custom -->
+      <line x1="527" y1="470" x2="617" y2="470" class="f-line"/>
+      <line x1="572" y1="470" x2="572" y2="486" class="f-line"/>
+      <circle cx="572" cy="470" r="3" class="f-dot"/>
+
+      <!-- Custom result -->
+      <rect x="488" y="486" width="164" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="570" y="502" text-anchor="middle">8–30 work items</text>
+      <text class="f-ts" x="570" y="520" text-anchor="middle">Varies by Client ID</text>
+
+      <!-- Converge rail at y=596 -->
+      <line x1="90" y1="390" x2="90" y2="596" class="f-line"/>
+      <line x1="340" y1="390" x2="340" y2="596" class="f-line"/>
+      <line x1="570" y1="530" x2="570" y2="596" class="f-line"/>
+      <line x1="90" y1="596" x2="570" y2="596" class="f-line"/>
+      <line x1="340" y1="596" x2="340" y2="614" class="f-line"/>
+      <circle cx="90" cy="596" r="3" class="f-dot"/>
+      <circle cx="340" cy="596" r="3" class="f-dot"/>
+      <circle cx="570" cy="596" r="3" class="f-dot"/>
+
+      <!-- ASSIGNMENT -->
+      <rect x="190" y="614" width="300" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="637" text-anchor="middle">~15 assignment automations</text>
+      <text class="f-ts" x="340" y="657" text-anchor="middle">Issue type + Client ID → assigns team member</text>
+      <line x1="340" y1="670" x2="340" y2="694" class="f-line"/>
+
+      <!-- OUTCOME -->
+      <rect x="190" y="694" width="300" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="717" text-anchor="middle">All tasks created and assigned</text>
+      <text class="f-ts" x="340" y="737" text-anchor="middle">Work starts day 1 — no manual effort</text>
+
+      <!-- LEGEND -->
+      <rect x="30" y="784" width="620" height="118" rx="8" class="f-legend-box"/>
+      <text class="f-ts" x="340" y="806" text-anchor="middle">Legend</text>
+      <rect x="50" y="818" width="14" height="14" rx="3" class="f-teal-fill"/>
+      <text class="f-ts" x="72" y="829">Trigger / system event</text>
+      <rect x="240" y="818" width="14" height="14" rx="3" class="f-purple-fill"/>
+      <text class="f-ts" x="262" y="829">Standard package automation</text>
+      <rect x="460" y="818" width="14" height="14" rx="3" class="f-coral-fill"/>
+      <text class="f-ts" x="482" y="829">Custom automation</text>
+      <rect x="50" y="848" width="14" height="14" rx="3" class="f-gray-fill"/>
+      <text class="f-ts" x="72" y="859">Work items generated</text>
+      <polygon points="254,851 268,858 254,865 240,858" class="f-gray-fill"/>
+      <text class="f-ts" x="276" y="863">Decision point</text>
+      <text class="f-ts" x="340" y="887" text-anchor="middle">22 total rules — 7 task creation, 15 user assignment</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">What I Built</div>
+  <div class="built-list fade-in d3">
+    <div class="built-item">
+      <div class="built-num">01</div>
+      <div>
+        <div class="built-title">Custom issue type hierarchy</div>
+        <div class="built-desc">Created three custom epic-level issue types — PackageA, PackageB, and Custom — so team members could see a client's service tier at a glance without opening the issue. Standard Jira "Epic" was replaced with meaningful types that matched how the team actually thought about their work.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">02</div>
+      <div>
+        <div class="built-title">Scheduled epic creation automation</div>
+        <div class="built-desc">A single automation runs on the first of every month and creates one epic-level work item per client. Package type and Client ID are set directly on the epic, which is what every downstream automation reads to decide what to do next.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">03</div>
+      <div>
+        <div class="built-title">PackageA and PackageB child task automations</div>
+        <div class="built-desc">One automation per tier. When a PackageA or PackageB epic is created, the corresponding automation fires and generates the full fixed task set. No Client ID logic needed — every client on a standard tier gets the same tasks every month.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">04</div>
+      <div>
+        <div class="built-title">Four Custom child task automations</div>
+        <div class="built-desc">Custom clients needed variable quantities of each task type. One automation hit Jira's object limit, so I split the logic across four automations running in parallel. Each handles a subset of task types, using if/then statements keyed on Client ID to determine how many tickets to generate. Tasks with multiples are titled sequentially (Blog Post #1, Blog Post #2, etc.).</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">05</div>
+      <div>
+        <div class="built-title">User assignment automations</div>
+        <div class="built-desc">About 15 separate automations handle assignment. Each checks issue type (and sometimes the ticket title for variations) and Client ID, then assigns the right team member. Tasks were typically split across 2-3 people per issue type, so each automation used if/then/else chains to cover every client. Assignment logic is package-agnostic — it only cares about what the task is and who the client is.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">06</div>
+      <div>
+        <div class="built-title">Client configuration template</div>
+        <div class="built-desc">The Custom tier required a process for managing changes. When a client's needs shifted, the manager needed a clean way to communicate updates without ambiguity. I built a simple Excel template — one row per Client ID, one column per task type, number in the cell equals tickets to generate. Updates went from frustrating back-and-forth to a five-minute form fill.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Architecture Detail</div>
+  <div class="fade-in d3">
+    <a href="automation.html" class="doc-card" style="display:flex; gap:20px; align-items:start; max-width:600px; margin-bottom:48px;">
+      <div class="doc-icon">⚡</div>
+      <div>
+        <div class="doc-number">Full writeup</div>
+        <div class="doc-title">Automation Architecture Breakdown</div>
+        <div class="doc-desc">Detailed documentation of all 22 automation rules — triggers, conditions, actions, and the logic behind the Custom tier's if/then structure.</div>
+        <div class="doc-actions"><span class="doc-link">Read →</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Outcome</div>
+  <div class="context-block fade-in d3">
+    <p>What had been taking the manager a couple of days each month for 10 clients — and would have scaled to a week or more at 45+ clients — became fully automated. Every month on the first, every client's full task set appeared in Jira already assigned. The team started work the same day with no setup required.</p>
+    <p>The system ran without issues from go-live through my departure. Ongoing maintenance was limited to updating Custom client configurations when service packages changed and adjusting assignment automations when team members joined or left.</p>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
