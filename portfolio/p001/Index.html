@@ -1,1 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-001: Intake Service Desk — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
 
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="../../" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span><span>P-001</span><span>›</span><span>Intake Service Desk</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">P-001 · Intake Service Desk</div>
+    <h1 class="project-title-h1">Intake Service Desk with <span class="accent-word">Auto-Routing</span></h1>
+    <p class="project-summary-text">IT requests were going into a single inbox with no routing, no SLA, and no way to tell who was supposed to handle what. I sat with stakeholders from four departments, documented the current mess, and built a JSM intake portal that auto-categorized requests and routed linked child tickets to the right department project. Manual triage dropped to zero.</p>
+    <div class="project-meta">
+      <div><div class="meta-label">Status</div><div class="meta-value"><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;">○ Coming Soon</span></div></div>
+      <div><div class="meta-label">Primary Tool</div><div class="meta-value">Jira Service Management</div></div>
+      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 4 departments</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">JSM</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span><span class="tag">JQL</span><span class="tag">Requirements Gathering</span><span class="tag">Service Desk Administration</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>IT requests came in through email with no structure. No categories, no priority, no routing. Whoever checked the inbox first decided what got worked. Some requests sat for days because the right person never saw them. Others got lost entirely.</p>
+    <p>Four departments were involved in IT request handling and none of them had visibility into what the others were doing. There was no SLA, no queue, and no way to report on volume or resolution time.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Full write-up coming soon</div>
+  <div class="context-block fade-in d3">
+    <p>This project page is in progress. Check back for the full breakdown: requirements documentation, portal configuration, automation logic, and outcomes.</p>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+</script>
+</body>
+</html>
