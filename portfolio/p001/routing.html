@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-001: Form Design and Automation Logic — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← Back to P-001</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-001</a><span>›</span>
+    <span>Form Design and Automation Logic</span>
+  </div>
+
+  <div class="doc-header fade-in d2">
+    <div class="doc-eyebrow">P-001 · Technical Detail</div>
+    <h1 class="doc-title-h1">Form Design and Automation Logic</h1>
+    <div class="doc-meta-line">1 JSM project · 5 Jira Software projects · 3 routing automations · Atlassian Forms · Custom link structure</div>
+    <div class="confidentiality-note" style="margin-top:20px;">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+  </div>
+
+  <div class="toc-mobile fade-in d2">
+    <button class="toc-mobile-toggle" id="tocToggle">Contents <span>▾</span></button>
+    <div class="toc-mobile-list" id="tocList">
+      <a href="#overview">Overview</a>
+      <a href="#environment">Environment</a>
+      <a href="#form">Intake form design</a>
+      <a href="#review">Review gate</a>
+      <a href="#automations">Routing automations</a>
+      <a href="#links">Link structure</a>
+      <a href="#projects">Team projects</a>
+      <a href="#confluence">Confluence integration</a>
+      <a href="#maintenance">Ongoing maintenance</a>
+    </div>
+  </div>
+
+  <div class="two-col fade-in d2">
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#environment">Environment</a></li>
+        <li><a href="#form">Intake form design</a></li>
+        <li><a href="#review">Review gate</a></li>
+        <li><a href="#automations">Routing automations</a></li>
+        <li><a href="#links" class="sub">Link structure</a></li>
+        <li><a href="#projects">Team projects</a></li>
+        <li><a href="#confluence">Confluence integration</a></li>
+        <li><a href="#maintenance">Ongoing maintenance</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="overview">
+        <h2 class="section-h">Overview</h2>
+        <p class="doc-p">This page covers the technical design behind the intake service desk and auto-routing system. The goal was to replace an unstructured multi-team process with a single submission point that captured all the information needed to start work across every involved team — automatically.</p>
+        <p class="doc-p">The system is built on a JSM service desk with a large conditional intake form, a human review gate, three routing automations, and five fully custom Jira Software projects where team work is managed. A Confluence knowledge base supports the submitter experience during form entry.</p>
+      </div>
+
+      <div class="doc-section" id="environment">
+        <h2 class="section-h">Environment</h2>
+        <p class="doc-p">The system spans six Jira projects running on Jira Cloud.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Project</th><th>Type</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Marketing Intake</td><td>Jira Service Management</td><td>Intake point — submitters interact here</td></tr>
+              <tr><td>Digital Design</td><td>Jira Software</td><td>Visual asset work management</td></tr>
+              <tr><td>Web Design</td><td>Jira Software</td><td>Website and page work management</td></tr>
+              <tr><td>Digital Ads</td><td>Jira Software</td><td>Ad campaign work management</td></tr>
+              <tr><td>Video</td><td>Jira Software</td><td>Video production work management</td></tr>
+              <tr><td>Social Media</td><td>Jira Software</td><td>Social campaign work management</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="doc-p">Every project was built from scratch. Custom issue types, custom workflows, custom fields, and custom screens were configured for each one. Nothing was left at default.</p>
+      </div>
+
+      <div class="doc-section" id="form">
+        <h2 class="section-h">Intake form design</h2>
+        <p class="doc-p">The intake form was built with Proforma, a third-party form tool that Atlassian later acquired and integrated natively into JSM as Atlassian Forms. The form is large — it had to capture enough information about every possible request type across every team to allow automation to generate tasks without human follow-up.</p>
+        <p class="doc-p">The structure is layered. The first question asks which teams need to be involved. Each selection reveals that team's section below. Within each team section, questions branch further based on what's selected.</p>
+        <p class="doc-p">Digital Ads illustrates how deep this goes. The team section presents every available ad type — display, performance max, shopping, video, carousel, and others. Each ad type selected reveals a set of specification questions for that format. Some of those questions have their own conditional branches. The form captures the full spec without requiring any back-and-forth after submission.</p>
+        <p class="doc-p">Design routing works similarly. Selecting the Design team reveals a list of asset types and design requests. The specific selection determines which project the task goes to — some request types route to Web Design, others to Digital Design. The submitter doesn't need to know that distinction. The form and automation handle it.</p>
+        <p class="doc-p">Help text and warnings were added throughout to guide submitters and reduce errors. Several Confluence knowledge base pages were linked directly from form fields where submitters were likely to need reference material.</p>
+      </div>
+
+      <div class="doc-section" id="review">
+        <h2 class="section-h">Review gate</h2>
+        <p class="doc-p">Submitted tickets enter a pending review status. No automation fires at this point. A designated reviewer opens the ticket, checks that all required information is present and accurate, and then manually changes the status to "Tasks created."</p>
+        <p class="doc-p">This gate was added early in the design process. The form is complex, and even with conditional logic and required fields, bad submissions were possible. Catching them before the automations fired prevented a cascade of incorrectly generated tasks that would all need to be closed or corrected manually.</p>
+        <p class="doc-p">If a ticket needed work, it was returned to the submitter with notes. The submitter updated the ticket and the reviewer checked it again before moving it forward.</p>
+      </div>
+
+      <div class="doc-section" id="automations">
+        <h2 class="section-h">Routing automations</h2>
+        <p class="doc-p">When the status changes to "Tasks created," three automations trigger simultaneously. They were split across three rules because a single automation would have hit Atlassian's per-rule item limit given the number of possible task combinations.</p>
+
+        <h3 class="sub-h">Automation 1 — Design teams</h3>
+        <p class="doc-p">Handles all design-related task generation. Uses branched field-value logic to check what was selected in the Design section of the form. Each branch checks for a specific value. If the value is present, a task is created in the appropriate project (Digital Design or Web Design). If the value is absent, the branch is skipped. Multiple design requests in the same submission each generate their own task.</p>
+
+        <h3 class="sub-h">Automation 2 — Digital Ads</h3>
+        <p class="doc-p">Handles ad campaign task generation. Each ad type selected in the form generates a separate task in the Digital Ads project. A submission with three ad types selected generates three tasks for that team. The automation checks for each ad type independently, so partial selections work correctly without any special handling.</p>
+
+        <h3 class="sub-h">Automation 3 — Other teams</h3>
+        <p class="doc-p">Handles Video and Social Media task generation. Uses the same branched field-value logic as Automation 1. If the Video section was filled out, a Video task is generated. If Social Media was included, a Social Media task is generated. Teams not selected in the form have no field values present, so their branches are skipped cleanly.</p>
+
+        <div class="doc-table-wrap" style="margin-top:24px;">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Automation</th><th>Trigger</th><th>Teams covered</th><th>Logic type</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Automation 1</td><td>Status → Tasks created</td><td>Digital Design, Web Design</td><td>Branched field-value</td></tr>
+              <tr><td>Automation 2</td><td>Status → Tasks created</td><td>Digital Ads</td><td>Branched field-value, 1 task per ad type</td></tr>
+              <tr><td>Automation 3</td><td>Status → Tasks created</td><td>Video, Social Media</td><td>Branched field-value</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section" id="links">
+        <h2 class="section-h">Link structure</h2>
+        <p class="doc-p">Generated tasks are linked back to the original JSM ticket using Jira's standard issue linking with custom link label names. This is not a native parent/child relationship. Jira's work item hierarchy (epic, story, subtask) was not used here — that structure is reserved for the teams' own work hierarchies within their projects.</p>
+        <p class="doc-p">The JSM ticket shows all generated tasks under a link label called "Marketing children." Each generated task shows the JSM ticket under a link label called "Marketing parent." This gives a clear visual hierarchy from either direction without occupying the native hierarchy slots.</p>
+        <p class="doc-p">The custom labels also made it possible to write a close automation that targeted only "Marketing children" links when checking whether all team work was complete. The automation could scan linked issues, confirm all children were in a closed status, and then close the marketing request automatically. This automation was later disabled when the platform approached monthly automation run limits, and teams transitioned to closing the JSM ticket manually.</p>
+      </div>
+
+      <div class="doc-section" id="projects">
+        <h2 class="section-h">Team projects</h2>
+        <p class="doc-p">Each of the five team projects was built to match how that team actually worked. Issue types, workflow statuses, required fields, and screen layouts were all configured independently based on requirements gathered directly from each team during the discovery process.</p>
+        <p class="doc-p">Discovery took about a month of independent sessions. No documented process existed — the work lived in people's heads and had never been fully mapped. Teams described their piece but often didn't know how it connected to other teams. Sessions used whiteboarding and flowcharting to capture what was said, and follow-up was frequent as one team's input revealed gaps in another's.</p>
+        <p class="doc-p">Teams manage their own work entirely within their project. They do not need to interact with the JSM project to complete tasks. Communication about a specific request happens on the JSM ticket, which all team members can access through the linked issue.</p>
+      </div>
+
+      <div class="doc-section" id="confluence">
+        <h2 class="section-h">Confluence integration</h2>
+        <p class="doc-p">A Confluence space was connected to the JSM project to support submitters during the intake process. Pages covered things submitters commonly needed to reference — campaign specs, available formats, asset requirements, and process guidance.</p>
+        <p class="doc-p">Relevant pages were linked directly from form help text so submitters could open them without leaving the form. This reduced the volume of questions coming into the team about what to fill in and how.</p>
+        <p class="doc-p">Each team also maintained restricted Confluence pages for their own internal process documentation. These were separate from the submitter-facing space and not accessible through the form.</p>
+      </div>
+
+      <div class="doc-section" id="maintenance">
+        <h2 class="section-h">Ongoing maintenance</h2>
+        <p class="doc-p">The initial build launched on a compressed 3-month timeline. Not everything could be fully mapped in that window — the process was too complex and too dependent on tribal knowledge that took time to surface. The system was designed with iteration in mind.</p>
+        <p class="doc-p">Post-launch issues were reported by the backend teams managing requests. Most were resolved the same day. After a few months of running the system, turnaround on fixes averaged under 30 minutes.</p>
+        <p class="doc-p">Additions after launch included more request types, expanded team coverage (Vendor Relations was added later), larger group campaign workflows, and ongoing improvements to form labels, help text, and field clarity based on how submitters were actually using it.</p>
+        <p class="doc-p">The close automation was disabled after Atlassian introduced monthly automation run limits and the system's volume began approaching the threshold. Teams handle JSM ticket closure manually as a result.</p>
+      </div>
+
+      <div class="doc-footer-note">
+        Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+      </div>
+
+      <div class="nav-doc">
+        <a href="index.html">← Back to P-001 overview</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const tocToggle=document.getElementById('tocToggle'),tocList=document.getElementById('tocList');
+  if(tocToggle)tocToggle.addEventListener('click',()=>{tocList.classList.toggle('open');tocToggle.querySelector('span').textContent=tocList.classList.contains('open')?'▴':'▾';});
+  document.querySelectorAll('.toc-mobile-list a,.toc-list a').forEach(a=>{
+    a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});
+  });
+</script>
+</body>
+</html>
