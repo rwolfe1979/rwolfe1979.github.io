@@ -293,11 +293,11 @@
     <div class="section-line"></div>
   </div>
   <div class="contact-grid reveal">
-    <a href="/cdn-cgi/l/email-protection#1163667e7d77742028262851767c70787d3f727e7c" class="contact-item">
+    <a href="mailto:rwolfe1979@gmail.com" class="contact-item">
       <div class="contact-icon">✉</div>
       <div>
         <div class="contact-label">Email</div>
-        <div class="contact-value"><span class="__cf_email__" data-cfemail="d1a3a6bebdb7b4e0e8e6e891b6bcb0b8bdffb2bebc">[email&#160;protected]</span></div>
+        <div class="contact-value">rwolfe1979@gmail.com</div>
       </div>
     </a>
     <a href="tel:5303218044" class="contact-item">
@@ -329,8 +329,7 @@
   <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-  // Custom cursor
+<script>
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
@@ -349,13 +348,11 @@
     el.addEventListener('mouseleave', () => { cursor.style.width = '8px'; cursor.style.height = '8px'; ring.style.width = '32px'; ring.style.height = '32px'; ring.style.borderColor = 'rgba(0,212,255,0.5)'; });
   });
 
-  // Hamburger
   const hamburger = document.getElementById('hamburger');
   const navMobile = document.getElementById('navMobile');
   hamburger.addEventListener('click', () => navMobile.classList.toggle('open'));
   function closeMenu() { navMobile.classList.remove('open'); }
 
-  // Scroll reveal
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
@@ -366,7 +363,6 @@
     el.style.transitionDelay = (i * 0.08) + 's';
   });
 
-  // Counter animation
   const countObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -379,4 +375,13 @@
         const timer = setInterval(() => {
           start += step;
           if (start >= num) { el.textContent = text; clearInterval(timer); }
-          else { el.textCo
+          else { el.textContent = Math.floor(start) + suffix; }
+        }, 16);
+        countObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-number').forEach(el => countObserver.observe(el));
+</script>
+</body>
+</html>
