@@ -110,6 +110,148 @@
         <p class="doc-p">A 2D filter gadget showed supervisor usage — which supervisors were appearing as approvers most often. This gave management visibility into approval patterns and a starting point if they needed to follow up on a specific decision.</p>
         <p class="doc-p">A second 2D filter gadget showed summary statistics by service desk, so leadership could see whether the blocker volume was concentrated in one area or distributed across all three.</p>
         <p class="doc-p">I chose pie charts and 2D filters deliberately. They show distribution and allow drill-down. A flat list of tickets wouldn't have given leadership the pattern view they needed. A more complex visualization would have required more maintenance. Simple gadgets backed by solid JQL filters hold up longer than anything custom-built.</p>
+
+        <p class="doc-p" style="margin-top:24px;">The mockup below shows the four-gadget layout as it appeared to leadership. Field names and values have been generalized.</p>
+
+        <div style="margin-top:16px;margin-bottom:8px;">
+          <style>
+            .jd{background:#f4f5f7;padding:16px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:13px;color:#172b4d}
+            .jd-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+            .jd-col{display:flex;flex-direction:column;gap:12px}
+            .jd-g{background:#fff;border:1px solid #dfe1e6;border-top:3px solid #0052cc;border-radius:3px;overflow:hidden}
+            .jd-h{display:flex;align-items:center;justify-content:space-between;padding:10px 14px 8px;border-bottom:1px solid #f4f5f7}
+            .jd-ht{font-size:13px;font-weight:700;color:#172b4d}
+            .jd-hi{display:flex;gap:8px;align-items:center}
+            .jd-b{padding:12px 14px}
+            .jd-f{padding:5px 14px 9px;font-size:11px;color:#97a0af;display:flex;align-items:center;gap:5px;border-top:1px solid #f4f5f7}
+            .jd-fld{font-size:13px;font-weight:700;color:#172b4d;margin:10px 0 1px}
+            .jd-tot{font-size:12px;color:#6b778c;margin-bottom:6px}
+            .jd-li{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid #f4f5f7}
+            .jd-sw{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+            .jd-ln{flex:1;font-size:12px;color:#172b4d}
+            .jd-lc{font-size:12px;color:#172b4d;font-weight:500}
+            .jd-tw{overflow-x:auto}
+            .jd-t{width:100%;border-collapse:collapse;font-size:12px;min-width:260px}
+            .jd-t th{background:#f4f5f7;color:#6b778c;font-weight:600;padding:6px 10px;text-align:right;border:1px solid #ebecf0;font-size:11px}
+            .jd-t th:first-child{text-align:left}
+            .jd-t td{padding:6px 10px;border:1px solid #ebecf0;text-align:right;color:#0052cc}
+            .jd-t td:first-child{text-align:left;color:#172b4d}
+            .jd-tr td{background:#f4f5f7;font-weight:700}
+            .jd-tr td:first-child{color:#172b4d}
+            .jd-2f{display:flex;justify-content:space-between;font-size:11px;color:#6b778c;margin-top:8px}
+            .jd-disc{font-size:11px;color:#403294;background:#f3f0ff;border-left:3px solid #6554c0;padding:6px 10px;margin-bottom:12px;border-radius:0 3px 3px 0}
+            @media(max-width:580px){.jd-grid{grid-template-columns:1fr}}
+          </style>
+
+          <div class="jd">
+            <div class="jd-disc">Illustrative data — field names and values generalized to protect confidential information.</div>
+            <div class="jd-grid">
+
+              <div class="jd-col">
+                <div class="jd-g">
+                  <div class="jd-h">
+                    <span class="jd-ht">Pie Chart: Blocker Reason</span>
+                    <span class="jd-hi">
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 1h4M1 1v4M13 1h-4M13 1v4M1 13h4M1 13v-4M13 13h-4M13 13v-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1" stroke="#97a0af" stroke-width="1.5"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M5 7h4M9 5l2-2a1.4 1.4 0 0 1 2 2L9 9M5 9l-2 2a1.4 1.4 0 0 1-2-2l4-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                  <div class="jd-b">
+                    <div style="position:relative;width:100%;height:180px"><canvas id="pie1" role="img" aria-label="Donut chart: Error 14, Supervisor Approved 9, Paid Rush 7. Total 30.">Error 14, Supervisor Approved 9, Paid Rush 7.</canvas></div>
+                    <div class="jd-fld">Blocker Reason</div>
+                    <div class="jd-tot">Total Issues: 30</div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#e5584c"></span><span class="jd-ln">Error</span><span class="jd-lc">14</span></div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#4c9aff"></span><span class="jd-ln">Supervisor Approved</span><span class="jd-lc">9</span></div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#f0b429"></span><span class="jd-ln">Paid Rush</span><span class="jd-lc">7</span></div>
+                  </div>
+                  <div class="jd-f"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Last refreshed just now</div>
+                </div>
+
+                <div class="jd-g">
+                  <div class="jd-h">
+                    <span class="jd-ht">Pie Chart: Error Sub-type</span>
+                    <span class="jd-hi">
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 1h4M1 1v4M13 1h-4M13 1v4M1 13h4M1 13v-4M13 13h-4M13 13v-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1" stroke="#97a0af" stroke-width="1.5"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M5 7h4M9 5l2-2a1.4 1.4 0 0 1 2 2L9 9M5 9l-2 2a1.4 1.4 0 0 1-2-2l4-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                  <div class="jd-b">
+                    <div style="position:relative;width:100%;height:180px"><canvas id="pie2" role="img" aria-label="Donut chart: File Setup Error 6, Content Error 4, System Error 2, Other 2. Total 14.">File Setup Error 6, Content Error 4, System Error 2, Other 2.</canvas></div>
+                    <div class="jd-fld">Error Sub-type</div>
+                    <div class="jd-tot">Total Issues: 14</div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#e5584c"></span><span class="jd-ln">File Setup Error</span><span class="jd-lc">6</span></div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#4c9aff"></span><span class="jd-ln">Content Error</span><span class="jd-lc">4</span></div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#f0b429"></span><span class="jd-ln">System Error</span><span class="jd-lc">2</span></div>
+                    <div class="jd-li"><span class="jd-sw" style="background:#57d9a3"></span><span class="jd-ln">Other</span><span class="jd-lc">2</span></div>
+                  </div>
+                  <div class="jd-f"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Last refreshed just now</div>
+                </div>
+              </div>
+
+              <div class="jd-col">
+                <div class="jd-g">
+                  <div class="jd-h">
+                    <span class="jd-ht">Two Dimensional Filter Statistics</span>
+                    <span class="jd-hi">
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 1h4M1 1v4M13 1h-4M13 1v4M1 13h4M1 13v-4M13 13h-4M13 13v-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1" stroke="#97a0af" stroke-width="1.5"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M5 7h4M9 5l2-2a1.4 1.4 0 0 1 2 2L9 9M5 9l-2 2a1.4 1.4 0 0 1-2-2l4-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                  <div class="jd-b">
+                    <div class="jd-tw">
+                      <table class="jd-t">
+                        <thead><tr><th>Blocker Reason</th><th>Marketing</th><th>Catalog</th><th>Development</th><th>T:</th></tr></thead>
+                        <tbody>
+                          <tr><td>Error</td><td>7</td><td>4</td><td>3</td><td>14</td></tr>
+                          <tr><td>Supervisor Approved</td><td>5</td><td>2</td><td>2</td><td>9</td></tr>
+                          <tr><td>Paid Rush</td><td>4</td><td>2</td><td>1</td><td>7</td></tr>
+                          <tr class="jd-tr"><td>Total Unique Issues:</td><td>16</td><td>8</td><td>6</td><td>30</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="jd-2f"><span>Grouped by: Blocker Reason</span><span>Showing 3 of 3 statistics.</span></div>
+                  </div>
+                  <div class="jd-f"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Last refreshed just now</div>
+                </div>
+
+                <div class="jd-g">
+                  <div class="jd-h">
+                    <span class="jd-ht">Two Dimensional Filter Statistics</span>
+                    <span class="jd-hi">
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M1 1h4M1 1v4M13 1h-4M13 1v4M1 13h4M1 13v-4M13 13h-4M13 13v-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1" stroke="#97a0af" stroke-width="1.5"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M5 7h4M9 5l2-2a1.4 1.4 0 0 1 2 2L9 9M5 9l-2 2a1.4 1.4 0 0 1-2-2l4-4" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </span>
+                  </div>
+                  <div class="jd-b">
+                    <div class="jd-tw">
+                      <table class="jd-t">
+                        <thead><tr><th>Approving Supervisor</th><th>Marketing</th><th>Catalog</th><th>Development</th><th>T:</th></tr></thead>
+                        <tbody>
+                          <tr><td>J. Martinez</td><td>2</td><td>1</td><td>1</td><td>4</td></tr>
+                          <tr><td>S. Thompson</td><td>3</td><td>0</td><td>0</td><td>3</td></tr>
+                          <tr><td>K. Williams</td><td>0</td><td>1</td><td>1</td><td>2</td></tr>
+                          <tr class="jd-tr"><td>Total Unique Issues:</td><td>5</td><td>2</td><td>2</td><td>9</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="jd-2f"><span>Grouped by: Approving Supervisor</span><span>Showing 3 of 3 statistics.</span></div>
+                  </div>
+                  <div class="jd-f"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M12 7a5 5 0 1 1-5-5" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round"/><path d="M12 2v5H7" stroke="#97a0af" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg> Last refreshed just now</div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <div class="doc-section" id="jql">
@@ -158,6 +300,12 @@
   <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
 </footer>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+  var chartOpts={responsive:true,maintainAspectRatio:false,cutout:'58%',plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.label+': '+c.raw;}}}}};
+  new Chart(document.getElementById('pie1'),{type:'doughnut',data:{labels:['Error','Supervisor Approved','Paid Rush'],datasets:[{data:[14,9,7],backgroundColor:['#e5584c','#4c9aff','#f0b429'],borderColor:'#ffffff',borderWidth:2}]},options:chartOpts});
+  new Chart(document.getElementById('pie2'),{type:'doughnut',data:{labels:['File Setup Error','Content Error','System Error','Other'],datasets:[{data:[6,4,2,2],backgroundColor:['#e5584c','#4c9aff','#f0b429','#57d9a3'],borderColor:'#ffffff',borderWidth:2}]},options:chartOpts});
+</script>
 <script>
   const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
   let mx=0,my=0,rx=0,ry=0;
