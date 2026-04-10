@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-001: Intake Service Desk — Ryan Wolfe</title>
+<title>P-001: Intake Service Desk with Auto-Routing — Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -22,20 +22,33 @@
 <div class="page-wrap">
 
   <div class="breadcrumb fade-in d1">
-    <a href="../../">Home</a><span>›</span><span>P-001</span><span>›</span><span>Intake Service Desk</span>
+    <a href="../../">Home</a><span>›</span><span>P-001</span><span>›</span><span>Intake Service Desk with Auto-Routing</span>
   </div>
 
   <div class="project-header fade-in d2">
-    <div class="project-eyebrow">P-001 · Intake Service Desk</div>
-    <h1 class="project-title-h1">Intake Service Desk with <span class="accent-word">Auto-Routing</span></h1>
-    <p class="project-summary-text">IT requests were going into a single inbox with no routing, no SLA, and no way to tell who was supposed to handle what. I sat with stakeholders from four departments, documented the current mess, and built a JSM intake portal that auto-categorized requests and routed linked child tickets to the right department project. Manual triage dropped to zero.</p>
+    <div class="project-eyebrow">P-001 · Jira Service Management</div>
+    <h1 class="project-title-h1">Intake Service Desk <span class="accent-word">with Auto-Routing</span></h1>
+    <p class="project-summary-text">Marketing campaign requests were tracked in a tool with no structure, no reporting, and no shared process. I designed and built a JSM intake system with a large conditional form, three automations, and five fully custom team projects. A single submitted request automatically generates and routes tasks to every team involved.</p>
+
+    <div class="confidentiality-note fade-in d2">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+
     <div class="project-meta">
-      <div><div class="meta-label">Status</div><div class="meta-value"><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;">○ Coming Soon</span></div></div>
-      <div><div class="meta-label">Primary Tool</div><div class="meta-value">Jira Service Management</div></div>
-      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 4 departments</div></div>
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Service Management Cloud</div></div>
+      <div><div class="meta-label">Built</div><div class="meta-value">2022</div></div>
+      <div><div class="meta-label">Ticket volume</div><div class="meta-value">~2,500/month</div></div>
     </div>
     <div class="tags">
-      <span class="tag">JSM</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span><span class="tag">JQL</span><span class="tag">Requirements Gathering</span><span class="tag">Service Desk Administration</span>
+      <span class="tag">Jira Service Management</span>
+      <span class="tag">Jira Software</span>
+      <span class="tag">Jira Automation</span>
+      <span class="tag">Atlassian Forms</span>
+      <span class="tag">Conditional Logic</span>
+      <span class="tag">Requirements Gathering</span>
+      <span class="tag">Confluence</span>
+      <span class="tag">Workflow Design</span>
     </div>
   </div>
 
@@ -43,18 +56,237 @@
 
   <div class="section-label fade-in d2">The Problem</div>
   <div class="context-block fade-in d3">
-    <p>IT requests came in through email with no structure. No categories, no priority, no routing. Whoever checked the inbox first decided what got worked. Some requests sat for days because the right person never saw them. Others got lost entirely.</p>
-    <p>Four departments were involved in IT request handling and none of them had visibility into what the others were doing. There was no SLA, no queue, and no way to report on volume or resolution time.</p>
+    <p>Campaign requests were managed in a work tool that had no real structure. Each team knew their piece of the process. Nobody had the full picture. There was no reporting, no accountability, and no visibility for management unless they lived inside the tool every day. Searching was essentially impossible. The process existed mostly as tribal knowledge.</p>
+    <p>Requests could involve multiple teams depending on what the campaign needed — design, video, digital ads, social media — and there was no reliable way to make sure every team got what they needed to start their work. Things fell through the gaps regularly.</p>
   </div>
 
   <div class="divider"></div>
 
-  <div class="section-label fade-in d2">Full write-up coming soon</div>
+  <div class="section-label fade-in d2">How the Routing Works</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">A request comes in through a JSM portal. The intake form uses conditional logic to reveal team-specific sections based on what the submitter selects. Once submitted, a reviewer checks the ticket before it moves forward. Changing the status to "Tasks created" triggers three automations simultaneously. Each automation uses branched field-value logic to generate the right tasks in the right team projects. All generated tasks link back to the original JSM ticket using custom link labels.</p>
+
+  <!-- FLOW DIAGRAM -->
+  <div class="fade-in d3" style="margin-bottom:48px;">
+    <svg width="100%" viewBox="0 0 680 1000" role="img" style="display:block;">
+      <title>Campaign intake and auto-routing flow</title>
+      <desc>Flowchart showing how a marketing campaign request moves from JSM intake through human review, triggers three automations, and fans out into team project tasks.</desc>
+      <style>
+        .f-teal-fill  { fill: #0d4f4a; stroke: #00d4ff; stroke-width: 0.5; }
+        .f-purple-fill{ fill: #2d1f6e; stroke: #7b2fff; stroke-width: 0.5; }
+        .f-coral-fill { fill: #5c2018; stroke: #d4522a; stroke-width: 0.5; }
+        .f-amber-fill { fill: #4a2e00; stroke: #c97a00; stroke-width: 0.5; }
+        .f-gray-fill  { fill: #111827; stroke: rgba(0,212,255,0.25); stroke-width: 0.5; }
+        .f-th { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
+        .f-ts { font-family:'Syne',sans-serif; font-size:11px; font-weight:400; fill:#6b7a8d; }
+        .f-line { stroke:rgba(0,212,255,0.4); stroke-width:1.5; fill:none; }
+        .f-dash { stroke:rgba(0,212,255,0.3); stroke-width:1.5; fill:none; stroke-dasharray:5 4; }
+        .f-lbl-bg { fill:#080c12; }
+      </style>
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="rgba(0,212,255,0.6)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </marker>
+      </defs>
+
+      <!-- STEP 1 -->
+      <rect x="215" y="40" width="250" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="63" text-anchor="middle">Account Executive submits</text>
+      <text class="f-ts" x="340" y="83" text-anchor="middle">JSM portal — marketing request type</text>
+      <line x1="340" y1="96" x2="340" y2="136" class="f-line" marker-end="url(#arr)"/>
+
+      <!-- STEP 2 -->
+      <rect x="175" y="136" width="330" height="68" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="160" text-anchor="middle">Conditional intake form</text>
+      <text class="f-ts" x="340" y="178" text-anchor="middle">Teams selected — sections reveal per selection</text>
+      <text class="f-ts" x="340" y="195" text-anchor="middle">Questions drill down to specific deliverables</text>
+      <line x1="340" y1="204" x2="340" y2="254" class="f-line" marker-end="url(#arr)"/>
+
+      <!-- STEP 3 -->
+      <rect x="195" y="254" width="290" height="56" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="277" text-anchor="middle">JSM ticket created</text>
+      <text class="f-ts" x="340" y="297" text-anchor="middle">Status: pending review</text>
+      <line x1="340" y1="310" x2="340" y2="350" class="f-line" marker-end="url(#arr)"/>
+
+      <!-- STEP 4 -->
+      <rect x="210" y="350" width="260" height="56" rx="8" class="f-amber-fill"/>
+      <text class="f-th" x="340" y="373" text-anchor="middle">Human review</text>
+      <text class="f-ts" x="340" y="391" text-anchor="middle">Reviewer checks ticket quality</text>
+
+      <!-- Needs work loop -->
+      <path d="M210 378 L90 378 L90 172 L175 172" class="f-dash" marker-end="url(#arr)"/>
+      <rect x="55" y="257" width="70" height="20" rx="4" class="f-lbl-bg"/>
+      <text class="f-ts" x="90" y="268" text-anchor="middle">Needs work</text>
+
+      <!-- Approved -->
+      <line x1="340" y1="406" x2="340" y2="456" class="f-line" marker-end="url(#arr)"/>
+      <rect x="305" y="421" width="70" height="20" rx="4" class="f-lbl-bg"/>
+      <text class="f-ts" x="340" y="432" text-anchor="middle">Approved</text>
+
+      <!-- STEP 5 -->
+      <rect x="185" y="456" width="310" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="340" y="479" text-anchor="middle">Status set to "Tasks created"</text>
+      <text class="f-ts" x="340" y="497" text-anchor="middle">Triggers 3 automations simultaneously</text>
+
+      <!-- Fan to automations -->
+      <line x1="340" y1="512" x2="340" y2="550" class="f-line"/>
+      <line x1="125" y1="550" x2="555" y2="550" class="f-line"/>
+      <line x1="125" y1="550" x2="125" y2="562" class="f-line"/>
+      <line x1="340" y1="550" x2="340" y2="562" class="f-line"/>
+      <line x1="555" y1="550" x2="555" y2="562" class="f-line"/>
+
+      <!-- Automation boxes -->
+      <rect x="40"  y="562" width="170" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="125" y="585" text-anchor="middle">Automation 1</text>
+      <text class="f-ts" x="125" y="603" text-anchor="middle">Design teams</text>
+
+      <rect x="255" y="562" width="170" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="340" y="585" text-anchor="middle">Automation 2</text>
+      <text class="f-ts" x="340" y="603" text-anchor="middle">Digital Ads</text>
+
+      <rect x="470" y="562" width="170" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="555" y="585" text-anchor="middle">Automation 3</text>
+      <text class="f-ts" x="555" y="603" text-anchor="middle">Other teams</text>
+
+      <!-- Branch to team boxes -->
+      <line x1="100" y1="630" x2="225" y2="630" class="f-line"/>
+      <line x1="125" y1="618" x2="125" y2="630" class="f-line"/>
+      <line x1="340" y1="618" x2="340" y2="658" class="f-line"/>
+      <line x1="455" y1="630" x2="577" y2="630" class="f-line"/>
+      <line x1="555" y1="618" x2="555" y2="630" class="f-line"/>
+      <line x1="100" y1="630" x2="100" y2="658" class="f-line"/>
+      <line x1="225" y1="630" x2="225" y2="658" class="f-line"/>
+      <line x1="455" y1="630" x2="455" y2="658" class="f-line"/>
+      <line x1="577" y1="630" x2="577" y2="658" class="f-line"/>
+
+      <!-- Team task boxes -->
+      <rect x="40"  y="658" width="120" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="100" y="681" text-anchor="middle">Digital</text>
+      <text class="f-th" x="100" y="699" text-anchor="middle">Design</text>
+
+      <rect x="170" y="658" width="110" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="225" y="681" text-anchor="middle">Web</text>
+      <text class="f-th" x="225" y="699" text-anchor="middle">Design</text>
+
+      <rect x="285" y="658" width="110" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="340" y="681" text-anchor="middle">Digital Ads</text>
+      <text class="f-ts" x="340" y="699" text-anchor="middle">1 task per ad type</text>
+
+      <rect x="405" y="658" width="100" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="455" y="681" text-anchor="middle">Video</text>
+      <text class="f-th" x="455" y="699" text-anchor="middle">Team</text>
+
+      <rect x="515" y="658" width="125" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="577" y="681" text-anchor="middle">Social</text>
+      <text class="f-th" x="577" y="699" text-anchor="middle">Media</text>
+
+      <!-- Converge -->
+      <line x1="100" y1="714" x2="100" y2="740" class="f-line"/>
+      <line x1="225" y1="714" x2="225" y2="740" class="f-line"/>
+      <line x1="340" y1="714" x2="340" y2="740" class="f-line"/>
+      <line x1="455" y1="714" x2="455" y2="740" class="f-line"/>
+      <line x1="577" y1="714" x2="577" y2="740" class="f-line"/>
+      <line x1="100" y1="740" x2="577" y2="740" class="f-line"/>
+      <line x1="340" y1="740" x2="340" y2="754" class="f-line" marker-end="url(#arr)"/>
+
+      <!-- STEP 6 -->
+      <rect x="155" y="754" width="370" height="56" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="777" text-anchor="middle">Team tasks linked to JSM ticket</text>
+      <text class="f-ts" x="340" y="795" text-anchor="middle">"Marketing children" / "Marketing parent" labels</text>
+      <line x1="340" y1="810" x2="340" y2="850" class="f-line" marker-end="url(#arr)"/>
+
+      <!-- STEP 7 -->
+      <rect x="175" y="850" width="330" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="873" text-anchor="middle">Teams complete their tasks</text>
+      <text class="f-ts" x="340" y="891" text-anchor="middle">Communication happens on JSM ticket</text>
+      <line x1="340" y1="906" x2="340" y2="946" class="f-line" marker-end="url(#arr)"/>
+
+      <!-- STEP 8 -->
+      <rect x="215" y="946" width="250" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="968" text-anchor="middle">Marketing request closed</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">What I Built</div>
+  <div class="built-list fade-in d3">
+    <div class="built-item">
+      <div class="built-num">01</div>
+      <div>
+        <div class="built-title">Requirements discovery</div>
+        <div class="built-desc">No documented process existed. I ran independent sessions with each team over about a month, whiteboarding and flowcharting what each team actually needed from a request. The process was mostly tribal knowledge — I had to pull it out one question at a time and push back when answers seemed incomplete. It took multiple sessions per team because one team's answer would reveal something another team hadn't mentioned yet.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">02</div>
+      <div>
+        <div class="built-title">Conditional intake form</div>
+        <div class="built-desc">Built using Proforma (now Atlassian Forms natively in JSM). The form is large — team selection at the top controls which sections appear below. Each team section has its own questions, and those questions have further conditional branches based on what's selected. Digital Ads, for example, presents every available ad type and each selection reveals additional spec fields. The form captures everything needed to generate tasks without follow-up.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">03</div>
+      <div>
+        <div class="built-title">Human review gate</div>
+        <div class="built-desc">Submitted tickets enter a pending review status before any automation fires. A reviewer checks that the ticket is complete and accurate. Only when the status is manually changed to "Tasks created" do the automations trigger. This step was added to catch bad submissions before they generated a cascade of tasks that would all need to be corrected or deleted.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">04</div>
+      <div>
+        <div class="built-title">Three routing automations</div>
+        <div class="built-desc">Split across three automations due to Atlassian's per-rule item limits. Automation 1 handles Design teams (Digital Design and Web Design). Automation 2 handles Digital Ads. Automation 3 handles Video and Social Media. Each uses branched field-value logic — if a field has a specific value, generate a task; if not, move to the next branch. Digital Ads generates one separate task per ad type selected, so a single request could produce several tasks for that team alone.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">05</div>
+      <div>
+        <div class="built-title">Five custom team projects</div>
+        <div class="built-desc">Built dedicated Jira Software projects for Digital Design, Web Design, Digital Ads, Video, and Social Media. Each has custom issue types, custom workflows, custom fields, and custom screens — nothing out of the box. The JSM project is equally custom. Teams manage their own work in their project and communicate on the original JSM ticket.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">06</div>
+      <div>
+        <div class="built-title">Custom link structure</div>
+        <div class="built-desc">Standard Jira issue linking with custom label names. The JSM ticket shows linked tasks under "Marketing children." Each team task shows the JSM ticket under "Marketing parent." This gave the visual hierarchy of a parent/child relationship without using Jira's native work item hierarchy, and let the close automation target only the linked children when checking completion status.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">07</div>
+      <div>
+        <div class="built-title">Confluence knowledge base</div>
+        <div class="built-desc">A Confluence space tied to the JSM project gave submitters reference material while filling out the form. Help text in the form linked directly to relevant Confluence pages. Each team also had restricted Confluence pages for internal process documentation and communication.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Routing Logic Detail</div>
+  <div class="fade-in d3">
+    <a href="routing.html" class="doc-card" style="display:flex; gap:20px; align-items:start; max-width:600px; margin-bottom:48px;">
+      <div class="doc-icon">⚡</div>
+      <div>
+        <div class="doc-number">Technical detail</div>
+        <div class="doc-title">Form Design and Automation Logic</div>
+        <div class="doc-desc">How the conditional form works, how each automation decides which tasks to generate, and how the link structure ties everything back to the original request.</div>
+        <div class="doc-actions"><span class="doc-link">Read →</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Outcome</div>
   <div class="context-block fade-in d3">
-    <p>This project page is in progress. Check back for the full breakdown: requirements documentation, portal configuration, automation logic, and outcomes.</p>
+    <p>What had been an unstructured, manually coordinated process running across multiple teams with no visibility became a single submission that handled all the routing automatically. Management could see every active request, every linked task, and where things stood across all teams at any point.</p>
+    <p>The system ran from go-live through my departure and is still in use. It handled roughly 2,500 requests per month at scale. It was expanded over time to include additional request types, and Vendor Relations and larger group campaign workflows were added after the initial launch.</p>
+    <p>Most issues after go-live were resolved within a day. Eventually I could turn around form and automation fixes in under 30 minutes. The initial build had a compressed 3-month timeline — the system evolved in the months after launch as edge cases surfaced and the process became better understood.</p>
   </div>
 
   <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+
 </div>
 
 <footer>
@@ -68,10 +300,12 @@
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
   function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
   animRing();
-  document.querySelectorAll('a').forEach(el=>{
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
     el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
     el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
   });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 </script>
 </body>
 </html>
