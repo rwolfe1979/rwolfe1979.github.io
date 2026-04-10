@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-003: Blocker Priority Dashboard — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="../../" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span><span>P-003</span><span>›</span><span>Blocker Priority Dashboard</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">P-003 · Jira Dashboards</div>
+    <h1 class="project-title-h1">Blocker Priority <span class="accent-word">Dashboard</span></h1>
+    <p class="project-summary-text">Back-end teams were losing time to blocker tickets submitted without a real reason. I designed a custom conditional field structure across three service desks to capture the reason behind every blocker, built a Jira dashboard to surface the data to leadership, and tied Paid Rush requests to a monthly billing process.</p>
+
+    <div class="confidentiality-note fade-in d2">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+
+    <div class="project-meta">
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Service Management Cloud</div></div>
+      <div><div class="meta-label">Built</div><div class="meta-value">2022</div></div>
+      <div><div class="meta-label">Service desks</div><div class="meta-value">3</div></div>
+    </div>
+    <div class="tags">
+      <span class="tag">Jira Service Management</span>
+      <span class="tag">Jira Dashboards</span>
+      <span class="tag">JQL</span>
+      <span class="tag">Atlassian Forms</span>
+      <span class="tag">Conditional Logic</span>
+      <span class="tag">Access Governance</span>
+      <span class="tag">Requirements Gathering</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>Blocker priority meant everything stopped. If a ticket came in marked Blocker, back-end teams dropped what they were doing and handled it immediately. That's what the priority was for. The problem was that anyone submitting a request could select Blocker with no requirement to justify it — and nobody was tracking how often it happened or why.</p>
+    <p>Back-end teams raised it as a recurring complaint. Volume was high and the reasons were invisible. Leadership wanted to stop the abuse and get data on what was actually driving blocker requests. They also wanted to introduce a paid option for clients who needed something expedited. The field system I designed covered all of it.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">How It Works</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">When a customer service rep sets a ticket to Blocker priority, a Blocker Reason field appears on the form. Selecting a reason triggers further conditional fields — an error sub-type selector or a supervisor user picker, depending on the selection. Paid Rush requires no extra fields and routes to billing. All three paths log data that the dashboard reads from JQL saved filters.</p>
+
+  <div class="fade-in d3" style="margin-bottom:48px;">
+    <svg width="100%" viewBox="0 0 680 560" role="img" style="display:block;">
+      <title>Blocker priority conditional field logic</title>
+      <desc>Flowchart showing how setting priority to Blocker reveals the Blocker Reason field with three branches: Error triggers an error sub-type selector, Supervisor Approved triggers a supervisor user picker, and Paid Rush requires no additional fields. All paths lead to form submission.</desc>
+      <style>
+        .f-teal-fill  { fill: #0d4f4a; stroke: #00d4ff; stroke-width: 0.5; }
+        .f-purple-fill{ fill: #2d1f6e; stroke: #7b2fff; stroke-width: 0.5; }
+        .f-coral-fill { fill: #5c2018; stroke: #d4522a; stroke-width: 0.5; }
+        .f-blue-fill  { fill: #0a1e4a; stroke: #0066ff; stroke-width: 0.5; }
+        .f-gray-fill  { fill: #111827; stroke: rgba(0,212,255,0.25); stroke-width: 0.5; }
+        .f-th { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
+        .f-ts { font-family:'Syne',sans-serif; font-size:11px; font-weight:400; fill:#6b7a8d; }
+        .f-line { stroke:rgba(0,212,255,0.4); stroke-width:1.5; fill:none; }
+        .f-dot { fill: rgba(0,212,255,0.6); }
+      </style>
+
+      <!-- Box 1: Priority set to Blocker -->
+      <rect x="215" y="40" width="250" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="62" text-anchor="middle">Priority set to Blocker</text>
+
+      <line x1="340" y1="84" x2="340" y2="122" class="f-line"/>
+
+      <!-- Box 2: Blocker Reason field appears -->
+      <rect x="185" y="122" width="310" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="142" text-anchor="middle">Blocker Reason field appears</text>
+      <text class="f-ts" x="340" y="162" text-anchor="middle">Only shown when Blocker is selected</text>
+
+      <line x1="340" y1="178" x2="340" y2="210" class="f-line"/>
+
+      <!-- Horizontal branch line -->
+      <line x1="120" y1="210" x2="560" y2="210" class="f-line"/>
+      <circle cx="120" cy="210" r="3" class="f-dot"/>
+      <circle cx="340" cy="210" r="3" class="f-dot"/>
+      <circle cx="560" cy="210" r="3" class="f-dot"/>
+
+      <line x1="120" y1="210" x2="120" y2="228" class="f-line"/>
+      <line x1="340" y1="210" x2="340" y2="228" class="f-line"/>
+      <line x1="560" y1="210" x2="560" y2="228" class="f-line"/>
+
+      <!-- Branch: Error -->
+      <rect x="30" y="228" width="180" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="120" y="248" text-anchor="middle">Error</text>
+      <text class="f-ts" x="120" y="268" text-anchor="middle">Sub-type required</text>
+
+      <!-- Branch: Supervisor Approved -->
+      <rect x="240" y="228" width="200" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="340" y="248" text-anchor="middle">Supervisor Approved</text>
+      <text class="f-ts" x="340" y="268" text-anchor="middle">User picker required</text>
+
+      <!-- Branch: Paid Rush -->
+      <rect x="480" y="228" width="160" height="56" rx="8" class="f-blue-fill"/>
+      <text class="f-th" x="560" y="248" text-anchor="middle">Paid Rush</text>
+      <text class="f-ts" x="560" y="268" text-anchor="middle">No extra fields</text>
+
+      <line x1="120" y1="284" x2="120" y2="320" class="f-line"/>
+      <line x1="340" y1="284" x2="340" y2="320" class="f-line"/>
+
+      <!-- Sub-field: Error sub-type -->
+      <rect x="20" y="320" width="200" height="56" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="120" y="340" text-anchor="middle">Error sub-type field</text>
+      <text class="f-ts" x="120" y="360" text-anchor="middle">Common types or Other</text>
+
+      <!-- Sub-field: Supervisor user picker -->
+      <rect x="230" y="320" width="220" height="56" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="340" text-anchor="middle">Supervisor user picker</text>
+      <text class="f-ts" x="340" y="360" text-anchor="middle">Scoped to supervisor group</text>
+
+      <!-- Merge -->
+      <line x1="120" y1="376" x2="120" y2="442" class="f-line"/>
+      <line x1="340" y1="376" x2="340" y2="442" class="f-line"/>
+      <line x1="560" y1="284" x2="560" y2="442" class="f-line"/>
+      <line x1="120" y1="442" x2="560" y2="442" class="f-line"/>
+      <circle cx="120" cy="442" r="3" class="f-dot"/>
+      <circle cx="340" cy="442" r="3" class="f-dot"/>
+      <circle cx="560" cy="442" r="3" class="f-dot"/>
+
+      <line x1="340" y1="442" x2="340" y2="478" class="f-line"/>
+
+      <!-- Final box -->
+      <rect x="215" y="478" width="250" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="500" text-anchor="middle">Form submitted</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">What I Built</div>
+  <div class="built-list fade-in d3">
+    <div class="built-item">
+      <div class="built-num">01</div>
+      <div>
+        <div class="built-title">Custom Blocker Reason field</div>
+        <div class="built-desc">A select field with three options: Error, Supervisor Approved, and Paid Rush. Added to all three service desks — Marketing, Catalog, and Development. It only appears on the form when Blocker priority is selected. Before this, priority selection had no accountability attached to it. Anyone could mark a ticket Blocker and submit.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">02</div>
+      <div>
+        <div class="built-title">Conditional form logic</div>
+        <div class="built-desc">Built with Atlassian Forms (formerly Proforma). Selecting Error reveals a second field for the specific error type, with a list of common categories and an Other option. Selecting Supervisor Approved reveals a user picker scoped to a permission group that contained only supervisors — no free-text, no ambiguity about who approved it. Paid Rush showed nothing additional and went straight to submission.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">03</div>
+      <div>
+        <div class="built-title">Warning messaging</div>
+        <div class="built-desc">Added warning text to the form when Blocker was selected. It stated clearly that abuse of the priority would result in oversight. This wasn't enforcement on its own — it was visibility. A lot of the reduction in blocker volume came from customer service reps realizing that someone was watching the data.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">04</div>
+      <div>
+        <div class="built-title">Jira dashboard</div>
+        <div class="built-desc">Built with pie charts and 2D filter gadgets. It showed the distribution of blocker reason types, error sub-types, and supervisor usage at a glance. All data was pulled from JQL saved filters. Any gadget could be clicked to drill into the underlying ticket list. Leadership got a summary view without needing to write their own JQL.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">05</div>
+      <div>
+        <div class="built-title">Paid Rush billing integration</div>
+        <div class="built-desc">Paid Rush tickets are pulled monthly from a JQL filter and used to generate client invoices. The dashboard data feeds into the billing process. The VP came to me with the paid rush concept. I designed the field structure and data capture that made billing possible — the original ask was just "charge for it." I built the system that makes that actually work.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Field and Dashboard Detail</div>
+  <div class="fade-in d3">
+    <a href="dashboard.html" class="doc-card" style="display:flex; gap:20px; align-items:start; max-width:600px; margin-bottom:48px;">
+      <div class="doc-icon">📊</div>
+      <div>
+        <div class="doc-number">Technical detail</div>
+        <div class="doc-title">Field Configuration and Dashboard Breakdown</div>
+        <div class="doc-desc">How the custom fields were configured, how the conditional form logic works, the gadgets on the dashboard, the JQL filters behind them, and how the billing pull works.</div>
+        <div class="doc-actions"><span class="doc-link">Read →</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Outcome</div>
+  <div class="context-block fade-in d3">
+    <p>Blocker volume dropped after the system went live. The form made submitting a blocker harder to do without a stated reason. The warning message added visibility. The supervisor approval path created a paper trail. I don't have an exact count on the reduction, but the back-end teams stopped raising it as a recurring complaint.</p>
+    <p>The dashboard is still active. The Paid Rush billing process runs every month. That part of the system became a permanent part of how the organization invoices clients for expedited work.</p>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
