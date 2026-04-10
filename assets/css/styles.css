@@ -854,3 +854,11 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
   .doc-footer-note { color: #666; border-top-color: #ccc; }
   .doc-table-wrap, .registry-table-wrap { overflow: visible; }
 }
+
+/* Confidentiality note */
+.confidentiality-note {
+  font-family: 'Space Mono', monospace; font-size: 11px;
+  color: var(--text-dim); border-left: 2px solid var(--border);
+  padding: 10px 14px; margin: 20px 0; line-height: 1.6;
+  background: rgba(0,212,255,0.03); border-radius: 0 4px 4px 0;
+}
