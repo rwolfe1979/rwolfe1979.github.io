@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-003: Field Configuration and Dashboard Breakdown — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← Back to P-003</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-003</a><span>›</span>
+    <span>Field Configuration and Dashboard Breakdown</span>
+  </div>
+
+  <div class="doc-header fade-in d2">
+    <div class="doc-eyebrow">P-003 · Technical Detail</div>
+    <h1 class="doc-title-h1">Field Configuration and Dashboard Breakdown</h1>
+    <div class="doc-meta-line">3 JSM service desks · 3 custom fields · JQL saved filters · Atlassian Forms (formerly Proforma)</div>
+    <div class="confidentiality-note" style="margin-top:20px;">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+  </div>
+
+  <div class="toc-mobile fade-in d2">
+    <button class="toc-mobile-toggle" id="tocToggle">Contents <span>▾</span></button>
+    <div class="toc-mobile-list" id="tocList">
+      <a href="#overview">Overview</a>
+      <a href="#fields">Custom fields</a>
+      <a href="#form">Conditional form logic</a>
+      <a href="#dashboard">Dashboard gadgets</a>
+      <a href="#jql">JQL filters</a>
+      <a href="#billing">Billing integration</a>
+    </div>
+  </div>
+
+  <div class="two-col fade-in d2">
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#fields">Custom fields</a></li>
+        <li><a href="#form">Conditional form logic</a></li>
+        <li><a href="#dashboard">Dashboard gadgets</a></li>
+        <li><a href="#jql">JQL filters</a></li>
+        <li><a href="#billing">Billing integration</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="overview">
+        <h2 class="section-h">Overview</h2>
+        <p class="doc-p">This page covers the field configuration, conditional form logic, and dashboard setup behind the Blocker Priority Dashboard. The project runs across three JSM service desks — Marketing, Catalog, and Development — and a shared Jira dashboard used by leadership.</p>
+        <p class="doc-p">The core problem was that blocker priority had no accountability. Adding a required reason field changed that. The dashboard made the data visible. The billing integration made one of the three reason paths financially meaningful. All three pieces depend on each other.</p>
+      </div>
+
+      <div class="doc-section" id="fields">
+        <h2 class="section-h">Custom fields</h2>
+        <p class="doc-p">Three custom fields were added to the service desks to support the blocker tracking system. Each field plays a specific role in capturing accurate, structured data.</p>
+
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Field</th><th>Type</th><th>Options</th><th>Trigger</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Blocker Reason</td><td>Select list</td><td>Error, Supervisor Approved, Paid Rush</td><td>Priority = Blocker</td></tr>
+              <tr><td>Error Sub-type</td><td>Select list</td><td>Predefined error categories, Other</td><td>Blocker Reason = Error</td></tr>
+              <tr><td>Approving Supervisor</td><td>User picker</td><td>Supervisor permission group</td><td>Blocker Reason = Supervisor Approved</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="doc-p">The Blocker Reason field is the entry point. It's required when Blocker priority is selected — a ticket can't be submitted without it. The downstream fields only appear based on what's selected in Blocker Reason, so customers service reps never see fields that don't apply to their situation.</p>
+        <p class="doc-p">The Approving Supervisor user picker was scoped to a permission group rather than the full user directory. This meant only names from that group could be selected. It removed the risk of someone entering a non-supervisor name or leaving the field vague.</p>
+        <p class="doc-p">The Error Sub-type field contained a list of error categories that leadership and I identified as the most common causes. If none of those applied, Other was available. Tracking how often Other was selected was intentional — if it became the most common choice, that indicated a gap in the predefined list that needed to be addressed.</p>
+      </div>
+
+      <div class="doc-section" id="form">
+        <h2 class="section-h">Conditional form logic</h2>
+        <p class="doc-p">The conditional display was built with Atlassian Forms, which was called Proforma at the time the system was originally built. Atlassian later acquired the tool and integrated it natively into JSM.</p>
+        <p class="doc-p">The form uses three tiers of conditional logic:</p>
+        <p class="doc-p">First, Blocker priority is a native Jira field that exists on every ticket. The form is configured to watch this field. When the submitter selects Blocker, the Blocker Reason field appears.</p>
+        <p class="doc-p">Second, once Blocker Reason is visible, the submitter makes a selection. Choosing Error reveals the Error Sub-type field. Choosing Supervisor Approved reveals the Approving Supervisor user picker. Choosing Paid Rush reveals nothing — it goes straight to submission.</p>
+        <p class="doc-p">Third, the conditional fields themselves are not required in isolation. They become required only because the form won't submit while a visible field is empty. If Blocker Reason is set to Error, the Error Sub-type field appears and must be filled before submission is possible.</p>
+        <p class="doc-p">Warning text was added at the Blocker priority selection point. It stated that blocker priority is for situations where all other work must stop, and that patterns of misuse would be reviewed. This wasn't an enforcement mechanism — it was a nudge. It worked.</p>
+      </div>
+
+      <div class="doc-section" id="dashboard">
+        <h2 class="section-h">Dashboard gadgets</h2>
+        <p class="doc-p">The dashboard was built as a standard Jira dashboard using native gadgets. The goal was to give leadership a high-level view of blocker activity without requiring them to understand JQL. Every gadget was backed by a saved filter, and any stat could be clicked to open the full ticket list that produced it.</p>
+        <p class="doc-p">The gadget layout used a combination of pie charts and 2D filter gadgets:</p>
+        <p class="doc-p">A pie chart showed the distribution of Blocker Reason types across all three service desks — how many tickets in the last 30 days were errors, supervisor-approved, or paid rush. This was the primary view. It answered the question leadership was actually asking: what are people marking as blockers and why?</p>
+        <p class="doc-p">A second pie chart broke down Error Sub-type selections. This was useful for identifying whether any one error category was dominating — which might indicate a systemic issue that deserved its own investigation.</p>
+        <p class="doc-p">A 2D filter gadget showed supervisor usage — which supervisors were appearing as approvers most often. This gave management visibility into approval patterns and a starting point if they needed to follow up on a specific decision.</p>
+        <p class="doc-p">A second 2D filter gadget showed summary statistics by service desk, so leadership could see whether the blocker volume was concentrated in one area or distributed across all three.</p>
+        <p class="doc-p">I chose pie charts and 2D filters deliberately. They show distribution and allow drill-down. A flat list of tickets wouldn't have given leadership the pattern view they needed. A more complex visualization would have required more maintenance. Simple gadgets backed by solid JQL filters hold up longer than anything custom-built.</p>
+      </div>
+
+      <div class="doc-section" id="jql">
+        <h2 class="section-h">JQL filters</h2>
+        <p class="doc-p">Every gadget on the dashboard reads from a saved JQL filter. Saved filters are reusable — they can be shared with the dashboard, used in other dashboards, and referenced in automation rules. Building them as saved filters rather than inline gadget queries meant a single update propagated everywhere the filter was used.</p>
+        <p class="doc-p">The filters follow a consistent pattern: scope by project, filter by priority, filter by the relevant custom field value, and apply a date range where appropriate. Examples of the logic used:</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr><th>Gadget</th><th>Filter logic</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Blocker Reason distribution</td><td>Projects in scope, priority = Blocker, created in last 30 days</td></tr>
+              <tr><td>Error sub-type breakdown</td><td>Projects in scope, priority = Blocker, Blocker Reason = Error, created in last 30 days</td></tr>
+              <tr><td>Supervisor usage</td><td>Projects in scope, priority = Blocker, Blocker Reason = Supervisor Approved</td></tr>
+              <tr><td>Paid Rush billing pull</td><td>Projects in scope, priority = Blocker, Blocker Reason = Paid Rush, created in current billing period</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="doc-p">Date ranges were set to rolling 30 days for the dashboard view. The billing filter used a fixed date range tied to the billing cycle, updated monthly before the pull was run.</p>
+      </div>
+
+      <div class="doc-section" id="billing">
+        <h2 class="section-h">Billing integration</h2>
+        <p class="doc-p">Paid Rush tickets are pulled monthly using the billing JQL filter. The results give a count of Paid Rush requests per client for the billing period. That data is used to generate charges on the client's invoice.</p>
+        <p class="doc-p">The Client ID field on every ticket connects the Paid Rush record back to the correct client account. This field was already part of the service desk setup before this project — it existed to track which client each request was submitted on behalf of. Tying the billing pull to Client ID meant no new infrastructure was needed. The data was already there.</p>
+        <p class="doc-p">The monthly pull is a manual process: run the filter, export or reference the results, hand off to billing. It wasn't automated. The volume was low enough that automation wasn't worth the maintenance overhead, and the manual step gave the team a built-in review point before charges went out.</p>
+        <p class="doc-p">This piece of the system wasn't in the original ask. The VP came with the concept of charging for rush requests. I designed the field structure that captured the data cleanly enough to make billing off of it practical. The monthly pull has been running since the system went live.</p>
+      </div>
+
+      <div class="doc-footer-note">
+        Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+      </div>
+
+      <div class="nav-doc">
+        <a href="index.html">← Back to P-003 overview</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const tocToggle=document.getElementById('tocToggle'),tocList=document.getElementById('tocList');
+  if(tocToggle)tocToggle.addEventListener('click',()=>{tocList.classList.toggle('open');tocToggle.querySelector('span').textContent=tocList.classList.contains('open')?'▴':'▾';});
+  document.querySelectorAll('.toc-mobile-list a,.toc-list a').forEach(a=>{
+    a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'});});
+  });
+</script>
+</body>
+</html>
