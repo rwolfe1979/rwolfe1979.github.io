@@ -26,8 +26,7 @@
     <li><a href="#portfolio">Work</a></li>
     <li><a href="#cert">Cert</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
+    <li><a href="Ryan_Wolfe_Jira_Administrator_03162026.pdf" target="_blank">Resume ↗</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
     <span></span><span></span><span></span>
@@ -39,8 +38,7 @@
   <li><a href="#portfolio" onclick="closeMenu()">Work</a></li>
   <li><a href="#cert" onclick="closeMenu()">Cert</a></li>
   <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
-  <li><a href="about.html" onclick="closeMenu()">About</a></li>
-  <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
+  <li><a href="Ryan_Wolfe_Jira_Administrator_03162026.pdf" target="_blank">Resume ↗</a></li>
 </ul>
 
 <section class="hero">
@@ -194,12 +192,12 @@
       <div class="project-number">P-001</div>
       <div class="project-body">
         <div class="project-title">Intake Service Desk with Auto-Routing</div>
-        <div class="project-summary">Marketing campaign requests were managed in an unstructured tool with no visibility and no shared process. I ran discovery with five teams, built a large conditional JSM intake form, and wired up three automations that generate and route tasks to five fully custom team projects on a single submission.</div>
+        <div class="project-summary">IT requests were going into a single inbox with no routing, no SLA, and no way to tell who was supposed to handle what. I sat with stakeholders from four departments, documented the current mess, and built a JSM intake portal that auto-categorized requests and routed linked child tickets to the right department project. Manual triage dropped to zero.</div>
         <div class="project-tools">
-          <span class="tag">Jira Service Management</span><span class="tag">Atlassian Forms</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span>
+          <span class="tag">JSM</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span><span class="tag">JQL</span>
         </div>
       </div>
-      <div class="project-status status-live">Live</div>
+      <div class="project-status status-building">Coming Soon</div>
     </a>
 
     <a href="portfolio/p002/" class="project-card reveal">
@@ -229,10 +227,10 @@
     <a href="portfolio/p004/" class="project-card reveal">
       <div class="project-number">P-004</div>
       <div class="project-body">
-        <div class="project-title">Permission Scheme Design and User Access Management</div>
-        <div class="project-summary">Managing access for 300+ users across 20 departments meant the permission model had to be both tight and maintainable. I designed a scheme structure built around roles and groups rather than individuals, so access could scale without becoming a liability. This covers how the model was designed, how it was enforced, and how access changes were handled day to day.</div>
+        <div class="project-title">JSM Service Desk Full Buildout</div>
+        <div class="project-summary">A department coming onto JSM for the first time. I scoped it with the department lead, documented requirements, configured the full service desk from portal to SLA rules to automation to approvals, ran UAT, and trained the team. The goal was that they could run it without calling me. That's what happened.</div>
         <div class="project-tools">
-          <span class="tag">Jira Admin</span><span class="tag">Permission Schemes</span><span class="tag">Access Governance</span><span class="tag">RBAC</span><span class="tag">Group Management</span>
+          <span class="tag">JSM</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span>
         </div>
       </div>
       <div class="project-status status-building">Coming Soon</div>
@@ -260,18 +258,6 @@
         </div>
       </div>
       <div class="project-status status-live">Live</div>
-    </a>
-
-    <a href="portfolio/p007/" class="project-card reveal">
-      <div class="project-number">P-007</div>
-      <div class="project-body">
-        <div class="project-title">Confluence Space Architecture</div>
-        <div class="project-summary">Confluence only works if people can find things and trust what they find. I designed the space structure, page templates, and permission model for a 300-user environment across 20 departments. This covers how the architecture was planned, how it was rolled out, and what it took to get teams to actually use it.</div>
-        <div class="project-tools">
-          <span class="tag">Confluence</span><span class="tag">Space Design</span><span class="tag">Page Templates</span><span class="tag">Permissions</span><span class="tag">Knowledge Management</span>
-        </div>
-      </div>
-      <div class="project-status status-building">Coming Soon</div>
     </a>
 
   </div>
@@ -307,11 +293,11 @@
     <div class="section-line"></div>
   </div>
   <div class="contact-grid reveal">
-    <a href="/cdn-cgi/l/email-protection#1163667e7d77742028262851767c70787d3f727e7c" class="contact-item">
+    <a href="mailto:rwolfe1979@gmail.com" class="contact-item">
       <div class="contact-icon">✉</div>
       <div>
         <div class="contact-label">Email</div>
-        <div class="contact-value"><span class="__cf_email__" data-cfemail="d1a3a6bebdb7b4e0e8e6e891b6bcb0b8bdffb2bebc">[email&#160;protected]</span></div>
+        <div class="contact-value">rwolfe1979@gmail.com</div>
       </div>
     </a>
     <a href="tel:5303218044" class="contact-item">
@@ -343,7 +329,7 @@
   <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
   // Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
@@ -393,4 +379,13 @@
         const timer = setInterval(() => {
           start += step;
           if (start >= num) { el.textContent = text; clearInterval(timer); }
-          else { el.textCo
+          else { el.textContent = Math.floor(start) + suffix; }
+        }, 16);
+        countObserver.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('.stat-number').forEach(el => countObserver.observe(el));
+</script>
+</body>
+</html>
