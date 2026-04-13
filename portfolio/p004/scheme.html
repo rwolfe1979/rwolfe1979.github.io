@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-004: Scheme Design and Access Model — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← Back to P-004</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-004</a><span>›</span>
+    <span>Scheme Design and Access Model</span>
+  </div>
+
+  <div class="doc-header fade-in d2">
+    <div class="doc-eyebrow">P-004 · Technical Detail</div>
+    <h1 class="doc-title-h1">Scheme Design and Access Model</h1>
+    <div class="doc-meta-line">1 universal scheme · 6 role tiers · 60–70 permission groups · 55+ projects · 300+ users</div>
+    <div class="confidentiality-note" style="margin-top:20px;">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+  </div>
+
+  <div class="toc-mobile fade-in d2">
+    <button class="toc-mobile-toggle" id="tocToggle">Contents <span>▾</span></button>
+    <div class="toc-mobile-list" id="tocList">
+      <a href="#overview">Overview</a>
+      <a href="#problem">The problem with per-project schemes</a>
+      <a href="#scheme">Scheme design</a>
+      <a href="#roles">Role tier definitions</a>
+      <a href="#groups">Permission Groups</a>
+      <a href="#onboarding">Onboarding and provisioning</a>
+      <a href="#migration">Migration</a>
+      <a href="#audits">Access audits</a>
+      <a href="#project-admins">Project admins and individual assignments</a>
+    </div>
+  </div>
+
+  <div class="two-col fade-in d2">
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#problem">The problem with per-project schemes</a></li>
+        <li><a href="#scheme">Scheme design</a></li>
+        <li><a href="#roles">Role tier definitions</a></li>
+        <li><a href="#groups">Permission Groups</a></li>
+        <li><a href="#onboarding">Onboarding and provisioning</a></li>
+        <li><a href="#migration">Migration</a></li>
+        <li><a href="#audits">Access audits</a></li>
+        <li><a href="#project-admins" class="sub">Project admin assignments</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="overview">
+        <h2 class="section-h">Overview</h2>
+        <p class="doc-p">This page covers the design and administration of the universal permission scheme built to govern access across the entire Jira environment. The goal was to replace a fragmented per-project model with a single, consistent structure that was easy to maintain, audit, and hand off.</p>
+        <p class="doc-p">The final model: one permission scheme, six named role tiers, and 60 to 70 permission groups. Every project in the environment references the same scheme. Access is managed at the group level, not the individual level. A user's group assignment at onboarding determines their access across every project they belong to, without any project-level configuration required.</p>
+      </div>
+
+      <div class="doc-section" id="problem">
+        <h2 class="section-h">The Problem with Per-Project Schemes</h2>
+        <p class="doc-p">Jira generates a permission scheme automatically when a project is created. By default, that scheme belongs only to that project. It works fine for a single project. At scale, it creates a management problem.</p>
+        <p class="doc-p">With 20+ auto-generated schemes in the environment, any change to how permissions worked had to be applied to each one manually. Atlassian platform updates occasionally introduced new permission types that needed explicit configuration. There was no reliable way to confirm that every scheme had been updated. An audit meant opening each scheme individually and comparing it against what the others had.</p>
+        <p class="doc-p">The risk wasn't just extra work. It was inconsistency. One project might be missing a permission that all the others had. One might have been configured slightly differently at creation and never corrected. With no single model to compare against, those gaps were easy to miss.</p>
+      </div>
+
+      <div class="doc-section" id="scheme">
+        <h2 class="section-h">Scheme Design</h2>
+        <p class="doc-p">The universal scheme was built around a principle: permissions should describe intent, not just grant access. Each role tier was named for what it's meant to be used for, so anyone looking at it — a project admin, a manager, a future Jira administrator — could understand the model without needing a technical explanation.</p>
+        <p class="doc-p">The scheme covers all Jira permission categories: issue access, project access, comment and attachment rights, workflow transitions, and project configuration. Role tiers are defined once in the scheme. Every project that references the scheme inherits those definitions automatically.</p>
+        <p class="doc-p">When Atlassian adds a new permission type in a platform update, the scheme is updated once. All 55+ projects reflect the change immediately.</p>
+      </div>
+
+      <div class="doc-section" id="roles">
+        <h2 class="section-h">Role Tier Definitions</h2>
+        <p class="doc-p">Six tiers cover the full range of access needed across the organization. The tiers stack — each higher tier includes the capabilities of the one below it plus additional rights.</p>
+        <div class="doc-table-wrap">
+          <table class="doc-table">
+            <thead>
+              <tr>
+                <th>Role Tier</th>
+                <th>What They Can Do</th>
+                <th>Typical Use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>View Only</td>
+                <td>Read access to the project. Can see issues and comments but cannot create, edit, or transition.</td>
+                <td>Executives and cross-department stakeholders who need visibility without working in the project.</td>
+              </tr>
+              <tr>
+                <td>View and Comment</td>
+                <td>Read access plus the ability to add comments to existing issues. Cannot create new issues.</td>
+                <td>Reviewers and approvers who participate in discussions but don't submit or manage work.</td>
+              </tr>
+              <tr>
+                <td>View, Comment, and Create</td>
+                <td>Read access, comments, and the ability to create new issues. Cannot edit or transition.</td>
+                <td>Requestors and submitters — teams that use a service desk or intake project to submit work requests.</td>
+              </tr>
+              <tr>
+                <td>Member / Agent</td>
+                <td>Full working access: create, edit, transition, and resolve issues. Standard for anyone doing active work in the project.</td>
+                <td>Team members in Jira Software projects and agents in JSM service desks.</td>
+              </tr>
+              <tr>
+                <td>Lead</td>
+                <td>Member-level access plus the ability to manage components, versions, and basic project settings. Cannot modify permission schemes or global settings.</td>
+                <td>Team leads and department supervisors who manage their project's configuration without needing full admin rights.</td>
+              </tr>
+              <tr>
+                <td>Manager / Admin</td>
+                <td>Full project administration rights within the project scope. Cannot modify global schemes or platform-level settings — those remain with the platform administrator.</td>
+                <td>Department managers who own a project and need full control over how it's configured.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="doc-section" id="groups">
+        <h2 class="section-h">Permission Groups</h2>
+        <p class="doc-p">Permission Groups are the mechanism that connects users to role tiers. Each group is named for the position or team it represents. A group is assigned to one of the six role tiers in the permission scheme. Any user added to that group automatically receives the access that tier defines, across every project where the group is applied.</p>
+        <p class="doc-p">The environment had between 60 and 70 Permission Groups. Groups weren't limited to job titles and departments. Some groups existed to populate user picker fields — dropdowns in forms and issue views that let people select other users. Supervisors, for example, were added to a dedicated supervisor group so their names appeared correctly in approver fields across the environment, even in projects they didn't actively work in.</p>
+        <p class="doc-p">Managing permissions at the group level rather than the individual level kept the model maintainable. When a team's access needs changed, the group assignment was updated once. All users in that group reflected the change. No individual user edits were needed.</p>
+      </div>
+
+      <div class="doc-section" id="onboarding">
+        <h2 class="section-h">Onboarding and Provisioning</h2>
+        <p class="doc-p">New user requests came through the IT service desk. When IT processed a new hire, contractor, or returning employee, they submitted a Jira request with the user's name, email, department, position, and manager.</p>
+        <p class="doc-p">From there, the provisioning process was:</p>
+        <ol class="doc-ol">
+          <li>Invite the user to Atlassian through Atlassian Access and correct their display name. Managed accounts in Atlassian Access sometimes pull in names incorrectly from the identity provider — this was a routine cleanup step.</li>
+          <li>Grant the appropriate product access (Jira Software, JSM, Confluence, or a combination).</li>
+          <li>Add the user to the Permission Group that matched their position.</li>
+          <li>Confirm with the requestor once configuration was complete.</li>
+        </ol>
+        <p class="doc-p">If the position was new to the organization and the correct group wasn't obvious, the manager was contacted directly. IT handled hardware and identity provisioning but didn't always have enough context about what a role required within Jira. Clarifying with the manager at onboarding was faster than correcting access after the fact.</p>
+        <p class="doc-p">Some users went into more than one group. Supervisors, for instance, were added to both their department group and a separate supervisor group. The department group handled their working access. The supervisor group made their name available in user picker fields across the environment.</p>
+      </div>
+
+      <div class="doc-section" id="migration">
+        <h2 class="section-h">Migration</h2>
+        <p class="doc-p">When the universal scheme was built, the environment had more than 20 active projects, each with its own auto-generated scheme. All were migrated to the universal scheme. The migration was handled project by project, applying the new scheme and verifying that access behaved correctly before moving on.</p>
+        <p class="doc-p">New projects created after the migration were handled during initial setup. Jira's project creation process still generated an auto-created scheme. As part of setting up any new project, that scheme was deleted and the universal scheme was applied before the project went live.</p>
+      </div>
+
+      <div class="doc-section" id="audits">
+        <h2 class="section-h">Access Audits</h2>
+        <p class="doc-p">Quarterly access audits reviewed all active user accounts and their Permission Group assignments. The audit checked:</p>
+        <ul class="doc-ul">
+          <li>Every active account matched a current employee or contractor</li>
+          <li>Group assignments were consistent with the user's current department and position</li>
+          <li>No user held Lead or Manager-level access without a current justification</li>
+          <li>Accounts inactive for 60 or more days were flagged for review</li>
+        </ul>
+        <p class="doc-p">The single scheme made audits practical. Before the consolidation, confirming what access was supposed to look like required cross-referencing dozens of separate configurations. With one scheme, the model was known. The audit was a check against it, not a reconstruction of it.</p>
+        <p class="doc-p">If a project admin had assigned a user directly to a project role outside of the group structure, that assignment was reviewed during the audit and standardized if needed.</p>
+      </div>
+
+      <div class="doc-section" id="project-admins">
+        <h2 class="section-h">Project Admin Assignments</h2>
+        <p class="doc-p">Project admins with Lead or Manager-level access could assign individual users directly to any role tier within their own project. That was intentional. Teams have legitimate needs to give someone temporary access, bring in a contractor, or adjust a specific user's rights without going through a formal request.</p>
+        <p class="doc-p">The platform administrator managed the Permission Group structure — the broader organizational model. Project admins managed individual assignments within their own scope. Both operated within the same permission scheme. The scheme's definitions didn't change based on how the assignment was made.</p>
+        <p class="doc-p">Individual project-level assignments were reviewed during quarterly audits. If an assignment appeared inconsistent with the user's role or no longer had a clear justification, the project lead was contacted for clarification.</p>
+        <div class="doc-footer-note">
+          Details in this document have been generalized to protect confidential information. Role names, group counts, and process details are representative of the production environment.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="nav-doc">
+    <a href="index.html" class="nav-doc-link">← P-004 Overview</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const tocToggle=document.getElementById('tocToggle');
+  const tocList=document.getElementById('tocList');
+  if(tocToggle&&tocList){tocToggle.addEventListener('click',()=>{const open=tocList.style.display==='block';tocList.style.display=open?'none':'block';tocToggle.querySelector('span').textContent=open?'▾':'▴';});}
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>

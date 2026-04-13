@@ -28,36 +28,252 @@
   <div class="project-header fade-in d2">
     <div class="project-eyebrow">P-004 · Jira Administration</div>
     <h1 class="project-title-h1">Permission Scheme Design <span class="accent-word">and User Access Management</span></h1>
-    <p class="project-summary-text">Managing access for 300+ users across 20 departments meant the permission model had to be both tight and maintainable. I designed a scheme structure built around roles and groups rather than individuals, so access could scale without becoming a liability.</p>
+    <p class="project-summary-text">Every project in the environment started with its own auto-generated permission scheme. With 55+ projects across 20 departments, that meant 20+ schemes to manage, audit, and update individually. I replaced them all with a single universal scheme built around named role tiers and group-based access assignment. Permission changes that used to require touching dozens of schemes now take one edit.</p>
 
     <div class="confidentiality-note fade-in d2">
       Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
     </div>
 
     <div class="project-meta">
-      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge status-building-badge">In Progress</span></div></div>
-      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Software Cloud</div></div>
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Cloud (Software + JSM)</div></div>
       <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 20 departments · 55+ projects</div></div>
+      <div><div class="meta-label">Schemes consolidated</div><div class="meta-value">20+ → 1</div></div>
     </div>
-
     <div class="tags">
       <span class="tag">Jira Administration</span>
       <span class="tag">Permission Schemes</span>
-      <span class="tag">Access Governance</span>
-      <span class="tag">RBAC</span>
-      <span class="tag">Group Management</span>
-      <span class="tag">User Lifecycle</span>
+      <span class="tag">User Access Management</span>
+      <span class="tag">Jira Service Management</span>
+      <span class="tag">Governance</span>
+      <span class="tag">Access Auditing</span>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <div class="coming-soon-block fade-in d3">
-    <div class="coming-soon-icon">⚙</div>
-    <div class="coming-soon-label">This project is being documented.</div>
-    <p class="coming-soon-text">The full write-up — scheme design, group structure, access request workflow, and offboarding process — is in progress. Check back soon.</p>
-    <a href="../../" class="btn-secondary" style="margin-top:32px;">← Back to Portfolio</a>
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>When Jira creates a new project, it generates a permission scheme automatically. That scheme belongs to that project. It looks like a convenience, but at scale it becomes a maintenance problem.</p>
+    <p>With 20+ schemes in the environment, any platform-level permission change had to be applied manually to every one of them. Atlassian platform updates occasionally added new permission types that needed to be explicitly configured — and with dozens of separate schemes, there was no reliable way to know if every one had been updated correctly. Auditing permissions meant checking each scheme individually. The risk of inconsistency was real and grew with every new project.</p>
+    <p>The environment needed one source of truth, not 20+ versions of the same configuration.</p>
   </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">How the Permission Model Works</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">A single universal scheme defines six named role tiers. Permission Groups, assigned at the platform level, map to those roles. When a user is onboarded, they're added to the group that matches their position. That group assignment flows through to every project automatically. Project admins can also assign users directly to a role within their own project — but the underlying scheme and its definitions never change.</p>
+
+  <!-- DIAGRAM: Permission model hierarchy -->
+  <div class="fade-in d3" style="margin-bottom:48px;">
+    <svg width="100%" viewBox="0 0 680 620" role="img" style="display:block;">
+      <title>Universal permission scheme model</title>
+      <desc>Diagram showing how a single permission scheme, six role tiers, and permission groups connect to project access across all Jira projects.</desc>
+      <style>
+        .p-scheme   { fill:#0d1219; stroke:#00d4ff; stroke-width:1.5; }
+        .p-role     { fill:#0d1f3c; stroke:#0066ff; stroke-width:0.75; }
+        .p-group    { fill:#1a0d3c; stroke:#7b2fff; stroke-width:0.75; }
+        .p-project  { fill:#0d2d1a; stroke:#00ff88; stroke-width:0.75; }
+        .p-th       { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
+        .p-ts       { font-family:'Syne',sans-serif; font-size:10.5px; font-weight:400; fill:#6b7a8d; }
+        .p-label    { font-family:'Space Mono',monospace; font-size:9px; font-weight:700; fill:#00d4ff; letter-spacing:0.08em; }
+        .p-glabel   { font-family:'Space Mono',monospace; font-size:9px; font-weight:700; fill:#7b2fff; letter-spacing:0.08em; }
+        .p-plabel   { font-family:'Space Mono',monospace; font-size:9px; font-weight:700; fill:#00ff88; letter-spacing:0.08em; }
+        .p-line     { stroke:rgba(0,212,255,0.35); stroke-width:1.2; fill:none; }
+        .p-line-g   { stroke:rgba(123,47,255,0.4); stroke-width:1.2; fill:none; }
+        .p-line-p   { stroke:rgba(0,255,136,0.35); stroke-width:1.2; fill:none; }
+        .p-dot      { fill:rgba(0,212,255,0.5); }
+        .p-dot-g    { fill:rgba(123,47,255,0.6); }
+        .p-dot-p    { fill:rgba(0,255,136,0.5); }
+      </style>
+
+      <!-- SCHEME BOX -->
+      <rect x="190" y="20" width="300" height="60" rx="8" class="p-scheme"/>
+      <text class="p-label" x="340" y="40" text-anchor="middle">UNIVERSAL PERMISSION SCHEME</text>
+      <text class="p-th" x="340" y="60" text-anchor="middle">One scheme · All 55+ projects</text>
+
+      <!-- connector scheme to roles -->
+      <line x1="340" y1="80" x2="340" y2="110" class="p-line"/>
+      <circle cx="340" cy="110" r="3" class="p-dot"/>
+
+      <!-- fan lines to 6 roles -->
+      <line x1="340" y1="110" x2="80" y2="150" class="p-line"/>
+      <line x1="340" y1="110" x2="196" y2="150" class="p-line"/>
+      <line x1="340" y1="110" x2="312" y2="150" class="p-line"/>
+      <line x1="340" y1="110" x2="428" y2="150" class="p-line"/>
+      <line x1="340" y1="110" x2="544" y2="150" class="p-line"/>
+      <line x1="340" y1="110" x2="624" y2="150" class="p-line"/>
+
+      <!-- ROLE BOXES — 6 roles -->
+      <!-- View Only -->
+      <rect x="20" y="150" width="120" height="52" rx="6" class="p-role"/>
+      <text class="p-label" x="80" y="167" text-anchor="middle">ROLE TIER 1</text>
+      <text class="p-th" x="80" y="184" text-anchor="middle" font-size="11">View Only</text>
+      <text class="p-ts" x="80" y="198" text-anchor="middle">Read access</text>
+
+      <!-- View + Comment -->
+      <rect x="148" y="150" width="120" height="52" rx="6" class="p-role"/>
+      <text class="p-label" x="208" y="167" text-anchor="middle">ROLE TIER 2</text>
+      <text class="p-th" x="208" y="184" text-anchor="middle" font-size="11">View + Comment</text>
+      <text class="p-ts" x="208" y="198" text-anchor="middle">Read, comment</text>
+
+      <!-- View + Comment + Create -->
+      <rect x="272" y="150" width="136" height="52" rx="6" class="p-role"/>
+      <text class="p-label" x="340" y="167" text-anchor="middle">ROLE TIER 3</text>
+      <text class="p-th" x="340" y="184" text-anchor="middle" font-size="11">+ Create</text>
+      <text class="p-ts" x="340" y="198" text-anchor="middle">Read, comment, create</text>
+
+      <!-- Member / Agent -->
+      <rect x="372" y="150" width="120" height="52" rx="6" class="p-role"/>
+      <text class="p-label" x="432" y="167" text-anchor="middle">ROLE TIER 4</text>
+      <text class="p-th" x="432" y="184" text-anchor="middle" font-size="11">Member / Agent</text>
+      <text class="p-ts" x="432" y="198" text-anchor="middle">Full working access</text>
+
+      <!-- Lead -->
+      <rect x="494" y="150" width="100" height="52" rx="6" class="p-role"/>
+      <text class="p-label" x="544" y="167" text-anchor="middle">ROLE TIER 5</text>
+      <text class="p-th" x="544" y="184" text-anchor="middle" font-size="11">Lead</text>
+      <text class="p-ts" x="544" y="198" text-anchor="middle">Member + config</text>
+
+      <!-- Manager / Admin -->
+      <rect x="576" y="150" width="100" height="52" rx="6" class="p-role"/>
+      <text class="p-label" x="626" y="167" text-anchor="middle">ROLE TIER 6</text>
+      <text class="p-th" x="626" y="184" text-anchor="middle" font-size="11">Manager</text>
+      <text class="p-ts" x="626" y="198" text-anchor="middle">Project admin</text>
+
+      <!-- SECTION LABEL: Permission Groups -->
+      <text class="p-glabel" x="340" y="248" text-anchor="middle">PERMISSION GROUPS (60–70 TOTAL) ASSIGNED TO ROLE TIERS</text>
+
+      <!-- connector line -->
+      <line x1="200" y1="255" x2="480" y2="255" class="p-line-g"/>
+      <circle cx="200" cy="255" r="3" class="p-dot-g"/>
+      <circle cx="340" cy="255" r="3" class="p-dot-g"/>
+      <circle cx="480" cy="255" r="3" class="p-dot-g"/>
+
+      <!-- GROUP BOXES — examples -->
+      <rect x="80" y="265" width="150" height="52" rx="6" class="p-group"/>
+      <text class="p-glabel" x="155" y="283" text-anchor="middle">EXAMPLE GROUP</text>
+      <text class="p-th" x="155" y="300" text-anchor="middle" font-size="11">Marketing Team</text>
+      <text class="p-ts" x="155" y="315" text-anchor="middle">→ Member / Agent role</text>
+
+      <rect x="265" y="265" width="150" height="52" rx="6" class="p-group"/>
+      <text class="p-glabel" x="340" y="283" text-anchor="middle">EXAMPLE GROUP</text>
+      <text class="p-th" x="340" y="300" text-anchor="middle" font-size="11">Department Leads</text>
+      <text class="p-ts" x="340" y="315" text-anchor="middle">→ Lead role</text>
+
+      <rect x="450" y="265" width="150" height="52" rx="6" class="p-group"/>
+      <text class="p-glabel" x="525" y="283" text-anchor="middle">EXAMPLE GROUP</text>
+      <text class="p-th" x="525" y="300" text-anchor="middle" font-size="11">Exec Stakeholders</text>
+      <text class="p-ts" x="525" y="315" text-anchor="middle">→ View Only role</text>
+
+      <!-- connector to onboarding label -->
+      <line x1="340" y1="317" x2="340" y2="360" class="p-line-g"/>
+      <text class="p-ts" x="340" y="350" text-anchor="middle">User added to group at onboarding · access flows to all projects automatically</text>
+
+      <!-- connector to projects -->
+      <line x1="340" y1="360" x2="340" y2="390" class="p-line-p"/>
+      <circle cx="340" cy="390" r="3" class="p-dot-p"/>
+
+      <!-- fan to projects -->
+      <line x1="340" y1="390" x2="140" y2="420" class="p-line-p"/>
+      <line x1="340" y1="390" x2="260" y2="420" class="p-line-p"/>
+      <line x1="340" y1="390" x2="340" y2="420" class="p-line-p"/>
+      <line x1="340" y1="390" x2="420" y2="420" class="p-line-p"/>
+      <line x1="340" y1="390" x2="540" y2="420" class="p-line-p"/>
+
+      <!-- PROJECT BOXES -->
+      <rect x="80" y="420" width="120" height="44" rx="6" class="p-project"/>
+      <text class="p-plabel" x="140" y="438" text-anchor="middle">PROJECT</text>
+      <text class="p-th" x="140" y="455" text-anchor="middle" font-size="11">Marketing SD</text>
+
+      <rect x="204" y="420" width="120" height="44" rx="6" class="p-project"/>
+      <text class="p-plabel" x="264" y="438" text-anchor="middle">PROJECT</text>
+      <text class="p-th" x="264" y="455" text-anchor="middle" font-size="11">IT Service Desk</text>
+
+      <rect x="280" y="420" width="120" height="44" rx="6" class="p-project"/>
+      <text class="p-plabel" x="340" y="438" text-anchor="middle">PROJECT</text>
+      <text class="p-th" x="340" y="455" text-anchor="middle" font-size="11">HR Onboarding</text>
+
+      <rect x="356" y="420" width="120" height="44" rx="6" class="p-project"/>
+      <text class="p-plabel" x="416" y="438" text-anchor="middle">PROJECT</text>
+      <text class="p-th" x="416" y="455" text-anchor="middle" font-size="11">Dev Sprint Board</text>
+
+      <rect x="480" y="420" width="120" height="44" rx="6" class="p-project"/>
+      <text class="p-plabel" x="540" y="438" text-anchor="middle">55+ PROJECTS</text>
+      <text class="p-th" x="540" y="455" text-anchor="middle" font-size="11">All departments</text>
+
+      <!-- caption -->
+      <text class="p-ts" x="340" y="510" text-anchor="middle">All projects reference the same scheme. One change propagates everywhere.</text>
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">What I Built</div>
+  <div class="built-list fade-in d3">
+    <div class="built-item">
+      <div class="built-num">01</div>
+      <div>
+        <div class="built-title">Universal permission scheme</div>
+        <div class="built-desc">Designed and built a single scheme with six named role tiers: View Only, View and Comment, View Comment and Create, Member/Agent, Lead, and Manager/Admin. Each tier has a clear definition of what it allows. The names describe intent, not technical configuration, so project admins could understand the model without needing a reference guide.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">02</div>
+      <div>
+        <div class="built-title">Permission Group structure</div>
+        <div class="built-desc">Built a set of 60 to 70 Permission Groups mapped to role tiers in the scheme. Groups were named for positions and teams, not for individual projects. When someone was onboarded, they went into the group that matched their role. That single assignment gave them the right access across every project they needed to be in, without any project-level configuration required.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">03</div>
+      <div>
+        <div class="built-title">Full environment migration</div>
+        <div class="built-desc">Migrated all existing projects from their individual auto-generated schemes to the universal scheme. New projects created after the migration were cleaned up during setup — the auto-generated scheme was deleted and the universal scheme was applied before the project went live.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">04</div>
+      <div>
+        <div class="built-title">Onboarding integration</div>
+        <div class="built-desc">Onboarding requests came through the IT service desk. When a new user was provisioned, I added them to the correct Permission Group based on their department and position. If a position was new and the right group wasn't obvious, I contacted the manager directly. Access was consistent from day one without requiring follow-up configuration per project.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">05</div>
+      <div>
+        <div class="built-title">Quarterly access audits</div>
+        <div class="built-desc">Ran quarterly audits across all active users and projects. With one scheme, the audit was a check against a known model. Access either matched the scheme's definitions or it didn't. No cross-referencing dozens of different configurations to determine what was expected.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Permission Scheme Detail</div>
+  <div class="fade-in d3">
+    <a href="scheme.html" class="doc-card" style="display:flex; gap:20px; align-items:start; max-width:600px; margin-bottom:48px;">
+      <div class="doc-icon">🔐</div>
+      <div>
+        <div class="doc-number">Technical detail</div>
+        <div class="doc-title">Scheme Design and Access Model</div>
+        <div class="doc-desc">Role tier definitions, how Permission Groups map to project roles, the onboarding and offboarding workflow, and how the audit process worked against a single consistent model.</div>
+        <div class="doc-actions"><span class="doc-link">Read →</span></div>
+      </div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Outcome</div>
+  <div class="context-block fade-in d3">
+    <p>A permission change that used to mean editing 20+ individual schemes now means editing one. The change propagates to every project automatically. There's no risk of missing one, no need to audit whether the update made it through.</p>
+    <p>Project setup got faster. Applying permissions to a new project is a single step. The scheme exists, the groups are mapped, and the new project inherits the same model everything else uses.</p>
+    <p>Quarterly audits became meaningful instead of impractical. With one scheme defining what access is supposed to look like, an audit is a comparison. Before, there was no reliable baseline to compare against.</p>
+    <p>The model was also built to survive turnover. A new admin stepping in would find one scheme with clearly named roles, groups that match org positions, and a consistent structure across every project. There's no institutional knowledge required to understand how access works.</p>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
 
 </div>
 
