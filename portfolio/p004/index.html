@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-004: JSM Service Desk Buildout — Ryan Wolfe</title>
+<title>P-004: Permission Scheme Design and User Access Management — Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -22,39 +22,43 @@
 <div class="page-wrap">
 
   <div class="breadcrumb fade-in d1">
-    <a href="../../">Home</a><span>›</span><span>P-004</span><span>›</span><span>JSM Service Desk Buildout</span>
+    <a href="../../">Home</a><span>›</span><span>P-004</span><span>›</span><span>Permission Scheme Design and User Access Management</span>
   </div>
 
   <div class="project-header fade-in d2">
-    <div class="project-eyebrow">P-004 · JSM Service Desk Buildout</div>
-    <h1 class="project-title-h1">JSM Service Desk <span class="accent-word">Full Buildout</span></h1>
-    <p class="project-summary-text">A department coming onto JSM for the first time. I scoped it with the department lead, documented requirements, configured the full service desk from portal to SLA rules to automation to approvals, ran UAT, and trained the team. The goal was that they could run it without calling me. That's what happened.</p>
+    <div class="project-eyebrow">P-004 · Jira Administration</div>
+    <h1 class="project-title-h1">Permission Scheme Design <span class="accent-word">and User Access Management</span></h1>
+    <p class="project-summary-text">Managing access for 300+ users across 20 departments meant the permission model had to be both tight and maintainable. I designed a scheme structure built around roles and groups rather than individuals, so access could scale without becoming a liability.</p>
+
+    <div class="confidentiality-note fade-in d2">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+
     <div class="project-meta">
-      <div><div class="meta-label">Status</div><div class="meta-value"><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;">○ Coming Soon</span></div></div>
-      <div><div class="meta-label">Primary Tool</div><div class="meta-value">Jira Service Management</div></div>
-      <div><div class="meta-label">Scope</div><div class="meta-value">Full service desk · End-to-end</div></div>
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge status-building-badge">In Progress</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Software Cloud</div></div>
+      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 20 departments · 55+ projects</div></div>
     </div>
+
     <div class="tags">
-      <span class="tag">JSM</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span><span class="tag">SLA Config</span><span class="tag">Requirements Gathering</span><span class="tag">Service Desk Administration</span>
+      <span class="tag">Jira Administration</span>
+      <span class="tag">Permission Schemes</span>
+      <span class="tag">Access Governance</span>
+      <span class="tag">RBAC</span>
+      <span class="tag">Group Management</span>
+      <span class="tag">User Lifecycle</span>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <div class="section-label fade-in d2">The Problem</div>
-  <div class="context-block fade-in d3">
-    <p>A department needed to move their request handling into JSM. They had a process that worked in email and spreadsheets, and they needed it to survive the migration without losing anything they depended on.</p>
-    <p>That meant understanding their current process before touching any configuration. Requirements first, build second. The service desk had to fit how they actually worked, not how I expected them to work.</p>
+  <div class="coming-soon-block fade-in d3">
+    <div class="coming-soon-icon">⚙</div>
+    <div class="coming-soon-label">This project is being documented.</div>
+    <p class="coming-soon-text">The full write-up — scheme design, group structure, access request workflow, and offboarding process — is in progress. Check back soon.</p>
+    <a href="../../" class="btn-secondary" style="margin-top:32px;">← Back to Portfolio</a>
   </div>
 
-  <div class="divider"></div>
-
-  <div class="section-label fade-in d2">Full write-up coming soon</div>
-  <div class="context-block fade-in d3">
-    <p>This project page is in progress. Check back for the full breakdown: requirements gathering, portal configuration, SLA and automation setup, UAT process, and training documentation.</p>
-  </div>
-
-  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
 </div>
 
 <footer>
@@ -68,10 +72,12 @@
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
   function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
   animRing();
-  document.querySelectorAll('a').forEach(el=>{
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
     el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
     el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
   });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 </script>
 </body>
 </html>
