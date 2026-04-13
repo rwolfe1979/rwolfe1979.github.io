@@ -26,6 +26,7 @@
     <li><a href="#portfolio">Work</a></li>
     <li><a href="#cert">Cert</a></li>
     <li><a href="#contact">Contact</a></li>
+    <li><a href="about.html">About</a></li>
     <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
   </ul>
   <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
@@ -38,6 +39,7 @@
   <li><a href="#portfolio" onclick="closeMenu()">Work</a></li>
   <li><a href="#cert" onclick="closeMenu()">Cert</a></li>
   <li><a href="#contact" onclick="closeMenu()">Contact</a></li>
+  <li><a href="about.html" onclick="closeMenu()">About</a></li>
   <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
 </ul>
 
@@ -212,25 +214,25 @@
       <div class="project-status status-live">Live</div>
     </a>
 
-<a href="portfolio/p003/" class="project-card reveal">
+    <a href="portfolio/p003/" class="project-card reveal">
       <div class="project-number">P-003</div>
       <div class="project-body">
-        <div class="project-title">Blocker Priority Dashboard</div>
-        <div class="project-summary">Back-end teams complained that blocker priority was being overused and they had no visibility into why. I designed a conditional field structure across three JSM service desks to capture the reason behind every blocker ticket, built a Jira dashboard to surface the data to leadership, and tied Paid Rush requests to a monthly client billing process.</div>
+        <div class="project-title">Executive Reporting Dashboard</div>
+        <div class="project-summary">Leadership asked for "a report." I asked what decisions they were actually trying to make. From there I documented the real requirements, compared native Jira dashboards, Marketplace apps, and an Excel approach against those requirements, and built a JQL-powered Excel dashboard with a documented refresh process. Trained the requestor to run it themselves.</div>
         <div class="project-tools">
-          <span class="tag">Jira Service Management</span><span class="tag">Jira Dashboards</span><span class="tag">Atlassian Forms</span><span class="tag">JQL</span>
+          <span class="tag">JQL</span><span class="tag">Excel</span><span class="tag">Jira Dashboards</span>
         </div>
       </div>
-      <div class="project-status status-live">Live</div>
+      <div class="project-status status-building">Coming Soon</div>
     </a>
 
     <a href="portfolio/p004/" class="project-card reveal">
       <div class="project-number">P-004</div>
       <div class="project-body">
-        <div class="project-title">JSM Service Desk Full Buildout</div>
-        <div class="project-summary">A department coming onto JSM for the first time. I scoped it with the department lead, documented requirements, configured the full service desk from portal to SLA rules to automation to approvals, ran UAT, and trained the team. The goal was that they could run it without calling me. That's what happened.</div>
+        <div class="project-title">Permission Scheme Design and User Access Management</div>
+        <div class="project-summary">Managing access for 300+ users across 20 departments meant the permission model had to be both tight and maintainable. I designed a scheme structure built around roles and groups rather than individuals, so access could scale without becoming a liability. This covers how the model was designed, how it was enforced, and how access changes were handled day to day.</div>
         <div class="project-tools">
-          <span class="tag">JSM</span><span class="tag">Jira Automation</span><span class="tag">Confluence</span>
+          <span class="tag">Jira Admin</span><span class="tag">Permission Schemes</span><span class="tag">Access Governance</span><span class="tag">RBAC</span><span class="tag">Group Management</span>
         </div>
       </div>
       <div class="project-status status-building">Coming Soon</div>
@@ -258,6 +260,18 @@
         </div>
       </div>
       <div class="project-status status-live">Live</div>
+    </a>
+
+    <a href="portfolio/p007/" class="project-card reveal">
+      <div class="project-number">P-007</div>
+      <div class="project-body">
+        <div class="project-title">Confluence Space Architecture</div>
+        <div class="project-summary">Confluence only works if people can find things and trust what they find. I designed the space structure, page templates, and permission model for a 300-user environment across 20 departments. This covers how the architecture was planned, how it was rolled out, and what it took to get teams to actually use it.</div>
+        <div class="project-tools">
+          <span class="tag">Confluence</span><span class="tag">Space Design</span><span class="tag">Page Templates</span><span class="tag">Permissions</span><span class="tag">Knowledge Management</span>
+        </div>
+      </div>
+      <div class="project-status status-building">Coming Soon</div>
     </a>
 
   </div>
@@ -293,11 +307,11 @@
     <div class="section-line"></div>
   </div>
   <div class="contact-grid reveal">
-    <a href="mailto:rwolfe1979@gmail.com" class="contact-item">
+    <a href="/cdn-cgi/l/email-protection#1163667e7d77742028262851767c70787d3f727e7c" class="contact-item">
       <div class="contact-icon">✉</div>
       <div>
         <div class="contact-label">Email</div>
-        <div class="contact-value">rwolfe1979@gmail.com</div>
+        <div class="contact-value"><span class="__cf_email__" data-cfemail="d1a3a6bebdb7b4e0e8e6e891b6bcb0b8bdffb2bebc">[email&#160;protected]</span></div>
       </div>
     </a>
     <a href="tel:5303218044" class="contact-item">
@@ -329,7 +343,8 @@
   <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Custom cursor
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursorRing');
   let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
@@ -348,11 +363,13 @@
     el.addEventListener('mouseleave', () => { cursor.style.width = '8px'; cursor.style.height = '8px'; ring.style.width = '32px'; ring.style.height = '32px'; ring.style.borderColor = 'rgba(0,212,255,0.5)'; });
   });
 
+  // Hamburger
   const hamburger = document.getElementById('hamburger');
   const navMobile = document.getElementById('navMobile');
   hamburger.addEventListener('click', () => navMobile.classList.toggle('open'));
   function closeMenu() { navMobile.classList.remove('open'); }
 
+  // Scroll reveal
   const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); }
@@ -363,6 +380,7 @@
     el.style.transitionDelay = (i * 0.08) + 's';
   });
 
+  // Counter animation
   const countObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
@@ -375,13 +393,4 @@
         const timer = setInterval(() => {
           start += step;
           if (start >= num) { el.textContent = text; clearInterval(timer); }
-          else { el.textContent = Math.floor(start) + suffix; }
-        }, 16);
-        countObserver.unobserve(el);
-      }
-    });
-  }, { threshold: 0.5 });
-  document.querySelectorAll('.stat-number').forEach(el => countObserver.observe(el));
-</script>
-</body>
-</html>
+          else { el.textCo

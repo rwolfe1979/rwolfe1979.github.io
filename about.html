@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="/" class="nav-logo">rw<span>//</span>portfolio</a>
+  <ul class="nav-links">
+    <li><a href="/#skills">Skills</a></li>
+    <li><a href="/#portfolio">Work</a></li>
+    <li><a href="/#cert">Cert</a></li>
+    <li><a href="/#contact">Contact</a></li>
+    <li><a href="about.html" class="nav-active">About</a></li>
+    <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<ul class="nav-mobile" id="navMobile">
+  <li><a href="/#skills" onclick="closeMenu()">Skills</a></li>
+  <li><a href="/#portfolio" onclick="closeMenu()">Work</a></li>
+  <li><a href="/#cert" onclick="closeMenu()">Cert</a></li>
+  <li><a href="/#contact" onclick="closeMenu()">Contact</a></li>
+  <li><a href="about.html" onclick="closeMenu()">About</a></li>
+  <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
+</ul>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="/">Home</a><span>›</span><span>About</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">About Me</div>
+    <h1 class="project-title-h1">Beyond the <span class="accent-word">Resume</span></h1>
+    <p class="project-summary-text">The work speaks for itself. But there's more to how I got here than four years of Atlassian administration. This page is the longer version.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="coming-soon-block fade-in d3">
+    <div class="coming-soon-icon">👤</div>
+    <div class="coming-soon-label">This page is being written.</div>
+    <p class="coming-soon-text">Background, interests, how I ended up in IT, and what I actually care about. Coming soon.</p>
+    <a href="/" class="btn-secondary" style="margin-top:32px;">← Back to Portfolio</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  const hamburger=document.getElementById('hamburger');
+  const navMobile=document.getElementById('navMobile');
+  hamburger.addEventListener('click',()=>navMobile.classList.toggle('open'));
+  function closeMenu(){navMobile.classList.remove('open');}
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
