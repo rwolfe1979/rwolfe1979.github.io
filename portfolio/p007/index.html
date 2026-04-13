@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-007: Confluence Space Architecture — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="../../" class="nav-back">← Back to Portfolio</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span><span>P-007</span><span>›</span><span>Confluence Space Architecture</span>
+  </div>
+
+  <div class="project-header fade-in d2">
+    <div class="project-eyebrow">P-007 · Confluence</div>
+    <h1 class="project-title-h1">Confluence Space <span class="accent-word">Architecture</span></h1>
+    <p class="project-summary-text">Confluence only works if people can find things and trust what they find. I designed the space structure, page templates, and permission model for a 300-user environment across 20 departments. This covers how the architecture was planned, how it was rolled out, and what it took to get teams to actually use it.</p>
+
+    <div class="confidentiality-note fade-in d2">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+    </div>
+
+    <div class="project-meta">
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge status-building-badge">In Progress</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Confluence Cloud</div></div>
+      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 20 departments</div></div>
+    </div>
+
+    <div class="tags">
+      <span class="tag">Confluence</span>
+      <span class="tag">Space Design</span>
+      <span class="tag">Page Templates</span>
+      <span class="tag">Permissions</span>
+      <span class="tag">Knowledge Management</span>
+      <span class="tag">Information Architecture</span>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="coming-soon-block fade-in d3">
+    <div class="coming-soon-icon">📚</div>
+    <div class="coming-soon-label">This project is being documented.</div>
+    <p class="coming-soon-text">The full write-up — space structure, template design, permission model, and adoption story — is in progress. Check back soon.</p>
+    <a href="../../" class="btn-secondary" style="margin-top:32px;">← Back to Portfolio</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+</body>
+</html>
