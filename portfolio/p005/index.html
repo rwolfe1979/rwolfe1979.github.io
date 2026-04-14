@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-005: Marketplace App Evaluation — Ryan Wolfe</title>
+<title>P-005: Marketplace App Evaluation Framework — Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -22,20 +22,32 @@
 <div class="page-wrap">
 
   <div class="breadcrumb fade-in d1">
-    <a href="../../">Home</a><span>›</span><span>P-005</span><span>›</span><span>App Evaluation Framework</span>
+    <a href="../../">Home</a><span>›</span><span>P-005</span><span>›</span><span>Marketplace App Evaluation Framework</span>
   </div>
 
   <div class="project-header fade-in d2">
-    <div class="project-eyebrow">P-005 · App Evaluation Framework</div>
-    <h1 class="project-title-h1">Marketplace App <span class="accent-word">Evaluation Framework</span></h1>
-    <p class="project-summary-text">Before any Marketplace app went into production, I ran it through the same evaluation: compatibility with our Jira version, performance impact in sandbox, functional testing of the specific features we actually needed, and a cost vs. value check. I also documented a rollback procedure before deploying anything. Most apps didn't make it past sandbox.</p>
+    <div class="project-eyebrow">P-005 · Platform Administration</div>
+    <h1 class="project-title-h1">Marketplace App <span class="accent-word">Evaluation</span> Framework</h1>
+    <p class="project-summary-text">There was no process for evaluating Marketplace apps before I owned it. Requests went directly to a budget conversation with no technical review, no security check, and no assessment of whether the app overlapped with something already installed. I built a repeatable evaluation framework covering security, cost, cross-team benefit, and vendor risk. It gave leadership actual information to make decisions.</p>
+    <div class="confidentiality-note">
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and managed in a production Atlassian Cloud environment.
+    </div>
     <div class="project-meta">
-      <div><div class="meta-label">Status</div><div class="meta-value"><span style="font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;text-transform:uppercase;">○ Coming Soon</span></div></div>
-      <div><div class="meta-label">Primary Tool</div><div class="meta-value">Atlassian Marketplace</div></div>
-      <div><div class="meta-label">Scope</div><div class="meta-value">300+ users · Jira + JSM + Confluence</div></div>
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Atlassian Cloud</div></div>
+      <div><div class="meta-label">Scale</div><div class="meta-value">~35–40 apps evaluated</div></div>
+      <div><div class="meta-label">Audit cycle</div><div class="meta-value">Annual at contract renewal</div></div>
     </div>
     <div class="tags">
-      <span class="tag">Atlassian Marketplace</span><span class="tag">Jira Admin</span><span class="tag">Sandbox Testing</span><span class="tag">Requirements Gathering</span><span class="tag">Process Documentation</span>
+      <span class="tag">Marketplace Apps</span>
+      <span class="tag">App Governance</span>
+      <span class="tag">Vendor Evaluation</span>
+      <span class="tag">Security Review</span>
+      <span class="tag">Atlassian Partner</span>
+      <span class="tag">Cost Management</span>
+      <span class="tag">Confluence</span>
+      <span class="tag">Jira Software</span>
+      <span class="tag">JSM</span>
     </div>
   </div>
 
@@ -43,18 +55,97 @@
 
   <div class="section-label fade-in d2">The Problem</div>
   <div class="context-block fade-in d3">
-    <p>App requests came in without any structure. A team would find something in the Marketplace, ask for it, and expect it to be live by the end of the week. There was no process for evaluating whether an app was safe, compatible, or actually worth the cost.</p>
-    <p>A bad Marketplace app in a 300-user environment can cause performance issues or break existing automation rules. I needed a repeatable process that protected the environment while still being responsive to legitimate requests.</p>
+    <p>Before I took over platform administration, app requests had no standard path. A department leader would approach the IT director directly, make the case for a new tool, and if the budget conversation went well, the app got installed. Nobody checked whether the app overlapped with something already in the instance. Nobody reviewed the vendor's security profile. Nobody asked whether more than one team could benefit from the same license.</p>
+    <p>The result was a growing catalog of apps that no team fully understood. Some were used by one person. Some weren't being used at all. And removing any of them carried risk. You can't always know what configuration an app has touched until after it's gone.</p>
+    <p>The cleanest solution was to stop the problem at the door. That meant having a consistent process that every request went through before any decision got made.</p>
   </div>
 
   <div class="divider"></div>
 
-  <div class="section-label fade-in d2">Full write-up coming soon</div>
+  <div class="section-label fade-in d2">What I Built</div>
+  <div class="built-list fade-in d3">
+    <div class="built-item">
+      <div class="built-num">01</div>
+      <div>
+        <div class="built-title">JSM-based request intake</div>
+        <div class="built-desc">All app evaluation requests came in through the Jira Service Management portal. Standardized intake meant every request included the requester's name, the app they wanted, and their stated use cases. If someone couldn't explain why they needed an app, that was worth knowing before any evaluation work started.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">02</div>
+      <div>
+        <div class="built-title">Tiered evaluation process</div>
+        <div class="built-desc">Paid and free apps followed different review tracks. Free apps got a lighter security and compatibility check. Paid apps went through a multi-step process covering use cases, alternatives, security, compatibility, and cost before any leadership conversation happened. The tier determined how much process the request needed, not who was asking.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">03</div>
+      <div>
+        <div class="built-title">Marketplace security review</div>
+        <div class="built-desc">Every paid app request included a review of the vendor's Atlassian Marketplace security profile. I checked four things: whether the vendor had completed Atlassian's privacy questionnaire, whether the app was part of the Marketplace Bug Bounty program, whether the vendor had a Trust Center, and what integration permissions the app required. An app that needed more access than it could justify was a flag.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">04</div>
+      <div>
+        <div class="built-title">30-day trial management</div>
+        <div class="built-desc">Where available, I ran a 30-day trial before committing to a contract. This was especially useful for more complex apps where the full feature set wasn't clear from the listing alone. Trials let me see actual performance before any purchase decision was made. The requesting team also got a chance to confirm the app did what they thought it would.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">05</div>
+      <div>
+        <div class="built-title">Partner contract coordination</div>
+        <div class="built-desc">The instance ran on a managed Atlassian partner contract, not direct Atlassian billing. That structure offered meaningful cost savings but meant approved paid apps required a contract amendment. I coordinated those updates directly with the partner, verifying user counts, product associations, and prorated billing, before any app went live.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">06</div>
+      <div>
+        <div class="built-title">App registry</div>
+        <div class="built-desc">I documented every installed app with its product association, category, description, and links to the vendor's Marketplace listing and help documentation. The registry served as the internal reference for anyone asking what a given app did, which product it ran in, and whether it was still active. It also supported the yearly audit process.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">07</div>
+      <div>
+        <div class="built-title">Yearly audit</div>
+        <div class="built-desc">At each contract renewal I reviewed every active app for usage and cost justification. The questions were simple: Is this still being used? Does the cost still make sense? Has anything changed about the team using it? Apps that didn't pass that review were removed. I removed about five apps over two audit cycles. Free apps were also reviewed for any pricing changes during this period.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Documentation</div>
+  <div class="doc-grid fade-in d3">
+    <a href="framework.html" class="doc-card">
+      <div class="doc-icon">🔍</div>
+      <div class="doc-number">Document 01</div>
+      <div class="doc-title">Evaluation Framework</div>
+      <div class="doc-desc">Full walkthrough of the evaluation process: request intake, paid vs. free tracks, security review criteria, 30-day trials, partner contract coordination, onboarding, and the yearly audit cycle. Includes the decision flow diagram.</div>
+      <div class="doc-actions"><span class="doc-link">Read →</span></div>
+    </a>
+    <a href="registry.html" class="doc-card">
+      <div class="doc-icon">📦</div>
+      <div class="doc-number">Document 02</div>
+      <div class="doc-title">App Registry</div>
+      <div class="doc-desc">A representative registry of installed and evaluated apps across Jira Software, Confluence, and JSM. Organized by product with descriptions, status, and links to Marketplace listings and vendor documentation.</div>
+      <div class="doc-actions"><span class="doc-link">View Registry →</span></div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Outcome</div>
   <div class="context-block fade-in d3">
-    <p>This project page is in progress. Check back for the full breakdown: the evaluation framework, sandbox testing process, documentation templates, and examples of apps that passed and failed review.</p>
+    <p>The framework kept the instance clean and the costs defensible. At each contract renewal, I could account for every app in the catalog. What it did, who was using it, and whether it was still worth the cost. The yearly audit removed five apps over two cycles without any of the risk that comes from removing something that's been in use for a while.</p>
+    <p>More importantly, the framework prevented the harder problem. Removing an app after it's embedded in someone's workflow is always riskier than not adding it in the first place. You can't always predict what configuration an app has touched until after it's gone. It's better to prevent than to clean up.</p>
+    <p>Leadership got clear recommendations backed by research instead of vendor marketing. The IT director didn't have to make decisions on incomplete information. And the instance didn't accumulate tools that nobody asked for twice.</p>
   </div>
 
   <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
+
 </div>
 
 <footer>
@@ -68,10 +159,12 @@
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
   function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
   animRing();
-  document.querySelectorAll('a').forEach(el=>{
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
     el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
     el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
   });
+  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
 </script>
 </body>
 </html>
