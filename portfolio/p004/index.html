@@ -36,17 +36,16 @@
 
     <div class="project-meta">
       <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
-      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Cloud (Software + JSM)</div></div>
-      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 20 departments · 55+ projects</div></div>
-      <div><div class="meta-label">Schemes consolidated</div><div class="meta-value">20+ → 1</div></div>
+      <div><div class="meta-label">Environment</div><div class="meta-value">Jira Software Cloud</div></div>
+      <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 55+ projects</div></div>
+      <div><div class="meta-label">Groups</div><div class="meta-value">60–70 Permission Groups</div></div>
     </div>
     <div class="tags">
-      <span class="tag">Jira Administration</span>
+      <span class="tag">Jira Admin</span>
       <span class="tag">Permission Schemes</span>
-      <span class="tag">User Access Management</span>
-      <span class="tag">Jira Service Management</span>
-      <span class="tag">Governance</span>
-      <span class="tag">Access Auditing</span>
+      <span class="tag">Access Governance</span>
+      <span class="tag">RBAC</span>
+      <span class="tag">Group Management</span>
     </div>
   </div>
 
@@ -54,156 +53,163 @@
 
   <div class="section-label fade-in d2">The Problem</div>
   <div class="context-block fade-in d3">
-    <p>When Jira creates a new project, it generates a permission scheme automatically. That scheme belongs to that project. It looks like a convenience, but at scale it becomes a maintenance problem.</p>
-    <p>With 20+ schemes in the environment, any platform-level permission change had to be applied manually to every one of them. Atlassian platform updates occasionally added new permission types that needed to be explicitly configured — and with dozens of separate schemes, there was no reliable way to know if every one had been updated correctly. Auditing permissions meant checking each scheme individually. The risk of inconsistency was real and grew with every new project.</p>
-    <p>The environment needed one source of truth, not 20+ versions of the same configuration.</p>
+    <p>When Jira creates a new project, it generates a permission scheme automatically. By default, that scheme belongs only to that project. For a single project, that's fine. At scale, it creates a management problem.</p>
+    <p>With 20+ auto-generated schemes across the environment, any change to how permissions worked had to be applied to each one manually. If Atlassian introduced a new permission type in a platform update, the only way to ensure every project had it configured correctly was to open each scheme and check. There was no reliable way to confirm nothing had been missed. An audit meant cross-referencing dozens of different configurations with no baseline to compare against.</p>
   </div>
 
   <div class="divider"></div>
 
-  <div class="section-label fade-in d2">How the Permission Model Works</div>
-  <p class="doc-p fade-in d3" style="margin-bottom:32px;">A single universal scheme defines six named role tiers. Permission Groups, assigned at the platform level, map to those roles. When a user is onboarded, they're added to the group that matches their position. That group assignment flows through to every project automatically. Project admins can also assign users directly to a role within their own project — but the underlying scheme and its definitions never change.</p>
+  <div class="section-label fade-in d2">Permission Model</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">One scheme covers all 55+ projects. Six role tiers define what each access level can do. Permission Groups, assigned at the platform level, map to those role tiers. When a user is onboarded, they're added to the group that matches their position. That group assignment flows through to every project automatically.</p>
 
   <!-- DIAGRAM: Permission model hierarchy -->
   <div class="fade-in d3" style="margin-bottom:48px;">
-    <svg width="100%" viewBox="0 0 680 620" role="img" style="display:block;">
+    <svg width="100%" viewBox="0 0 960 420" role="img" style="display:block;">
       <title>Universal permission scheme model</title>
-      <desc>Diagram showing how a single permission scheme, six role tiers, and permission groups connect to project access across all Jira projects.</desc>
+      <desc>Diagram showing one permission scheme connecting to six role tiers, which map to permission groups, which flow to 55+ Jira projects.</desc>
       <style>
-        .p-scheme   { fill:#0d1219; stroke:#00d4ff; stroke-width:1.5; }
-        .p-role     { fill:#0d1f3c; stroke:#0066ff; stroke-width:0.75; }
-        .p-group    { fill:#1a0d3c; stroke:#7b2fff; stroke-width:0.75; }
-        .p-project  { fill:#0d2d1a; stroke:#00ff88; stroke-width:0.75; }
-        .p-th       { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
-        .p-ts       { font-family:'Syne',sans-serif; font-size:10.5px; font-weight:400; fill:#6b7a8d; }
-        .p-label    { font-family:'Space Mono',monospace; font-size:9px; font-weight:700; fill:#00d4ff; letter-spacing:0.08em; }
-        .p-glabel   { font-family:'Space Mono',monospace; font-size:9px; font-weight:700; fill:#7b2fff; letter-spacing:0.08em; }
-        .p-plabel   { font-family:'Space Mono',monospace; font-size:9px; font-weight:700; fill:#00ff88; letter-spacing:0.08em; }
-        .p-line     { stroke:rgba(0,212,255,0.35); stroke-width:1.2; fill:none; }
-        .p-line-g   { stroke:rgba(123,47,255,0.4); stroke-width:1.2; fill:none; }
-        .p-line-p   { stroke:rgba(0,255,136,0.35); stroke-width:1.2; fill:none; }
-        .p-dot      { fill:rgba(0,212,255,0.5); }
-        .p-dot-g    { fill:rgba(123,47,255,0.6); }
-        .p-dot-p    { fill:rgba(0,255,136,0.5); }
+        .f-teal  { fill:#0d4f4a; stroke:#00d4ff; stroke-width:0.5; }
+        .f-coral { fill:#5c2018; stroke:#d4522a; stroke-width:0.5; }
+        .f-purp  { fill:#2d1f6e; stroke:#7b2fff; stroke-width:0.5; }
+        .f-gray  { fill:#111827; stroke:rgba(0,212,255,0.25); stroke-width:0.5; }
+        .f-th  { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
+        .f-ts  { font-family:'Syne',sans-serif; font-size:11px; font-weight:400; fill:#6b7a8d; }
+        .f-lbl { font-family:'Space Mono',monospace; font-size:8px; font-weight:700; fill:#6b7a8d; letter-spacing:0.08em; }
+        .f-ln  { stroke:rgba(0,212,255,0.4); stroke-width:1; fill:none; }
+        .f-lng { stroke:rgba(123,47,255,0.4); stroke-width:1; fill:none; }
+        .f-dt  { fill:rgba(0,212,255,0.6); }
+        .f-dtg { fill:rgba(123,47,255,0.6); }
       </style>
 
+      <!-- All rows centered at x=480
+           Role tiers: 6x120 + 5x10 = 770  start=95  centers: 155,285,415,545,675,805
+           Groups:     3x220 + 2x60 = 780   start=90  centers: 200,480,760
+           Projects:   5x135 + 4x40 = 835   start=63  centers: 131,306,481,656,831 -->
+
       <!-- SCHEME BOX -->
-      <rect x="190" y="20" width="300" height="60" rx="8" class="p-scheme"/>
-      <text class="p-label" x="340" y="40" text-anchor="middle">UNIVERSAL PERMISSION SCHEME</text>
-      <text class="p-th" x="340" y="60" text-anchor="middle">One scheme · All 55+ projects</text>
+      <rect x="265" y="20" width="430" height="60" rx="8" class="f-teal"/>
+      <text class="f-lbl" x="480" y="39" text-anchor="middle">UNIVERSAL PERMISSION SCHEME</text>
+      <text class="f-th"  x="480" y="59" text-anchor="middle">One scheme · All 55+ projects</text>
 
-      <!-- connector scheme to roles -->
-      <line x1="340" y1="80" x2="340" y2="110" class="p-line"/>
-      <circle cx="340" cy="110" r="3" class="p-dot"/>
+      <!-- scheme to role tier bar -->
+      <line x1="480" y1="80" x2="480" y2="100" class="f-ln"/>
+      <circle cx="480" cy="100" r="3" class="f-dt"/>
+      <line x1="155" y1="100" x2="805" y2="100" class="f-ln"/>
+      <circle cx="155" cy="100" r="3" class="f-dt"/>
+      <circle cx="285" cy="100" r="3" class="f-dt"/>
+      <circle cx="415" cy="100" r="3" class="f-dt"/>
+      <circle cx="545" cy="100" r="3" class="f-dt"/>
+      <circle cx="675" cy="100" r="3" class="f-dt"/>
+      <circle cx="805" cy="100" r="3" class="f-dt"/>
+      <line x1="155" y1="100" x2="155" y2="110" class="f-ln"/>
+      <line x1="285" y1="100" x2="285" y2="110" class="f-ln"/>
+      <line x1="415" y1="100" x2="415" y2="110" class="f-ln"/>
+      <line x1="545" y1="100" x2="545" y2="110" class="f-ln"/>
+      <line x1="675" y1="100" x2="675" y2="110" class="f-ln"/>
+      <line x1="805" y1="100" x2="805" y2="110" class="f-ln"/>
 
-      <!-- fan lines to 6 roles -->
-      <line x1="340" y1="110" x2="80" y2="150" class="p-line"/>
-      <line x1="340" y1="110" x2="196" y2="150" class="p-line"/>
-      <line x1="340" y1="110" x2="312" y2="150" class="p-line"/>
-      <line x1="340" y1="110" x2="428" y2="150" class="p-line"/>
-      <line x1="340" y1="110" x2="544" y2="150" class="p-line"/>
-      <line x1="340" y1="110" x2="624" y2="150" class="p-line"/>
+      <!-- ROLE TIER BOXES w=120 gap=10 start=95 -->
+      <rect x="95"  y="110" width="120" height="62" rx="6" class="f-coral"/>
+      <text class="f-lbl" x="155" y="125" text-anchor="middle">ROLE TIER 1</text>
+      <text class="f-th"  x="155" y="144" text-anchor="middle">View Only</text>
+      <text class="f-ts"  x="155" y="161" text-anchor="middle">Read access</text>
 
-      <!-- ROLE BOXES — 6 roles -->
-      <!-- View Only -->
-      <rect x="20" y="150" width="120" height="52" rx="6" class="p-role"/>
-      <text class="p-label" x="80" y="167" text-anchor="middle">ROLE TIER 1</text>
-      <text class="p-th" x="80" y="184" text-anchor="middle" font-size="11">View Only</text>
-      <text class="p-ts" x="80" y="198" text-anchor="middle">Read access</text>
+      <rect x="225" y="110" width="120" height="62" rx="6" class="f-coral"/>
+      <text class="f-lbl" x="285" y="125" text-anchor="middle">ROLE TIER 2</text>
+      <text class="f-th"  x="285" y="144" text-anchor="middle">Comment</text>
+      <text class="f-ts"  x="285" y="161" text-anchor="middle">Read, comment</text>
 
-      <!-- View + Comment -->
-      <rect x="148" y="150" width="120" height="52" rx="6" class="p-role"/>
-      <text class="p-label" x="208" y="167" text-anchor="middle">ROLE TIER 2</text>
-      <text class="p-th" x="208" y="184" text-anchor="middle" font-size="11">View + Comment</text>
-      <text class="p-ts" x="208" y="198" text-anchor="middle">Read, comment</text>
+      <rect x="355" y="110" width="120" height="62" rx="6" class="f-coral"/>
+      <text class="f-lbl" x="415" y="125" text-anchor="middle">ROLE TIER 3</text>
+      <text class="f-th"  x="415" y="144" text-anchor="middle">Create</text>
+      <text class="f-ts"  x="415" y="161" text-anchor="middle">Comment, create</text>
 
-      <!-- View + Comment + Create -->
-      <rect x="272" y="150" width="136" height="52" rx="6" class="p-role"/>
-      <text class="p-label" x="340" y="167" text-anchor="middle">ROLE TIER 3</text>
-      <text class="p-th" x="340" y="184" text-anchor="middle" font-size="11">+ Create</text>
-      <text class="p-ts" x="340" y="198" text-anchor="middle">Read, comment, create</text>
+      <rect x="485" y="110" width="120" height="62" rx="6" class="f-coral"/>
+      <text class="f-lbl" x="545" y="125" text-anchor="middle">ROLE TIER 4</text>
+      <text class="f-th"  x="545" y="144" text-anchor="middle">Member</text>
+      <text class="f-ts"  x="545" y="161" text-anchor="middle">Full access</text>
 
-      <!-- Member / Agent -->
-      <rect x="372" y="150" width="120" height="52" rx="6" class="p-role"/>
-      <text class="p-label" x="432" y="167" text-anchor="middle">ROLE TIER 4</text>
-      <text class="p-th" x="432" y="184" text-anchor="middle" font-size="11">Member / Agent</text>
-      <text class="p-ts" x="432" y="198" text-anchor="middle">Full working access</text>
+      <rect x="615" y="110" width="120" height="62" rx="6" class="f-coral"/>
+      <text class="f-lbl" x="675" y="125" text-anchor="middle">ROLE TIER 5</text>
+      <text class="f-th"  x="675" y="144" text-anchor="middle">Lead</text>
+      <text class="f-ts"  x="675" y="161" text-anchor="middle">Member + config</text>
 
-      <!-- Lead -->
-      <rect x="494" y="150" width="100" height="52" rx="6" class="p-role"/>
-      <text class="p-label" x="544" y="167" text-anchor="middle">ROLE TIER 5</text>
-      <text class="p-th" x="544" y="184" text-anchor="middle" font-size="11">Lead</text>
-      <text class="p-ts" x="544" y="198" text-anchor="middle">Member + config</text>
+      <rect x="745" y="110" width="120" height="62" rx="6" class="f-coral"/>
+      <text class="f-lbl" x="805" y="125" text-anchor="middle">ROLE TIER 6</text>
+      <text class="f-th"  x="805" y="144" text-anchor="middle">Manager</text>
+      <text class="f-ts"  x="805" y="161" text-anchor="middle">Project admin</text>
 
-      <!-- Manager / Admin -->
-      <rect x="576" y="150" width="100" height="52" rx="6" class="p-role"/>
-      <text class="p-label" x="626" y="167" text-anchor="middle">ROLE TIER 6</text>
-      <text class="p-th" x="626" y="184" text-anchor="middle" font-size="11">Manager</text>
-      <text class="p-ts" x="626" y="198" text-anchor="middle">Project admin</text>
+      <!-- Groups label -->
+      <text class="f-lbl" x="480" y="190" text-anchor="middle">PERMISSION GROUPS (60-70 TOTAL) ASSIGNED TO ROLE TIERS</text>
 
-      <!-- SECTION LABEL: Permission Groups -->
-      <text class="p-glabel" x="340" y="248" text-anchor="middle">PERMISSION GROUPS (60–70 TOTAL) ASSIGNED TO ROLE TIERS</text>
+      <!-- groups connector centers: 200,480,760 -->
+      <line x1="200" y1="198" x2="760" y2="198" class="f-lng"/>
+      <circle cx="200" cy="198" r="3" class="f-dtg"/>
+      <circle cx="480" cy="198" r="3" class="f-dtg"/>
+      <circle cx="760" cy="198" r="3" class="f-dtg"/>
+      <line x1="200" y1="198" x2="200" y2="208" class="f-lng"/>
+      <line x1="480" y1="198" x2="480" y2="208" class="f-lng"/>
+      <line x1="760" y1="198" x2="760" y2="208" class="f-lng"/>
 
-      <!-- connector line -->
-      <line x1="200" y1="255" x2="480" y2="255" class="p-line-g"/>
-      <circle cx="200" cy="255" r="3" class="p-dot-g"/>
-      <circle cx="340" cy="255" r="3" class="p-dot-g"/>
-      <circle cx="480" cy="255" r="3" class="p-dot-g"/>
+      <!-- GROUP BOXES w=220 gap=60 start=90 -->
+      <rect x="90"  y="208" width="220" height="62" rx="6" class="f-purp"/>
+      <text class="f-lbl" x="200" y="224" text-anchor="middle">EXAMPLE GROUP</text>
+      <text class="f-th"  x="200" y="243" text-anchor="middle">Marketing Team</text>
+      <text class="f-ts"  x="200" y="260" text-anchor="middle">Member / Agent role</text>
 
-      <!-- GROUP BOXES — examples -->
-      <rect x="80" y="265" width="150" height="52" rx="6" class="p-group"/>
-      <text class="p-glabel" x="155" y="283" text-anchor="middle">EXAMPLE GROUP</text>
-      <text class="p-th" x="155" y="300" text-anchor="middle" font-size="11">Marketing Team</text>
-      <text class="p-ts" x="155" y="315" text-anchor="middle">→ Member / Agent role</text>
+      <rect x="370" y="208" width="220" height="62" rx="6" class="f-purp"/>
+      <text class="f-lbl" x="480" y="224" text-anchor="middle">EXAMPLE GROUP</text>
+      <text class="f-th"  x="480" y="243" text-anchor="middle">Department Leads</text>
+      <text class="f-ts"  x="480" y="260" text-anchor="middle">Lead role</text>
 
-      <rect x="265" y="265" width="150" height="52" rx="6" class="p-group"/>
-      <text class="p-glabel" x="340" y="283" text-anchor="middle">EXAMPLE GROUP</text>
-      <text class="p-th" x="340" y="300" text-anchor="middle" font-size="11">Department Leads</text>
-      <text class="p-ts" x="340" y="315" text-anchor="middle">→ Lead role</text>
+      <rect x="650" y="208" width="220" height="62" rx="6" class="f-purp"/>
+      <text class="f-lbl" x="760" y="224" text-anchor="middle">EXAMPLE GROUP</text>
+      <text class="f-th"  x="760" y="243" text-anchor="middle">Exec Stakeholders</text>
+      <text class="f-ts"  x="760" y="260" text-anchor="middle">View Only role</text>
 
-      <rect x="450" y="265" width="150" height="52" rx="6" class="p-group"/>
-      <text class="p-glabel" x="525" y="283" text-anchor="middle">EXAMPLE GROUP</text>
-      <text class="p-th" x="525" y="300" text-anchor="middle" font-size="11">Exec Stakeholders</text>
-      <text class="p-ts" x="525" y="315" text-anchor="middle">→ View Only role</text>
+      <!-- Onboarding text -->
+      <text class="f-ts" x="480" y="292" text-anchor="middle">User added to group at onboarding · access flows to all projects automatically</text>
 
-      <!-- connector to onboarding label -->
-      <line x1="340" y1="317" x2="340" y2="360" class="p-line-g"/>
-      <text class="p-ts" x="340" y="350" text-anchor="middle">User added to group at onboarding · access flows to all projects automatically</text>
+      <!-- vertical to projects -->
+      <line x1="480" y1="300" x2="480" y2="320" class="f-ln"/>
+      <circle cx="480" cy="320" r="3" class="f-dt"/>
 
-      <!-- connector to projects -->
-      <line x1="340" y1="360" x2="340" y2="390" class="p-line-p"/>
-      <circle cx="340" cy="390" r="3" class="p-dot-p"/>
+      <!-- projects bar centers: 131,306,481,656,831 -->
+      <line x1="131" y1="320" x2="831" y2="320" class="f-ln"/>
+      <circle cx="131" cy="320" r="3" class="f-dt"/>
+      <circle cx="306" cy="320" r="3" class="f-dt"/>
+      <circle cx="481" cy="320" r="3" class="f-dt"/>
+      <circle cx="656" cy="320" r="3" class="f-dt"/>
+      <circle cx="831" cy="320" r="3" class="f-dt"/>
+      <line x1="131" y1="320" x2="131" y2="330" class="f-ln"/>
+      <line x1="306" y1="320" x2="306" y2="330" class="f-ln"/>
+      <line x1="481" y1="320" x2="481" y2="330" class="f-ln"/>
+      <line x1="656" y1="320" x2="656" y2="330" class="f-ln"/>
+      <line x1="831" y1="320" x2="831" y2="330" class="f-ln"/>
 
-      <!-- fan to projects -->
-      <line x1="340" y1="390" x2="140" y2="420" class="p-line-p"/>
-      <line x1="340" y1="390" x2="260" y2="420" class="p-line-p"/>
-      <line x1="340" y1="390" x2="340" y2="420" class="p-line-p"/>
-      <line x1="340" y1="390" x2="420" y2="420" class="p-line-p"/>
-      <line x1="340" y1="390" x2="540" y2="420" class="p-line-p"/>
+      <!-- PROJECT BOXES w=135 gap=40 start=63 -->
+      <rect x="63"  y="330" width="135" height="52" rx="6" class="f-gray"/>
+      <text class="f-lbl" x="131" y="346" text-anchor="middle">PROJECT</text>
+      <text class="f-th"  x="131" y="365" text-anchor="middle">Marketing SD</text>
 
-      <!-- PROJECT BOXES -->
-      <rect x="80" y="420" width="120" height="44" rx="6" class="p-project"/>
-      <text class="p-plabel" x="140" y="438" text-anchor="middle">PROJECT</text>
-      <text class="p-th" x="140" y="455" text-anchor="middle" font-size="11">Marketing SD</text>
+      <rect x="238" y="330" width="135" height="52" rx="6" class="f-gray"/>
+      <text class="f-lbl" x="306" y="346" text-anchor="middle">PROJECT</text>
+      <text class="f-th"  x="306" y="365" text-anchor="middle">IT Service Desk</text>
 
-      <rect x="204" y="420" width="120" height="44" rx="6" class="p-project"/>
-      <text class="p-plabel" x="264" y="438" text-anchor="middle">PROJECT</text>
-      <text class="p-th" x="264" y="455" text-anchor="middle" font-size="11">IT Service Desk</text>
+      <rect x="413" y="330" width="135" height="52" rx="6" class="f-gray"/>
+      <text class="f-lbl" x="481" y="346" text-anchor="middle">PROJECT</text>
+      <text class="f-th"  x="481" y="365" text-anchor="middle">HR Onboarding</text>
 
-      <rect x="280" y="420" width="120" height="44" rx="6" class="p-project"/>
-      <text class="p-plabel" x="340" y="438" text-anchor="middle">PROJECT</text>
-      <text class="p-th" x="340" y="455" text-anchor="middle" font-size="11">HR Onboarding</text>
+      <rect x="588" y="330" width="135" height="52" rx="6" class="f-gray"/>
+      <text class="f-lbl" x="656" y="346" text-anchor="middle">PROJECT</text>
+      <text class="f-th"  x="656" y="365" text-anchor="middle">Dev Sprint Board</text>
 
-      <rect x="356" y="420" width="120" height="44" rx="6" class="p-project"/>
-      <text class="p-plabel" x="416" y="438" text-anchor="middle">PROJECT</text>
-      <text class="p-th" x="416" y="455" text-anchor="middle" font-size="11">Dev Sprint Board</text>
-
-      <rect x="480" y="420" width="120" height="44" rx="6" class="p-project"/>
-      <text class="p-plabel" x="540" y="438" text-anchor="middle">55+ PROJECTS</text>
-      <text class="p-th" x="540" y="455" text-anchor="middle" font-size="11">All departments</text>
+      <rect x="763" y="330" width="135" height="52" rx="6" class="f-gray"/>
+      <text class="f-lbl" x="831" y="346" text-anchor="middle">55+ PROJECTS</text>
+      <text class="f-th"  x="831" y="365" text-anchor="middle">All departments</text>
 
       <!-- caption -->
-      <text class="p-ts" x="340" y="510" text-anchor="middle">All projects reference the same scheme. One change propagates everywhere.</text>
+      <text class="f-ts" x="480" y="405" text-anchor="middle">All projects reference the same scheme. One change propagates everywhere.</text>
     </svg>
   </div>
 
@@ -251,14 +257,12 @@
   <div class="divider"></div>
 
   <div class="section-label fade-in d2">Permission Scheme Detail</div>
-  <div class="fade-in d3">
-    <a href="scheme.html" class="doc-card" style="display:flex; gap:20px; align-items:start; max-width:600px; margin-bottom:48px;">
-      <div class="doc-icon">🔐</div>
+  <div class="fade-in d3" style="margin-bottom:48px;">
+    <a href="scheme.html" class="arrow-link">
       <div>
-        <div class="doc-number">Technical detail</div>
-        <div class="doc-title">Scheme Design and Access Model</div>
-        <div class="doc-desc">Role tier definitions, how Permission Groups map to project roles, the onboarding and offboarding workflow, and how the audit process worked against a single consistent model.</div>
-        <div class="doc-actions"><span class="doc-link">Read →</span></div>
+        <div class="arrow-link-meta">Technical detail</div>
+        <div class="arrow-link-title">Scheme Design and Access Model</div>
+        <div class="arrow-link-sub">Read →</div>
       </div>
     </a>
   </div>
@@ -270,7 +274,7 @@
     <p>A permission change that used to mean editing 20+ individual schemes now means editing one. The change propagates to every project automatically. There's no risk of missing one, no need to audit whether the update made it through.</p>
     <p>Project setup got faster. Applying permissions to a new project is a single step. The scheme exists, the groups are mapped, and the new project inherits the same model everything else uses.</p>
     <p>Quarterly audits became meaningful instead of impractical. With one scheme defining what access is supposed to look like, an audit is a comparison. Before, there was no reliable baseline to compare against.</p>
-    <p>The model was also built to survive turnover. A new admin stepping in would find one scheme with clearly named roles, groups that match org positions, and a consistent structure across every project. There's no institutional knowledge required to understand how access works.</p>
+    <p>The model was also built to survive turnover. A new admin stepping in would find one scheme with clearly named roles, groups that match org positions, and a consistent structure across every project.</p>
   </div>
 
   <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
@@ -288,7 +292,7 @@
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
   function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
   animRing();
-  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
+  document.querySelectorAll('a,.arrow-link,.built-item').forEach(el=>{
     el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
     el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
   });
