@@ -727,6 +727,123 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
 .built-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; letter-spacing: -.01em; }
 .built-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
+/* ── Arrow Link Components ──────────────────────────────────── */
+/* Pattern 2: single full-width arrow, one destination         */
+.arrow-link {
+  display: flex;
+  align-items: center;
+  background: var(--surface);
+  border-top: 1.5px solid rgba(0,212,255,0.3);
+  border-left: 1.5px solid rgba(0,212,255,0.3);
+  border-bottom: 1.5px solid rgba(0,212,255,0.3);
+  border-right: none;
+  height: 72px;
+  padding: 0 68px 0 24px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: background 0.2s;
+  margin-bottom: 8px;
+}
+.arrow-link::after {
+  content: '';
+  position: absolute;
+  right: -33.5px; top: -1.5px;
+  width: 0; height: 0;
+  border-top: 37.5px solid transparent;
+  border-bottom: 37.5px solid transparent;
+  border-left: 33px solid rgba(0,212,255,0.3);
+  z-index: 0;
+}
+.arrow-link::before {
+  content: '';
+  position: absolute;
+  right: -31px; top: 0;
+  width: 0; height: 0;
+  border-top: 36px solid transparent;
+  border-bottom: 36px solid transparent;
+  border-left: 31px solid var(--surface);
+  z-index: 1;
+}
+.arrow-link:hover { background: var(--surface2); }
+.arrow-link:hover::before { border-left-color: var(--surface2); }
+.arrow-link-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px; color: var(--text-dim);
+  letter-spacing: .15em; text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.arrow-link-title {
+  font-size: 15px; font-weight: 700;
+  letter-spacing: -.01em; color: var(--text);
+  transition: color .2s;
+}
+.arrow-link:hover .arrow-link-title { color: var(--accent); }
+.arrow-link-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; color: var(--accent);
+  letter-spacing: .1em; text-transform: uppercase;
+  margin-top: 4px;
+}
+
+/* Pattern 3: two-arrow row (Read Online + PDF)                */
+.arrow-link-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.arrow-link-row .arrow-link {
+  flex: 1;
+  margin-bottom: 0;
+}
+.arrow-link-pdf {
+  flex-shrink: 0;
+  width: 112px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg2);
+  border-top: 1.5px solid rgba(0,212,255,0.3);
+  border-left: 1.5px solid rgba(0,212,255,0.3);
+  border-bottom: 1.5px solid rgba(0,212,255,0.3);
+  border-right: none;
+  height: 72px;
+  padding: 0 44px 0 16px;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  transition: background 0.2s;
+}
+.arrow-link-pdf::after {
+  content: '';
+  position: absolute;
+  right: -33.5px; top: -1.5px;
+  width: 0; height: 0;
+  border-top: 37.5px solid transparent;
+  border-bottom: 37.5px solid transparent;
+  border-left: 33px solid rgba(0,212,255,0.3);
+  z-index: 0;
+}
+.arrow-link-pdf::before {
+  content: '';
+  position: absolute;
+  right: -31px; top: 0;
+  width: 0; height: 0;
+  border-top: 36px solid transparent;
+  border-bottom: 36px solid transparent;
+  border-left: 31px solid var(--bg2);
+  z-index: 1;
+}
+.arrow-link-pdf:hover { background: var(--surface); }
+.arrow-link-pdf:hover::before { border-left-color: var(--surface); }
+.arrow-link-pdf-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: .1em; text-transform: uppercase;
+}
+
 /* ════════════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS
    ════════════════════════════════════════════════════════════ */
