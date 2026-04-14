@@ -727,6 +727,32 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
 .built-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; letter-spacing: -.01em; }
 .built-desc { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
 
+/* ── Project Arrow (main index — variable height) ──────────── */
+/* Two-layer clip-path: outer = teal border, inner = dark fill  */
+.project-arrow {
+  display: block;
+  clip-path: polygon(0 0, calc(100% - 42px) 0, 100% 50%, calc(100% - 42px) 100%, 0 100%);
+  background: rgba(0, 212, 255, 0.25);
+  margin-bottom: 3px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.2s;
+}
+.project-arrow:hover { background: rgba(0, 212, 255, 0.45); }
+.project-arrow-inner {
+  clip-path: polygon(0 0, calc(100% - 40px) 0, 100% 50%, calc(100% - 40px) 100%, 0 100%);
+  background: var(--surface);
+  margin: 1.5px 0 1.5px 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  padding: 28px var(--pad-x);
+  padding-right: calc(var(--pad-x) + 60px);
+  transition: background 0.2s;
+}
+.project-arrow:hover .project-arrow-inner { background: var(--surface2); }
+.project-arrow:hover .project-title { color: var(--accent); }
+
 /* ── Arrow Link Components ──────────────────────────────────── */
 /* Pattern 2: single full-width arrow, one destination         */
 .arrow-link {
@@ -855,6 +881,7 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
   .hero-photo { width: 180px; height: 180px; }
   .skills-grid { grid-template-columns: repeat(2, 1fr); }
   .project-card { padding: 28px var(--pad-x); }
+  .project-arrow-inner { padding: 28px var(--pad-x); padding-right: calc(var(--pad-x) + 60px); }
 }
 
 /* ── Mobile-ish (max 900px) — collapse two-col doc layout ── */
@@ -897,6 +924,13 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
   .project-card {
     grid-template-columns: 1fr;
     gap: 12px; padding: 24px var(--pad-x-sm);
+  }
+  .project-arrow-inner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 24px var(--pad-x-sm);
+    padding-right: calc(var(--pad-x-sm) + 52px);
   }
   .project-number { display: none; }
   .project-title { font-size: 18px; }
