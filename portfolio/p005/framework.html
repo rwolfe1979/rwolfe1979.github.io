@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-005: Evaluation Framework — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← Back to P-005</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-005</a><span>›</span>
+    <span>Evaluation Framework</span>
+  </div>
+
+  <div class="doc-header fade-in d2">
+    <div class="doc-eyebrow">P-005 · Document 01</div>
+    <h1 class="doc-title-h1">Evaluation Framework</h1>
+    <div class="doc-meta-line">Atlassian Cloud · ~35–40 apps evaluated · Annual audit at contract renewal</div>
+    <div class="confidentiality-note" style="margin-top:20px;">
+      Details in this document have been generalized to protect confidential information. The framework described is based on work I designed and ran in a production environment.
+    </div>
+  </div>
+
+  <div class="toc-mobile fade-in d2">
+    <button class="toc-mobile-toggle" id="tocToggle">Contents <span>▾</span></button>
+    <div class="toc-mobile-list" id="tocList">
+      <a href="#overview">Overview</a>
+      <a href="#intake">Request intake</a>
+      <a href="#paid-vs-free">Paid vs. free tracks</a>
+      <a href="#criteria">Evaluation criteria: paid apps</a>
+      <a href="#trial">30-day trials</a>
+      <a href="#decision">Decision and communication</a>
+      <a href="#contract">Partner contract coordination</a>
+      <a href="#onboarding">Onboarding and support</a>
+      <a href="#audit">Yearly audit</a>
+    </div>
+  </div>
+
+  <div class="two-col fade-in d2">
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#intake">Request intake</a></li>
+        <li><a href="#paid-vs-free">Paid vs. free tracks</a></li>
+        <li><a href="#criteria">Evaluation criteria</a></li>
+        <li><a href="#trial" class="sub">30-day trials</a></li>
+        <li><a href="#decision">Decision and communication</a></li>
+        <li><a href="#contract">Partner contract coordination</a></li>
+        <li><a href="#onboarding">Onboarding and support</a></li>
+        <li><a href="#audit">Yearly audit</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="overview">
+        <h2 class="section-h">Overview</h2>
+        <p class="doc-p">This document covers the full evaluation process for Atlassian Marketplace app requests. Every request, paid or free, went through a consistent review before any decision was made. The process existed to keep the instance clean, keep costs defensible, and give leadership something more than a vendor pitch to base decisions on.</p>
+        <p class="doc-p">The framework had two evaluation tracks depending on whether an app was paid or free. Both tracks converged at the same approval decision. The diagram below shows the full flow.</p>
+
+        <div style="margin: 32px 0 40px;">
+          <svg width="100%" viewBox="0 0 680 1096" role="img" style="display:block;">
+            <title>Marketplace App Evaluation Framework — Decision Flow</title>
+            <desc>Two-track decision flow. Requests come in via JSM. Free apps go through a security and compatibility check and a user notification. Paid apps go through six steps: use case review, compare alternatives, security review, cost calculation, optional 30-day trial, and assessment summary. Both tracks converge at an approved-or-rejected decision. Approved apps go to notify and onboard. Rejected apps notify the requester. An annual audit connects at the bottom.</desc>
+            <style>
+              .ft { fill:#0d4f4a; stroke:#00d4ff; stroke-width:.5; }
+              .fp { fill:#2d1f6e; stroke:#7b2fff; stroke-width:.5; }
+              .fc { fill:#5c2018; stroke:#d4522a; stroke-width:.5; }
+              .fg { fill:#111827; stroke:rgba(0,212,255,.25); stroke-width:.5; }
+              .fo { fill:#0d1219; stroke:rgba(0,212,255,.2); stroke-width:.5; stroke-dasharray:5 3; }
+              .fa { fill:#0a1a10; stroke:rgba(0,255,136,.35); stroke-width:.5; stroke-dasharray:5 3; }
+              .fleg { fill:none; stroke:rgba(0,212,255,.12); stroke-width:.5; stroke-dasharray:4 3; }
+              .fth { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
+              .fts { font-family:'Syne',sans-serif; font-size:11px; fill:#6b7a8d; }
+              .ftg { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#00ff88; }
+              .fln { stroke:rgba(0,212,255,.4); stroke-width:1; fill:none; }
+              .fld { stroke:rgba(0,212,255,.2); stroke-width:1; fill:none; stroke-dasharray:4 3; }
+              .fdt { fill:rgba(0,212,255,.6); }
+            </style>
+
+            <!-- JSM REQUEST -->
+            <rect x="140" y="20" width="400" height="52" rx="4" class="ft"/>
+            <text class="fth" x="340" y="41" text-anchor="middle">Request submitted</text>
+            <text class="fts" x="340" y="58" text-anchor="middle">JSM service desk · requestor describes need and use cases</text>
+            <line x1="340" y1="72" x2="340" y2="96" class="fln"/>
+
+            <!-- DIAMOND 1: Paid or Free? -->
+            <polygon points="340,96 440,120 340,144 240,120" class="fg"/>
+            <text class="fth" x="340" y="125" text-anchor="middle">Paid or free?</text>
+            <text class="fts" x="177" y="113" text-anchor="middle">Free</text>
+            <text class="fts" x="503" y="113" text-anchor="middle">Paid</text>
+            <line x1="240" y1="120" x2="112" y2="120" class="fln"/>
+            <line x1="112" y1="120" x2="112" y2="166" class="fln"/>
+            <line x1="440" y1="120" x2="567" y2="120" class="fln"/>
+            <line x1="567" y1="120" x2="567" y2="166" class="fln"/>
+
+            <!-- FREE TRACK -->
+            <rect x="20" y="166" width="185" height="72" rx="4" class="fp"/>
+            <text class="fth" x="112" y="180" text-anchor="middle">Security &amp;</text>
+            <text class="fth" x="112" y="196" text-anchor="middle">compatibility check</text>
+            <text class="fts" x="112" y="212" text-anchor="middle">Privacy · vendor trust</text>
+            <text class="fts" x="112" y="226" text-anchor="middle">Config conflicts</text>
+            <line x1="112" y1="238" x2="112" y2="254" class="fln"/>
+
+            <rect x="20" y="254" width="185" height="72" rx="4" class="fg"/>
+            <text class="fth" x="112" y="271" text-anchor="middle">User notified</text>
+            <text class="fts" x="112" y="290" text-anchor="middle">Free apps may become paid</text>
+            <text class="fts" x="112" y="306" text-anchor="middle">Access not guaranteed</text>
+            <line x1="112" y1="326" x2="112" y2="730" class="fln"/>
+
+            <!-- Free track annotation on long line -->
+            <text class="fts" x="140" y="483" style="font-size:10px;fill:rgba(107,122,141,.5);">Lighter review ·</text>
+            <text class="fts" x="140" y="496" style="font-size:10px;fill:rgba(107,122,141,.5);">admin decision only</text>
+
+            <!-- PAID TRACK -->
+            <rect x="475" y="166" width="185" height="52" rx="4" class="fp"/>
+            <text class="fth" x="567" y="187" text-anchor="middle">Use case review</text>
+            <text class="fts" x="567" y="204" text-anchor="middle">Why? Who else benefits?</text>
+            <line x1="567" y1="218" x2="567" y2="250" class="fln"/>
+
+            <rect x="475" y="250" width="185" height="52" rx="4" class="fp"/>
+            <text class="fth" x="567" y="271" text-anchor="middle">Compare alternatives</text>
+            <text class="fts" x="567" y="288" text-anchor="middle">Evaluate Marketplace options</text>
+            <line x1="567" y1="302" x2="567" y2="334" class="fln"/>
+
+            <rect x="475" y="334" width="185" height="96" rx="4" class="fp"/>
+            <text class="fth" x="567" y="349" text-anchor="middle">Security review</text>
+            <text class="fts" x="567" y="365" text-anchor="middle">Privacy questionnaire</text>
+            <text class="fts" x="567" y="381" text-anchor="middle">Bug Bounty · Trust Center</text>
+            <text class="fts" x="567" y="397" text-anchor="middle">Integration permissions</text>
+            <text class="fts" x="567" y="413" text-anchor="middle">Config &amp; app conflicts</text>
+            <line x1="567" y1="430" x2="567" y2="462" class="fln"/>
+
+            <rect x="475" y="462" width="185" height="52" rx="4" class="fp"/>
+            <text class="fth" x="567" y="483" text-anchor="middle">Cost calculation</text>
+            <text class="fts" x="567" y="500" text-anchor="middle">User count · JSW / Conf / JSM</text>
+            <line x1="567" y1="514" x2="567" y2="546" class="fln"/>
+
+            <!-- Optional 30-day trial -->
+            <rect x="475" y="546" width="185" height="66" rx="4" class="fo"/>
+            <text class="fth" x="567" y="562" text-anchor="middle">30-day trial</text>
+            <text class="fts" x="567" y="580" text-anchor="middle">Optional · where available</text>
+            <text class="fts" x="567" y="596" text-anchor="middle">Test before committing</text>
+            <line x1="567" y1="612" x2="567" y2="628" class="fln"/>
+
+            <rect x="475" y="628" width="185" height="52" rx="4" class="ft"/>
+            <text class="fth" x="567" y="649" text-anchor="middle">Assessment summary</text>
+            <text class="fts" x="567" y="666" text-anchor="middle">Presented to leadership</text>
+            <line x1="567" y1="680" x2="567" y2="730" class="fln"/>
+
+            <!-- CONVERGENCE -->
+            <line x1="112" y1="730" x2="567" y2="730" class="fln"/>
+            <circle cx="112" cy="730" r="3.5" class="fdt"/>
+            <circle cx="340" cy="730" r="3.5" class="fdt"/>
+            <circle cx="567" cy="730" r="3.5" class="fdt"/>
+            <line x1="340" y1="730" x2="340" y2="756" class="fln"/>
+
+            <!-- DIAMOND 2: Approved or Rejected? -->
+            <polygon points="340,756 440,782 340,808 240,782" class="fg"/>
+            <text class="fth" x="340" y="777" text-anchor="middle">Approved or</text>
+            <text class="fth" x="340" y="793" text-anchor="middle">rejected?</text>
+            <text class="fts" x="177" y="775" text-anchor="middle">Rejected</text>
+            <text class="fts" x="503" y="775" text-anchor="middle">Approved</text>
+            <line x1="240" y1="782" x2="112" y2="782" class="fln"/>
+            <line x1="112" y1="782" x2="112" y2="826" class="fln"/>
+            <line x1="440" y1="782" x2="567" y2="782" class="fln"/>
+            <line x1="567" y1="782" x2="567" y2="826" class="fln"/>
+
+            <!-- REJECTED -->
+            <rect x="20" y="826" width="185" height="60" rx="4" class="fc"/>
+            <text class="fth" x="112" y="841" text-anchor="middle">Notify requester</text>
+            <text class="fts" x="112" y="858" text-anchor="middle">Decision communicated</text>
+            <text class="fts" x="112" y="872" text-anchor="middle">with reasoning</text>
+
+            <!-- APPROVED -->
+            <rect x="475" y="826" width="185" height="80" rx="4" class="ft"/>
+            <text class="fth" x="567" y="841" text-anchor="middle">Notify &amp; onboard</text>
+            <text class="fts" x="567" y="858" text-anchor="middle">Requestor + team managers</text>
+            <text class="fts" x="567" y="874" text-anchor="middle">Vendor docs · training</text>
+            <text class="fts" x="567" y="890" text-anchor="middle">Paid: update partner contract</text>
+
+            <!-- DASHED CONNECTOR TO AUDIT -->
+            <line x1="567" y1="906" x2="567" y2="930" class="fld"/>
+            <line x1="567" y1="930" x2="340" y2="930" class="fld"/>
+            <circle cx="340" cy="930" r="3" class="fdt"/>
+            <line x1="340" y1="930" x2="340" y2="946" class="fld"/>
+
+            <!-- YEARLY AUDIT -->
+            <rect x="140" y="946" width="400" height="52" rx="4" class="fa"/>
+            <text class="ftg" x="340" y="967" text-anchor="middle">Yearly audit</text>
+            <text class="fts" x="340" y="984" text-anchor="middle">Active apps reviewed at renewal · usage and cost</text>
+
+            <!-- LEGEND -->
+            <rect x="20" y="1016" width="640" height="60" rx="4" class="fleg"/>
+            <text class="fts" x="340" y="1031" text-anchor="middle" style="font-size:9px;fill:#3d4f63;letter-spacing:.12em;">LEGEND</text>
+            <rect x="40" y="1044" width="11" height="11" rx="2" class="ft"/>
+            <text class="fts" x="57" y="1052">Key step</text>
+            <rect x="140" y="1044" width="11" height="11" rx="2" class="fp"/>
+            <text class="fts" x="157" y="1052">Evaluation step</text>
+            <rect x="290" y="1044" width="11" height="11" rx="2" class="fc"/>
+            <text class="fts" x="307" y="1052">Rejected outcome</text>
+            <rect x="430" y="1044" width="11" height="11" rx="2" class="fg"/>
+            <text class="fts" x="447" y="1052">Decision / neutral</text>
+            <rect x="570" y="1044" width="11" height="11" rx="2" class="fo"/>
+            <text class="fts" x="587" y="1052">Optional step</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="doc-section" id="intake">
+        <h2 class="section-h">Request intake</h2>
+        <p class="doc-p">All app evaluation requests, paid or free, came in through the same JSM service desk portal. This created a consistent starting point for every request regardless of who was asking or what they wanted. The request included the requester's name, the app they wanted, and their stated use cases.</p>
+        <p class="doc-p">That last part mattered. If someone couldn't explain why they needed an app, that was worth knowing before any evaluation work started. The intake step wasn't a hurdle. It was information gathering. A vague use case usually meant the requester hadn't thought through what the app would actually solve.</p>
+        <p class="doc-p">Having all requests go through the same channel also meant leadership wasn't fielding informal asks directly. The evaluation process was the path. There wasn't a shortcut around it.</p>
+      </div>
+
+      <div class="doc-section" id="paid-vs-free">
+        <h2 class="section-h">Paid vs. free tracks</h2>
+        <p class="doc-p">The evaluation path split based on cost. Paid apps went through the full multi-step review described in the next section. Free apps got a lighter review: a security and compatibility check, followed by a conversation with the requester about the risk of free apps going paid.</p>
+        <p class="doc-p">That risk is real. If a free app shifts to a paid model after it's in use and the cost isn't approved, it has to come out. Removing an app mid-use is harder than not adding it in the first place. Users needed to know going in that free apps weren't guaranteed to stay free. If pricing changed, access might not be maintained.</p>
+        <p class="doc-p">Free apps did not require leadership approval. The decision to install or decline was mine. I documented it the same way as paid apps. A free app that didn't pass the security or compatibility check was declined regardless of cost.</p>
+      </div>
+
+      <div class="doc-section" id="criteria">
+        <h2 class="section-h">Evaluation criteria: paid apps</h2>
+        <p class="doc-p">For paid apps, I worked through five areas before bringing anything to leadership.</p>
+
+        <h3 class="sub-h">Use case and cross-team benefit</h3>
+        <p class="doc-p">I needed to understand why the requester wanted the app and whether other teams could benefit from the same license. An app used by one team is harder to justify at scale. An app that serves multiple departments is a better investment. Cross-team benefit wasn't a requirement, but it was a factor in the recommendation.</p>
+
+        <h3 class="sub-h">Marketplace alternatives</h3>
+        <p class="doc-p">I researched other apps in the same category before settling on any specific option. Requesters often had a specific app in mind, but that wasn't always the best fit. Sometimes the most well-known option had gaps that a lesser-known alternative handled better. I evaluated at least two or three options before forming a view.</p>
+
+        <h3 class="sub-h">Security review</h3>
+        <p class="doc-p">Every paid app request included a review of the vendor's Atlassian Marketplace security profile. Four things were checked:</p>
+        <ul class="doc-ul">
+          <li><strong>Privacy questionnaire.</strong> Whether the vendor had completed Atlassian's privacy and security questionnaire and made the responses available.</li>
+          <li><strong>Bug Bounty program.</strong> Whether the app was part of Atlassian's Marketplace Bug Bounty program, which indicates active security monitoring and responsible disclosure.</li>
+          <li><strong>Trust Center.</strong> Whether the vendor had a Trust Center with security, compliance, and data handling documentation available for review.</li>
+          <li><strong>Integration permissions.</strong> What access the app required within the Atlassian environment. An app that requested more permission than its stated function required was flagged.</li>
+        </ul>
+        <p class="doc-p">A weak security profile wasn't an automatic rejection, but it was part of the recommendation. If a vendor hadn't engaged with Atlassian's security programs at all, that was worth surfacing to leadership explicitly.</p>
+
+        <h3 class="sub-h">Compatibility check</h3>
+        <p class="doc-p">I reviewed whether the app could conflict with existing configuration: other apps, custom fields, workflow rules, or permission schemes. I also checked whether the app overlapped with something already installed. Adding a second tool that does what an existing tool already does creates confusion without adding value.</p>
+
+        <h3 class="sub-h">Cost calculation</h3>
+        <p class="doc-p">Atlassian Marketplace apps are priced per user and tied to a specific product: Jira Software, Confluence, or Jira Service Management. The cost depends on which product the app runs in and how many users are on that product's license. I calculated the expected cost based on the relevant user count before any leadership conversation happened, so the budget discussion had actual numbers attached to it.</p>
+
+        <div class="doc-section" id="trial" style="margin-bottom:0;margin-top:32px;">
+          <h3 class="sub-h">30-day trials</h3>
+          <p class="doc-p">Where available, I ran a 30-day trial before committing to a contract. This was especially useful for more complex apps where the full feature set wasn't clear from the listing or vendor documentation alone.</p>
+          <p class="doc-p">A trial didn't skip the evaluation steps. It was an additional step run after the initial assessment, not a replacement for it. The trial let the requesting team confirm the app worked the way they expected before any purchase decision was made. For the dev team specifically, where requests came in more exploratory ("we want to test a few tools and see what sticks"), trials gave us a structured way to do that without committing to anything upfront.</p>
+        </div>
+      </div>
+
+      <div class="doc-section" id="decision">
+        <h2 class="section-h">Decision and communication</h2>
+        <p class="doc-p">After completing the evaluation, I compiled a summary of findings and presented it to the relevant leader along with my recommendation. I didn't just hand over a list of facts. I told leadership what I thought the right call was and why. That's the point of doing the research: to have a defensible opinion, not just a data dump.</p>
+        <p class="doc-p">Leadership made the final call. But they were making it with actual information: what the app does, what it costs, what the security profile looks like, whether other teams could use it, and whether there were better alternatives available.</p>
+        <p class="doc-p">For approved apps, I notified the requester and reached out to any other team managers who might benefit from the same license. For declined apps, I communicated the decision and the reasoning directly to the requester. I owned the communication in both directions. Leadership didn't relay outcomes.</p>
+      </div>
+
+      <div class="doc-section" id="contract">
+        <h2 class="section-h">Partner contract coordination</h2>
+        <p class="doc-p">The instance ran on a managed Atlassian partner contract rather than direct Atlassian billing. This structure offered meaningful cost savings but meant paid apps couldn't be added unilaterally. Each addition required a contract amendment.</p>
+        <p class="doc-p">Partner contracts are structured around a set user count and product combination agreed to at the start of the contract term. Mid-contract additions are possible and are billed at a prorated rate for the remaining contract period. I coordinated those updates directly with the partner: verifying the user count for the relevant product, confirming the prorated cost, and ensuring the amendment was reflected accurately before the app went live.</p>
+        <p class="doc-p">Understanding how partner contracts work, including when to time additions to minimize prorated costs, was part of managing the platform responsibly. That knowledge doesn't come from the Marketplace listing.</p>
+      </div>
+
+      <div class="doc-section" id="onboarding">
+        <h2 class="section-h">Onboarding and support</h2>
+        <p class="doc-p">Onboarding was self-service by default. Atlassian Marketplace apps typically have strong vendor documentation, and I provided direct links to those resources rather than rebuilding the content myself. The app registry documented the help link for every installed app so users could find it without asking.</p>
+        <p class="doc-p">For apps with more complex onboarding, I ran short training sessions covering the core workflow. Tempo Timesheets was the main example: how to start and stop the timer, how to access timesheets, and how to read capacity data. I kept those sessions targeted. Users who needed deeper help were pointed to the vendor's own documentation rather than treated as a support queue I needed to own.</p>
+        <p class="doc-p">For support tickets that required admin-level access to diagnose, I acted as the interface between the user-facing problem and the vendor's support channel. Users couldn't access the configuration layers I could, so having a single point of contact for escalations made those requests go faster and get resolved more cleanly.</p>
+      </div>
+
+      <div class="doc-section" id="audit">
+        <h2 class="section-h">Yearly audit</h2>
+        <p class="doc-p">At each contract renewal, I reviewed every app in the catalog. The questions were simple: Is this still being used? Does the cost still make sense? Has anything changed about the team or department that was using it?</p>
+        <p class="doc-p">Apps that didn't pass that review were removed. Over two audit cycles, I removed about five apps. None of those removals caused major issues, but they required careful review of any configuration the app had touched before it came out. Removal is always riskier than prevention. That's why the evaluation framework existed in the first place.</p>
+        <p class="doc-p">Free apps were also reviewed during the audit. If a previously free app had moved to a paid model since it was installed, I evaluated it through the standard paid process before the renewal. A free app that couldn't justify the cost at renewal was removed rather than automatically converted.</p>
+      </div>
+
+      <div class="doc-footer-note">Document 01 of 02 · P-005 Marketplace App Evaluation Framework · Details generalized to protect confidential information.</div>
+
+      <div class="nav-doc">
+        <a href="index.html">← P-005 Overview</a>
+        <a href="registry.html">App Registry →</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+
+  const tocToggle=document.getElementById('tocToggle');
+  const tocList=document.getElementById('tocList');
+  if(tocToggle&&tocList){
+    tocToggle.addEventListener('click',()=>{
+      const open=tocList.classList.toggle('open');
+      tocToggle.classList.toggle('open',open);
+    });
+  }
+
+  const tocLinks=document.querySelectorAll('.toc-list a');
+  const sections=document.querySelectorAll('.doc-section[id]');
+  const onScroll=()=>{
+    let current='';
+    sections.forEach(s=>{if(s.getBoundingClientRect().top<120)current=s.id;});
+    tocLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+current);});
+  };
+  window.addEventListener('scroll',onScroll,{passive:true});
+</script>
+</body>
+</html>

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-005: App Registry — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← P-005 Overview</a>
+</nav>
+
+<div class="page-wrap-wide">
+
+  <div class="breadcrumb">
+    <a href="../../">Home</a><span>›</span><a href="index.html">P-005</a><span>›</span><span>App Registry</span>
+  </div>
+
+  <div class="doc-header">
+    <div class="doc-eyebrow">P-005 · Document 02</div>
+    <h1 class="doc-title-h1">App Registry</h1>
+    <div class="doc-meta-line">Atlassian Cloud · Representative sample · ~35–40 apps evaluated across all three products</div>
+  </div>
+
+  <div class="doc-divider"></div>
+
+  <div class="intro-grid">
+    <div class="intro-card">
+      <div class="intro-card-label">What this registry covers</div>
+      <div class="intro-card-body">This registry documents installed Marketplace apps across <strong>Jira Software, Confluence, and Jira Service Management</strong>. It includes apps that are currently active as well as apps that were removed during yearly audits. Apps that were evaluated and declined were not installed and are not tracked here.</div>
+    </div>
+    <div class="intro-card">
+      <div class="intro-card-label">Why this exists</div>
+      <div class="intro-card-body">Without a catalog, it's impossible to audit the instance or answer basic questions: what does this app do, which product is it tied to, where is the documentation, and is it still being used? The registry answers all of those without anyone having to dig through the Marketplace admin panel or ask around.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p><strong>About this sample:</strong> The active instance included approximately 35–40 apps across all three Atlassian products. This registry shows a representative sample. App names and some details have been generalized to protect confidential information. Tempo Timesheets and ScriptRunner for Jira are documented with their real names and resources. Both were specifically called out in the evaluation process as significant installations.</p>
+  </div>
+
+  <div class="status-key">
+    <div class="status-key-item"><div class="status-dot-active"></div> Active = currently installed and in use</div>
+    <div class="status-key-item"><div class="status-dot-disabled"></div> Removed = uninstalled during a yearly audit</div>
+  </div>
+
+  <!-- JIRA SOFTWARE -->
+  <div class="registry-section">
+    <div class="registry-section-header">
+      <div class="registry-section-title">Jira Software</div>
+      <div class="registry-section-count">6 apps</div>
+      <div class="registry-section-line"></div>
+    </div>
+    <div class="registry-table-wrap">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>App</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Marketplace</th>
+            <th>Help Docs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rule-name">Tempo Timesheets</span></td>
+            <td><span class="scope-tag">Time Tracking</span></td>
+            <td>Time entry with start/stop timer, detailed timesheets, and capacity tracking across projects. Adopted by multiple departments for workload visibility and project billing. The most widely used third-party app in the instance.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><a href="https://marketplace.atlassian.com/apps/6572/tempo-timesheets-time-tracking-software" target="_blank" class="doc-link" style="text-transform:none;">Marketplace ↗</a></td>
+            <td><a href="https://help.tempo.io/" target="_blank" class="doc-link" style="text-transform:none;">help.tempo.io ↗</a></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">ScriptRunner for Jira</span></td>
+            <td><span class="scope-tag">Advanced Automation</span></td>
+            <td>Groovy-based scripting engine for complex automation rules, custom JQL functions, and workflow validators that go beyond native Jira automation limits. Used for admin-level automation that standard rules couldn't handle.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><a href="https://marketplace.atlassian.com/apps/6820/scriptrunner-for-jira" target="_blank" class="doc-link" style="text-transform:none;">Marketplace ↗</a></td>
+            <td><a href="https://docs.adaptavist.com/sr4jc/latest" target="_blank" class="doc-link" style="text-transform:none;">docs.adaptavist.com ↗</a></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Advanced roadmap planner</span></td>
+            <td><span class="scope-tag">Planning</span></td>
+            <td>Cross-project roadmapping and dependency tracking. Used for release planning and multi-team milestone visibility beyond what native Jira roadmaps provided at the time of installation.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Sprint analytics add-on</span></td>
+            <td><span class="scope-tag">Agile Reporting</span></td>
+            <td>Sprint-level burndown and velocity reporting beyond native Jira dashboards. Removed after native reporting was upgraded and the additional capability was no longer needed.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Time logging add-on (legacy)</span></td>
+            <td><span class="scope-tag">Time Tracking</span></td>
+            <td>Basic manual time logging evaluated before Tempo was adopted. Replaced when Tempo was approved. Tempo provided a substantially better feature set for the same category.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Dev workflow integration</span></td>
+            <td><span class="scope-tag">Dev Tooling</span></td>
+            <td>Development pipeline status integration evaluated during a dev team trial period. Removed after limited adoption. The dev team determined it didn't fit their workflow after testing.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CONFLUENCE -->
+  <div class="registry-section">
+    <div class="registry-section-header">
+      <div class="registry-section-title">Confluence</div>
+      <div class="registry-section-count">5 apps</div>
+      <div class="registry-section-line"></div>
+    </div>
+    <div class="registry-table-wrap">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>App</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Marketplace</th>
+            <th>Help Docs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rule-name">Advanced diagramming</span></td>
+            <td><span class="scope-tag">Diagramming</span></td>
+            <td>Interactive diagram builder supporting flowcharts, org charts, and process maps embedded directly in Confluence pages. Used across multiple teams for documentation and process design.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Database and tables add-on</span></td>
+            <td><span class="scope-tag">Data &amp; Tables</span></td>
+            <td>Structured data tables with filtering, sorting, and formula support inside Confluence pages. Used for tracking reference data, lists, and lightweight internal databases without exporting to spreadsheets.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Page publishing workflow</span></td>
+            <td><span class="scope-tag">Workflow</span></td>
+            <td>Structured approval and publishing workflow for Confluence pages requiring review before becoming visible to the broader organization. Used by teams with compliance or governance requirements around published content.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Content template manager</span></td>
+            <td><span class="scope-tag">Content Management</span></td>
+            <td>Expanded template library with category organization and formatting guardrails for team-created Confluence pages. Removed during a yearly audit after adoption dropped. Teams defaulted to the native template system.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Visual mockup add-on</span></td>
+            <td><span class="scope-tag">Design / Mockup</span></td>
+            <td>Browser-based wireframing and mockup tool embedded in Confluence pages. Evaluated for a design team request. Removed after low adoption across teams. The design team already had preferred tools outside of Confluence.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- JSM -->
+  <div class="registry-section">
+    <div class="registry-section-header">
+      <div class="registry-section-title">Jira Service Management</div>
+      <div class="registry-section-count">4 apps</div>
+      <div class="registry-section-line"></div>
+    </div>
+    <div class="registry-table-wrap">
+      <table class="registry-table">
+        <thead>
+          <tr>
+            <th>App</th>
+            <th>Category</th>
+            <th>Description</th>
+            <th>Status</th>
+            <th>Marketplace</th>
+            <th>Help Docs</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="rule-name">Asset and config management</span></td>
+            <td><span class="scope-tag">Asset Management</span></td>
+            <td>Hardware and software asset tracking linked directly to JSM service requests. Used by IT to manage device assignment and inventory without leaving the Atlassian environment.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">SLA analytics extension</span></td>
+            <td><span class="scope-tag">Reporting</span></td>
+            <td>Extended SLA reporting with team-level metrics and trend analysis beyond native JSM reporting. Used to track service desk performance across multiple queues and produce leadership-facing summaries.</td>
+            <td><span class="status-active">Active</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Customer satisfaction surveys</span></td>
+            <td><span class="scope-tag">Customer Feedback</span></td>
+            <td>Post-resolution survey sent to requestors on ticket close. Removed during a yearly audit after response rates were consistently low across all service desks. The data wasn't useful enough to justify the cost.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+          <tr>
+            <td><span class="rule-name">Agent shift scheduling</span></td>
+            <td><span class="scope-tag">Agent Scheduling</span></td>
+            <td>Shift and on-call scheduling for service desk agents. Evaluated following a support team request and run through a 30-day trial. Removed after low usage. The team preferred their existing scheduling process outside of Jira.</td>
+            <td><span class="status-disabled">Removed</span></td>
+            <td><span class="reviewed-date">—</span></td>
+            <td><span class="reviewed-date">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="doc-footer-note">Document 02 of 02 · P-005 Marketplace App Evaluation Framework · Representative sample · full instance included ~35–40 apps · Details generalized to protect confidential information</div>
+
+  <div class="nav-doc">
+    <a href="framework.html">← Evaluation Framework</a>
+    <a href="index.html">P-005 Overview →</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+</script>
+</body>
+</html>
