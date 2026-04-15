@@ -9,18 +9,23 @@
 <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
+
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
-<div class="blob blob-1"></div><div class="blob blob-2"></div>
+<div class="grid-bg"></div>
+<div class="scanlines"></div>
+<div class="noise"></div>
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
 
 <nav>
-  <a href="/" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-logo">rw<span>//</span>portfolio</a>
   <ul class="nav-links">
-    <li><a href="/#skills">Skills</a></li>
-    <li><a href="/#portfolio">Work</a></li>
-    <li><a href="/#cert">Cert</a></li>
-    <li><a href="/#contact">Contact</a></li>
+    <li><a href="index.html#skills">Skills</a></li>
+    <li><a href="index.html#portfolio">Work</a></li>
+    <li><a href="index.html#cert">Cert</a></li>
+    <li><a href="index.html#contact">Contact</a></li>
     <li><a href="about.html" class="nav-active">About</a></li>
     <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
   </ul>
@@ -30,58 +35,172 @@
 </nav>
 
 <ul class="nav-mobile" id="navMobile">
-  <li><a href="/#skills" onclick="closeMenu()">Skills</a></li>
-  <li><a href="/#portfolio" onclick="closeMenu()">Work</a></li>
-  <li><a href="/#cert" onclick="closeMenu()">Cert</a></li>
-  <li><a href="/#contact" onclick="closeMenu()">Contact</a></li>
+  <li><a href="index.html#skills" onclick="closeMenu()">Skills</a></li>
+  <li><a href="index.html#portfolio" onclick="closeMenu()">Work</a></li>
+  <li><a href="index.html#cert" onclick="closeMenu()">Cert</a></li>
+  <li><a href="index.html#contact" onclick="closeMenu()">Contact</a></li>
   <li><a href="about.html" onclick="closeMenu()">About</a></li>
   <li><a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank">Resume ↗</a></li>
 </ul>
 
 <div class="page-wrap">
 
-  <div class="breadcrumb fade-in d1">
-    <a href="/">Home</a><span>›</span><span>About</span>
+  <div class="breadcrumb">
+    <a href="index.html">Home</a>
+    <span>›</span>
+    About
   </div>
 
-  <div class="project-header fade-in d2">
-    <div class="project-eyebrow">About Me</div>
-    <h1 class="project-title-h1">Beyond the <span class="accent-word">Resume</span></h1>
-    <p class="project-summary-text">The work speaks for itself. But there's more to how I got here than four years of Atlassian administration. This page is the longer version.</p>
-  </div>
+  <!-- ── INTRO ─────────────────────────────────────────────── -->
+  <section class="about-intro">
+    <div class="about-eyebrow">About Me</div>
+    <h1 class="about-h1">I grew up in Paradise, California.<br>That's its real name.</h1>
+    <p class="about-lead">A small mountain town in the Sierra Nevada foothills, about 90 miles north of Sacramento. Population 26,000 before November 2018. Famous now for one very bad morning.</p>
+  </section>
 
-  <div class="divider"></div>
+  <figure class="about-photo-wide">
+    <img src="assets/images/paradise-sign.jpg" alt="The original Paradise California town sign reading You Are Ascending Into Paradise before the 2018 Camp Fire" loading="lazy">
+    <figcaption class="about-photo-caption">Paradise, CA — the sign that stood at the edge of town. It burned in the fire. · Photo: Wikimedia Commons, CC BY-SA 3.0</figcaption>
+  </figure>
 
-  <div class="coming-soon-block fade-in d3">
-    <div class="coming-soon-icon">👤</div>
-    <div class="coming-soon-label">This page is being written.</div>
-    <p class="coming-soon-text">Background, interests, how I ended up in IT, and what I actually care about. Coming soon.</p>
-    <a href="/" class="btn-secondary" style="margin-top:32px;">← Back to Portfolio</a>
-  </div>
+  <!-- ── WHERE I CAME FROM ──────────────────────────────────── -->
+  <section class="about-section">
+    <p>I lived there for most of my life. It's where I got my first computer, discovered I was good at math, and started learning that I could figure out almost anything if I cared enough about it. I didn't take a straight line anywhere. I studied computer science and 3D graphics at CSU Chico. I worked as a bank teller, then as a financial services rep for several years. Then I spent time at an e-commerce company doing data work and eventually building out product categories.</p>
+
+    <p>The job I'm most proud of from that stretch: I built out an entire product category everyone said couldn't work. The consensus was that you couldn't sell doors online. Too complicated, too many configurations, too much the customer would need to understand first. I spent weeks learning everything — how doors are built, what the terminology means, what a buyer actually needs to know. Then I built it from scratch: data standards, style guides, user-facing help content, and most of the graphics myself. After I left, it became one of the fastest-growing categories on the site.</p>
+
+    <p>That project taught me something I've carried into every job since. If you understand a problem fully enough, you can build something useful out of it. The domain doesn't matter. The tool doesn't matter. The work is always the same: figure it out, then build it right.</p>
+  </section>
+
+  <!-- ── THE FIRE ───────────────────────────────────────────── -->
+  <section class="about-section">
+    <h2 class="about-h2">November 8, 2018</h2>
+
+    <p>I was in a drive-through line at Dutch Bros in Chico when I watched a smoke plume double in size over Paradise. I drove back up the ridge to get my dog. By the time I got home, burning branches were falling on my car. I had maybe 20 minutes.</p>
+
+    <p>Driving out, it was pitch black at 9 in the morning. Ash fell like snow. Trees exploded around me. I could see flames across the canyon where my house was and I already knew it was gone. I called my renter's insurance from the car. The guy on the phone thought I was joking at first.</p>
+
+    <p>By evening, 95% of the town was gone. Eighty-five people didn't make it out. The fire took the house I grew up in, the schools I attended, the pizza place where I had my first job, and the hospital where I was born.</p>
+
+    <p>Losing a place you've spent your whole life in is a specific kind of loss. But it also pushed me out of something that had gotten too small. I ended up in Sacramento. I don't think I'd have left otherwise.</p>
+  </section>
+
+  <figure class="about-photo-wide">
+    <img src="assets/images/camp-fire-aerial.jpg" alt="NASA satellite aerial view of the Camp Fire burning through Butte County California on November 8 2018 showing red heat signatures and a massive smoke plume moving west" loading="lazy">
+    <figcaption class="about-photo-caption">Camp Fire, November 8, 2018 — NASA/USGS satellite imagery · Public domain</figcaption>
+  </figure>
+
+  <!-- ── THE WORK ───────────────────────────────────────────── -->
+  <section class="about-section">
+    <h2 class="about-h2">How I ended up in Jira</h2>
+
+    <p>A few months after the fire, a former colleague pulled me into a new role at a wholesale buying organization. About a year in, I looked at a Jira rollout a third-party firm had left half-finished and told my manager it wasn't going to work. That turned into me taking it over.</p>
+
+    <p>I ended up as the sole Atlassian administrator for the next four years. Three hundred users across 20 departments. 55+ Jira projects. Around 25 JSM service desks. Over 100 automation rules. When something broke, it was my problem. When a department needed a service desk built, I scoped it, built it, tested it, and trained the team. No handoffs, no backup, no escalation path.</p>
+
+    <p>I learned the platform mostly by doing. Official training, webinars, documentation — I used all of it. But the real learning happened by building real things for real people and figuring out what actually worked. That's still how I learn best.</p>
+
+    <p>What I found out about myself in that role: I'm good at figuring out what people actually need, which isn't always what they asked for. I'm good at building things that hold up. And I get a specific kind of satisfaction from making someone's job easier, even when they never notice it happened.</p>
+  </section>
+
+  <!-- ── WHO I AM NOW ───────────────────────────────────────── -->
+  <section class="about-section">
+    <h2 class="about-h2">Sacramento, Zeke, and everything else</h2>
+
+    <figure class="about-photo-wide">
+      <img src="assets/images/sacramento.jpg" alt="Sacramento Tower Bridge lit up at night with the city skyline reflected in the Sacramento River" loading="lazy">
+      <figcaption class="about-photo-caption">Sacramento — where I landed, and where I stayed · Photo: Leo Visions, Unsplash</figcaption>
+    </figure>
+
+    <p>I've been in Sacramento since 2019. I live here with my partner Drew and our 13-year-old lab mix Zeke. It's a good life. Quieter than it sounds from the outside.</p>
+
+    <div class="about-zeke-wrap">
+      <figure class="about-zeke-photo">
+        <img src="assets/images/zeke-puppy.jpg" alt="Zeke as a young puppy exploring outdoors" loading="lazy">
+        <figcaption class="about-photo-caption">Then</figcaption>
+      </figure>
+      <figure class="about-zeke-photo">
+        <img src="assets/images/zeke.jpg" alt="Zeke now at 13 years old looking distinguished with gray around his muzzle" loading="lazy">
+        <figcaption class="about-photo-caption">Now. Objectively the best dog.</figcaption>
+      </figure>
+    </div>
+
+    <p>Outside of work I watch a lot of anime and sci-fi. I'm drawn to stories about people who get dropped into an unfamiliar world and have to figure out how to belong there. My current favorite is Frieren: Beyond Journey's End, which is one of the best things I've watched in years. I also play a lot of games that let you build things: Fallout, Skyrim, Enshrouded, city builders. Anything with a good world to explore.</p>
+
+    <div class="about-photo-2up">
+      <figure>
+        <img src="assets/images/garden.jpg" alt="A vivid red gladiolus flower blooming in the garden" loading="lazy">
+        <figcaption class="about-photo-caption">I grow things when I remember to water them</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/images/vineyard.jpg" alt="Rows of grapevines stretching toward rolling hills in California wine country" loading="lazy">
+        <figcaption class="about-photo-caption">Wine country is a reliable weekend plan · Photo: Daniel Salgado, Unsplash</figcaption>
+      </figure>
+    </div>
+
+    <p>Drew and I spend a lot of weekends in Sonoma and Napa. Good food and good wine are a reliable default. I cook at home more than we go out. I have a shelf of art supplies I keep meaning to use more.</p>
+
+    <p>I'm not a particularly social person. I find dealing with people tiring, honestly. But I also genuinely want to help them, and I get real satisfaction from building something that makes their work easier. I've never fully squared that tension, but I've learned to work with it.</p>
+  </section>
+
+  <!-- ── WHAT I'M LOOKING FOR ───────────────────────────────── -->
+  <section class="about-section about-section--last">
+    <h2 class="about-h2">What I'm looking for</h2>
+
+    <p>I want to be somewhere I'm actually needed. Not somewhere that tolerates me — somewhere with real problems to solve and room to solve them well. I pick up new platforms fast. I care about doing things right. I'm at my best when I'm busy and the work matters.</p>
+
+    <p>If that sounds like your team, I'd like to talk.</p>
+
+    <div class="about-cta">
+      <a href="index.html#contact" class="btn-primary">Get In Touch</a>
+      <a href="Ryan_Wolfe_Jira_Administrator_04102026.pdf" target="_blank" class="btn-secondary">View Resume ↗</a>
+    </div>
+  </section>
 
 </div>
 
 <footer>
-  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
-  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+  <span class="footer-text">rwolfe1979.github.io</span>
+  <span class="footer-cert">ACP-620 Certified · ID: 43YQPFE21B4QQYSE</span>
 </footer>
 
 <script>
-  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
-  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
-  animRing();
-  const hamburger=document.getElementById('hamburger');
-  const navMobile=document.getElementById('navMobile');
-  hamburger.addEventListener('click',()=>navMobile.classList.toggle('open'));
-  function closeMenu(){navMobile.classList.remove('open');}
-  document.querySelectorAll('a').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
-    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const cursorRing = document.getElementById('cursorRing');
+if (cursor && cursorRing) {
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    cursorRing.style.left = e.clientX + 'px';
+    cursorRing.style.top = e.clientY + 'px';
   });
-  const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target);}});},{threshold:0.1});
-  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '16px';
+      cursor.style.height = '16px';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '8px';
+      cursor.style.height = '8px';
+    });
+  });
+}
+
+// Mobile nav
+const hamburger = document.getElementById('hamburger');
+const navMobile = document.getElementById('navMobile');
+function closeMenu() {
+  navMobile.classList.remove('open');
+  hamburger.classList.remove('open');
+}
+if (hamburger) {
+  hamburger.addEventListener('click', () => {
+    navMobile.classList.toggle('open');
+    hamburger.classList.toggle('open');
+  });
+}
 </script>
+
 </body>
 </html>
