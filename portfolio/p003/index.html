@@ -55,91 +55,96 @@
 
   <div class="section-label fade-in d2">The Problem</div>
   <div class="context-block fade-in d3">
-    <p>Blocker priority meant everything stopped. If a ticket came in marked Blocker, back-end teams dropped what they were doing and handled it immediately. That's what the priority was for.</p>
-    <p>The problem was that people were using it freely. No reason required, no approval needed, no visibility into whether a given ticket actually warranted interrupting everything else. Back-end teams were raising it as a recurring complaint. Leadership had no data to respond with. Without structured data on why blockers were being submitted, there was no way to distinguish legitimate use from misuse.</p>
+    <p>Blocker priority meant everything stopped. If a ticket came in marked Blocker, back-end teams dropped what they were doing and handled it immediately. That's what the priority was for. The problem was that anyone submitting a request could select Blocker with no requirement to justify it. Nobody was tracking how often it happened or why.</p>
+    <p>Back-end teams raised it as a recurring complaint. Volume was high and the reasons were invisible. Leadership wanted to stop the abuse and get data on what was actually driving blocker requests. They also wanted to introduce a paid option for clients who needed something expedited. The field system I designed covered all of it.</p>
   </div>
 
   <div class="divider"></div>
 
-  <div class="section-label fade-in d2">Field Logic Flow</div>
-  <p class="doc-p fade-in d3" style="margin-bottom:32px;">When Blocker priority is selected, a Blocker Reason field appears. The selection routes to a different downstream field depending on the reason. Error reveals a sub-type selector. Supervisor Approved reveals a scoped user picker. Paid Rush shows nothing and goes straight to submission.</p>
+  <div class="section-label fade-in d2">How It Works</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">When a customer service rep sets a ticket to Blocker priority, a Blocker Reason field appears on the form. Selecting a reason triggers further conditional fields: an error sub-type selector or a supervisor user picker, depending on the selection. Paid Rush requires no extra fields and routes to billing. All three paths log data that the dashboard reads from JQL saved filters.</p>
 
   <div class="fade-in d3" style="margin-bottom:48px;">
-    <svg width="100%" viewBox="0 0 680 520" role="img" style="display:block;">
-      <title>Blocker field conditional logic</title>
-      <desc>Flowchart showing how selecting Blocker priority reveals the Blocker Reason field, which branches to Error sub-type, Supervisor Approved user picker, or Paid Rush with no additional fields, all converging at form submitted.</desc>
+    <svg width="100%" viewBox="0 0 680 560" role="img" style="display:block;">
+      <title>Blocker priority conditional field logic</title>
+      <desc>Flowchart showing how setting priority to Blocker reveals the Blocker Reason field with three branches: Error triggers an error sub-type selector, Supervisor Approved triggers a supervisor user picker, and Paid Rush requires no additional fields. All paths lead to form submission.</desc>
       <style>
-        .f-teal-fill { fill:#0d4f4a; stroke:#00d4ff; stroke-width:0.5; }
-        .f-purple-fill { fill:#2d1f6e; stroke:#7b2fff; stroke-width:0.5; }
-        .f-coral-fill { fill:#5c2018; stroke:#d4522a; stroke-width:0.5; }
-        .f-blue-fill { fill:#0d1f3c; stroke:#0066ff; stroke-width:0.5; }
-        .f-gray-fill { fill:#111827; stroke:rgba(0,212,255,0.25); stroke-width:0.5; }
+        .f-teal-fill  { fill: #0d4f4a; stroke: #00d4ff; stroke-width: 0.5; }
+        .f-purple-fill{ fill: #2d1f6e; stroke: #7b2fff; stroke-width: 0.5; }
+        .f-coral-fill { fill: #5c2018; stroke: #d4522a; stroke-width: 0.5; }
+        .f-blue-fill  { fill: #0a1e4a; stroke: #0066ff; stroke-width: 0.5; }
+        .f-gray-fill  { fill: #111827; stroke: rgba(0,212,255,0.25); stroke-width: 0.5; }
         .f-th { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
         .f-ts { font-family:'Syne',sans-serif; font-size:11px; font-weight:400; fill:#6b7a8d; }
-        .f-line { stroke:rgba(0,212,255,0.4); stroke-width:1; fill:none; }
-        .f-dot { fill:rgba(0,212,255,0.6); }
+        .f-line { stroke:rgba(0,212,255,0.4); stroke-width:1.5; fill:none; }
+        .f-dot { fill: rgba(0,212,255,0.6); }
       </style>
 
-      <!-- Priority set to Blocker -->
-      <rect x="190" y="20" width="300" height="56" rx="8" class="f-gray-fill"/>
-      <text class="f-th" x="340" y="53" text-anchor="middle">Priority set to Blocker</text>
-      <line x1="340" y1="76" x2="340" y2="104" class="f-line"/>
+      <!-- Box 1: Priority set to Blocker -->
+      <rect x="215" y="40" width="250" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="62" text-anchor="middle">Priority set to Blocker</text>
 
-      <!-- Blocker Reason field appears -->
-      <rect x="140" y="104" width="400" height="56" rx="8" class="f-teal-fill"/>
-      <text class="f-th" x="340" y="127" text-anchor="middle">Blocker Reason field appears</text>
-      <text class="f-ts" x="340" y="147" text-anchor="middle">Only shown when Blocker is selected</text>
+      <line x1="340" y1="84" x2="340" y2="122" class="f-line"/>
 
-      <!-- Branch line -->
-      <line x1="340" y1="160" x2="340" y2="184" class="f-line"/>
-      <line x1="120" y1="184" x2="560" y2="184" class="f-line"/>
-      <circle cx="120" cy="184" r="3" class="f-dot"/>
-      <circle cx="340" cy="184" r="3" class="f-dot"/>
-      <circle cx="560" cy="184" r="3" class="f-dot"/>
-      <line x1="120" y1="184" x2="120" y2="204" class="f-line"/>
-      <line x1="340" y1="184" x2="340" y2="204" class="f-line"/>
-      <line x1="560" y1="184" x2="560" y2="204" class="f-line"/>
+      <!-- Box 2: Blocker Reason field appears -->
+      <rect x="185" y="122" width="310" height="56" rx="8" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="142" text-anchor="middle">Blocker Reason field appears</text>
+      <text class="f-ts" x="340" y="162" text-anchor="middle">Only shown when Blocker is selected</text>
 
-      <!-- Error -->
-      <rect x="30" y="204" width="180" height="56" rx="8" class="f-coral-fill"/>
-      <text class="f-th" x="120" y="227" text-anchor="middle">Error</text>
-      <text class="f-ts" x="120" y="247" text-anchor="middle">Sub-type required</text>
+      <line x1="340" y1="178" x2="340" y2="210" class="f-line"/>
 
-      <!-- Supervisor Approved -->
-      <rect x="240" y="204" width="200" height="56" rx="8" class="f-purple-fill"/>
-      <text class="f-th" x="340" y="227" text-anchor="middle">Supervisor Approved</text>
-      <text class="f-ts" x="340" y="247" text-anchor="middle">User picker required</text>
+      <!-- Horizontal branch line -->
+      <line x1="120" y1="210" x2="560" y2="210" class="f-line"/>
+      <circle cx="120" cy="210" r="3" class="f-dot"/>
+      <circle cx="340" cy="210" r="3" class="f-dot"/>
+      <circle cx="560" cy="210" r="3" class="f-dot"/>
 
-      <!-- Paid Rush -->
-      <rect x="480" y="204" width="160" height="56" rx="8" class="f-blue-fill"/>
-      <text class="f-th" x="560" y="227" text-anchor="middle">Paid Rush</text>
-      <text class="f-ts" x="560" y="247" text-anchor="middle">No extra fields</text>
+      <line x1="120" y1="210" x2="120" y2="228" class="f-line"/>
+      <line x1="340" y1="210" x2="340" y2="228" class="f-line"/>
+      <line x1="560" y1="210" x2="560" y2="228" class="f-line"/>
 
-      <!-- Sub-fields -->
-      <line x1="120" y1="260" x2="120" y2="296" class="f-line"/>
-      <line x1="340" y1="260" x2="340" y2="296" class="f-line"/>
+      <!-- Branch: Error -->
+      <rect x="30" y="228" width="180" height="56" rx="8" class="f-coral-fill"/>
+      <text class="f-th" x="120" y="248" text-anchor="middle">Error</text>
+      <text class="f-ts" x="120" y="268" text-anchor="middle">Sub-type required</text>
 
-      <rect x="20" y="296" width="200" height="56" rx="8" class="f-gray-fill"/>
-      <text class="f-th" x="120" y="319" text-anchor="middle">Error sub-type field</text>
-      <text class="f-ts" x="120" y="339" text-anchor="middle">Common types or Other</text>
+      <!-- Branch: Supervisor Approved -->
+      <rect x="240" y="228" width="200" height="56" rx="8" class="f-purple-fill"/>
+      <text class="f-th" x="340" y="248" text-anchor="middle">Supervisor Approved</text>
+      <text class="f-ts" x="340" y="268" text-anchor="middle">User picker required</text>
 
-      <rect x="240" y="296" width="200" height="56" rx="8" class="f-gray-fill"/>
-      <text class="f-th" x="340" y="319" text-anchor="middle">Supervisor user picker</text>
-      <text class="f-ts" x="340" y="339" text-anchor="middle">Scoped to supervisor group</text>
+      <!-- Branch: Paid Rush -->
+      <rect x="480" y="228" width="160" height="56" rx="8" class="f-blue-fill"/>
+      <text class="f-th" x="560" y="248" text-anchor="middle">Paid Rush</text>
+      <text class="f-ts" x="560" y="268" text-anchor="middle">No extra fields</text>
 
-      <!-- Converge -->
-      <line x1="120" y1="352" x2="120" y2="388" class="f-line"/>
-      <line x1="340" y1="352" x2="340" y2="388" class="f-line"/>
-      <line x1="560" y1="260" x2="560" y2="388" class="f-line"/>
-      <line x1="120" y1="388" x2="560" y2="388" class="f-line"/>
-      <circle cx="120" cy="388" r="3" class="f-dot"/>
-      <circle cx="340" cy="388" r="3" class="f-dot"/>
-      <circle cx="560" cy="388" r="3" class="f-dot"/>
-      <line x1="340" y1="388" x2="340" y2="408" class="f-line"/>
+      <line x1="120" y1="284" x2="120" y2="320" class="f-line"/>
+      <line x1="340" y1="284" x2="340" y2="320" class="f-line"/>
 
-      <!-- Form submitted -->
-      <rect x="190" y="408" width="300" height="56" rx="8" class="f-gray-fill"/>
-      <text class="f-th" x="340" y="441" text-anchor="middle">Form submitted</text>
+      <!-- Sub-field: Error sub-type -->
+      <rect x="20" y="320" width="200" height="56" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="120" y="340" text-anchor="middle">Error sub-type field</text>
+      <text class="f-ts" x="120" y="360" text-anchor="middle">Common types or Other</text>
+
+      <!-- Sub-field: Supervisor user picker -->
+      <rect x="230" y="320" width="220" height="56" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="340" text-anchor="middle">Supervisor user picker</text>
+      <text class="f-ts" x="340" y="360" text-anchor="middle">Scoped to supervisor group</text>
+
+      <!-- Merge -->
+      <line x1="120" y1="376" x2="120" y2="442" class="f-line"/>
+      <line x1="340" y1="376" x2="340" y2="442" class="f-line"/>
+      <line x1="560" y1="284" x2="560" y2="442" class="f-line"/>
+      <line x1="120" y1="442" x2="560" y2="442" class="f-line"/>
+      <circle cx="120" cy="442" r="3" class="f-dot"/>
+      <circle cx="340" cy="442" r="3" class="f-dot"/>
+      <circle cx="560" cy="442" r="3" class="f-dot"/>
+
+      <line x1="340" y1="442" x2="340" y2="478" class="f-line"/>
+
+      <!-- Final box -->
+      <rect x="215" y="478" width="250" height="44" rx="8" class="f-gray-fill"/>
+      <text class="f-th" x="340" y="500" text-anchor="middle">Form submitted</text>
     </svg>
   </div>
 
@@ -150,22 +155,22 @@
     <div class="built-item">
       <div class="built-num">01</div>
       <div>
-        <div class="built-title">Three custom fields across three service desks</div>
-        <div class="built-desc">Blocker Reason (select list: Error, Supervisor Approved, Paid Rush), Error Sub-type (select list with predefined categories and Other), and Approving Supervisor (user picker scoped to the supervisor permission group). All three were added to the Marketing, Catalog, and Development service desks.</div>
+        <div class="built-title">Custom Blocker Reason field</div>
+        <div class="built-desc">A select field with three options: Error, Supervisor Approved, and Paid Rush. Added to all three service desks: Marketing, Catalog, and Development. It only appears on the form when Blocker priority is selected. Before this, priority selection had no accountability attached to it. Anyone could mark a ticket Blocker and submit.</div>
       </div>
     </div>
     <div class="built-item">
       <div class="built-num">02</div>
       <div>
         <div class="built-title">Conditional form logic</div>
-        <div class="built-desc">Built in Atlassian Forms (formerly Proforma). The Blocker Reason field only appears when Blocker priority is selected. Choosing Error reveals the Error Sub-type field. Choosing Supervisor Approved reveals the Approving Supervisor user picker. Paid Rush showed nothing additional and went straight to submission.</div>
+        <div class="built-desc">Built with Atlassian Forms (formerly Proforma). Selecting Error reveals a second field for the specific error type, with a list of common categories and an Other option. Selecting Supervisor Approved reveals a user picker scoped to a permission group that contained only supervisors. No free-text, no ambiguity about who approved it. Paid Rush showed nothing additional and went straight to submission.</div>
       </div>
     </div>
     <div class="built-item">
       <div class="built-num">03</div>
       <div>
         <div class="built-title">Warning messaging</div>
-        <div class="built-desc">Added warning text to the form when Blocker was selected. It stated clearly that abuse of the priority would result in oversight. This wasn't enforcement on its own — it was visibility. A lot of the reduction in blocker volume came from customer service reps realizing that someone was watching the data.</div>
+        <div class="built-desc">Added warning text to the form when Blocker was selected. It stated clearly that abuse of the priority would result in oversight. This wasn't enforcement on its own. It was visibility. A lot of the reduction in blocker volume came from customer service reps realizing that someone was watching the data.</div>
       </div>
     </div>
     <div class="built-item">
@@ -179,7 +184,7 @@
       <div class="built-num">05</div>
       <div>
         <div class="built-title">Paid Rush billing integration</div>
-        <div class="built-desc">Paid Rush tickets are pulled monthly from a JQL filter and used to generate client invoices. The dashboard data feeds into the billing process. The VP came to me with the paid rush concept. I designed the field structure and data capture that made billing possible — the original ask was just "charge for it." I built the system that makes that actually work.</div>
+        <div class="built-desc">Paid Rush tickets are pulled monthly from a JQL filter and used to generate client invoices. The dashboard data feeds into the billing process. The VP came to me with the paid rush concept. I designed the field structure and data capture that made billing possible. The original ask was just "charge for it." I built the system that makes that actually work.</div>
       </div>
     </div>
   </div>
@@ -187,12 +192,14 @@
   <div class="divider"></div>
 
   <div class="section-label fade-in d2">Field and Dashboard Detail</div>
-  <div class="fade-in d3" style="margin-bottom:48px;">
-    <a href="dashboard.html" class="arrow-link">
+  <div class="fade-in d3">
+    <a href="dashboard.html" class="doc-card" style="display:flex; gap:20px; align-items:start; max-width:600px; margin-bottom:48px;">
+      <div class="doc-icon">📊</div>
       <div>
-        <div class="arrow-link-meta">Technical detail</div>
-        <div class="arrow-link-title">Field Configuration and Dashboard Breakdown</div>
-        <div class="arrow-link-sub">Read →</div>
+        <div class="doc-number">Technical detail</div>
+        <div class="doc-title">Field Configuration and Dashboard Breakdown</div>
+        <div class="doc-desc">How the custom fields were configured, how the conditional form logic works, the gadgets on the dashboard, the JQL filters behind them, and how the billing pull works.</div>
+        <div class="doc-actions"><span class="doc-link">Read →</span></div>
       </div>
     </a>
   </div>
@@ -201,8 +208,8 @@
 
   <div class="section-label fade-in d2">The Outcome</div>
   <div class="context-block fade-in d3">
-    <p>Blocker volume dropped after the system went live. The form made submitting a blocker harder to do without a stated reason. The warning message added visibility. The supervisor approval path created a paper trail. I don't have an exact count on the reduction, but the back-end teams stopped raising it as a recurring complaint.</p>
-    <p>The dashboard is still active. The Paid Rush billing pull runs every month. The data exists now in a form that leadership can act on, which is what they asked for.</p>
+    <p>Blocker volume dropped after the system went live. The form made submitting a blocker harder to do without a stated reason. The warning message added visibility. The supervisor approval path created a paper trail. I don't have an exact count on the reduction, but the back-end teams stopped complaining about it.</p>
+    <p>The dashboard is still active. The Paid Rush billing process runs every month. That part of the system became a permanent part of how the organization invoices clients for expedited work.</p>
   </div>
 
   <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
@@ -220,7 +227,7 @@
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
   function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
   animRing();
-  document.querySelectorAll('a,.arrow-link,.built-item').forEach(el=>{
+  document.querySelectorAll('a,.doc-card,.built-item').forEach(el=>{
     el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
     el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
   });
