@@ -71,7 +71,7 @@
 
       <div class="doc-section" id="overview">
         <h2 class="section-h">Overview</h2>
-        <p class="doc-p">This page covers the technical design behind the intake service desk and auto-routing system. The goal was to replace an unstructured multi-team process with a single submission point that captured all the information needed to start work across every involved team — automatically.</p>
+        <p class="doc-p">This page covers the technical design behind the intake service desk and auto-routing system. The goal was to replace an unstructured multi-team process with a single submission point that captured all the information needed to start work across every involved team, automatically.</p>
         <p class="doc-p">The system is built on a JSM service desk with a large conditional intake form, a human review gate, three routing automations, and five fully custom Jira Software projects where team work is managed. A Confluence knowledge base supports the submitter experience during form entry.</p>
       </div>
 
@@ -98,10 +98,10 @@
 
       <div class="doc-section" id="form">
         <h2 class="section-h">Intake form design</h2>
-        <p class="doc-p">The intake form was built with Proforma, a third-party form tool that Atlassian later acquired and integrated natively into JSM as Atlassian Forms. The form is large — it had to capture enough information about every possible request type across every team to allow automation to generate tasks without human follow-up.</p>
+        <p class="doc-p">The intake form was built with Proforma, a third-party form tool that Atlassian later acquired and integrated natively into JSM as Atlassian Forms. The form is large. It had to capture enough information about every possible request type across every team to allow automation to generate tasks without human follow-up.</p>
         <p class="doc-p">The structure is layered. The first question asks which teams need to be involved. Each selection reveals that team's section below. Within each team section, questions branch further based on what's selected.</p>
-        <p class="doc-p">Digital Ads illustrates how deep this goes. The team section presents every available ad type — display, performance max, shopping, video, carousel, and others. Each ad type selected reveals a set of specification questions for that format. Some of those questions have their own conditional branches. The form captures the full spec without requiring any back-and-forth after submission.</p>
-        <p class="doc-p">Design routing works similarly. Selecting the Design team reveals a list of asset types and design requests. The specific selection determines which project the task goes to — some request types route to Web Design, others to Digital Design. The submitter doesn't need to know that distinction. The form and automation handle it.</p>
+        <p class="doc-p">Digital Ads illustrates how deep this goes. The team section presents every available ad type: display, performance max, shopping, video, carousel, and others. Each ad type selected reveals a set of specification questions for that format. Some of those questions have their own conditional branches. The form captures the full spec without requiring any back-and-forth after submission.</p>
+        <p class="doc-p">Design routing works similarly. Selecting the Design team reveals a list of asset types and design requests. The specific selection determines which project the task goes to. Some request types route to Web Design, others to Digital Design. The submitter doesn't need to know that distinction. The form and automation handle it.</p>
         <p class="doc-p">Help text and warnings were added throughout to guide submitters and reduce errors. Several Confluence knowledge base pages were linked directly from form fields where submitters were likely to need reference material.</p>
       </div>
 
@@ -141,7 +141,7 @@
 
       <div class="doc-section" id="links">
         <h2 class="section-h">Link structure</h2>
-        <p class="doc-p">Generated tasks are linked back to the original JSM ticket using Jira's standard issue linking with custom link label names. This is not a native parent/child relationship. Jira's work item hierarchy (epic, story, subtask) was not used here — that structure is reserved for the teams' own work hierarchies within their projects.</p>
+        <p class="doc-p">Generated tasks are linked back to the original JSM ticket using Jira's standard issue linking with custom link label names. This is not a native parent/child relationship. Jira's work item hierarchy (epic, story, subtask) was not used here. That structure is reserved for the teams' own work hierarchies within their projects.</p>
         <p class="doc-p">The JSM ticket shows all generated tasks under a link label called "Marketing children." Each generated task shows the JSM ticket under a link label called "Marketing parent." This gives a clear visual hierarchy from either direction without occupying the native hierarchy slots.</p>
         <p class="doc-p">The custom labels also made it possible to write a close automation that targeted only "Marketing children" links when checking whether all team work was complete. The automation could scan linked issues, confirm all children were in a closed status, and then close the marketing request automatically. This automation was later disabled when the platform approached monthly automation run limits, and teams transitioned to closing the JSM ticket manually.</p>
       </div>
@@ -149,20 +149,20 @@
       <div class="doc-section" id="projects">
         <h2 class="section-h">Team projects</h2>
         <p class="doc-p">Each of the five team projects was built to match how that team actually worked. Issue types, workflow statuses, required fields, and screen layouts were all configured independently based on requirements gathered directly from each team during the discovery process.</p>
-        <p class="doc-p">Discovery took about a month of independent sessions. No documented process existed — the work lived in people's heads and had never been fully mapped. Teams described their piece but often didn't know how it connected to other teams. Sessions used whiteboarding and flowcharting to capture what was said, and follow-up was frequent as one team's input revealed gaps in another's.</p>
+        <p class="doc-p">Discovery took about a month of independent sessions. No documented process existed. The work lived in people's heads and had never been fully mapped. Teams described their piece but often didn't know how it connected to other teams. Sessions used whiteboarding and flowcharting to capture what was said, and follow-up was frequent as one team's input revealed gaps in another's.</p>
         <p class="doc-p">Teams manage their own work entirely within their project. They do not need to interact with the JSM project to complete tasks. Communication about a specific request happens on the JSM ticket, which all team members can access through the linked issue.</p>
       </div>
 
       <div class="doc-section" id="confluence">
         <h2 class="section-h">Confluence integration</h2>
-        <p class="doc-p">A Confluence space was connected to the JSM project to support submitters during the intake process. Pages covered things submitters commonly needed to reference — campaign specs, available formats, asset requirements, and process guidance.</p>
+        <p class="doc-p">A Confluence space was connected to the JSM project to support submitters during the intake process. Pages covered things submitters commonly needed to reference: campaign specs, available formats, asset requirements, and process guidance.</p>
         <p class="doc-p">Relevant pages were linked directly from form help text so submitters could open them without leaving the form. This reduced the volume of questions coming into the team about what to fill in and how.</p>
         <p class="doc-p">Each team also maintained restricted Confluence pages for their own internal process documentation. These were separate from the submitter-facing space and not accessible through the form.</p>
       </div>
 
       <div class="doc-section" id="maintenance">
         <h2 class="section-h">Ongoing maintenance</h2>
-        <p class="doc-p">The initial build launched on a compressed 3-month timeline. Not everything could be fully mapped in that window — the process was too complex and too dependent on tribal knowledge that took time to surface. The system was designed with iteration in mind.</p>
+        <p class="doc-p">The initial build launched on a compressed 3-month timeline. Not everything could be fully mapped in that window. The process was too complex and too dependent on tribal knowledge that took time to surface. The system was designed with iteration in mind.</p>
         <p class="doc-p">Post-launch issues were reported by the backend teams managing requests. Most were resolved the same day. After a few months of running the system, turnaround on fixes averaged under 30 minutes.</p>
         <p class="doc-p">Additions after launch included more request types, expanded team coverage (Vendor Relations was added later), larger group campaign workflows, and ongoing improvements to form labels, help text, and field clarity based on how submitters were actually using it.</p>
         <p class="doc-p">The close automation was disabled after Atlassian introduced monthly automation run limits and the system's volume began approaching the threshold. Teams handle JSM ticket closure manually as a result.</p>
