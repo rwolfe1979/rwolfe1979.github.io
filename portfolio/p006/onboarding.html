@@ -87,13 +87,13 @@
       <div class="doc-section" id="s3">
         <h2 class="section-h">3. Domain Ownership and Account Control</h2>
         <p class="doc-p">The organization's email domains were claimed through Atlassian's domain verification process. This was a one-time action that gave the Jira administrator full control over all Atlassian accounts on those domains. Every account associated with a claimed domain is fully managed by the administrator, including display names, Group memberships, and product access.</p>
-        <p class="doc-p">This is distinct from Atlassian Access (SSO/SCIM). Atlassian Access was not used in this environment. Accounts are personal Atlassian accounts tied to company email addresses, brought under organizational control through domain claim rather than identity provider integration. There is no automated provisioning or deprovisioning — all account management is performed manually by the administrator.</p>
+        <p class="doc-p">This is distinct from Atlassian Access (SSO/SCIM). Atlassian Access was not used in this environment. Accounts are personal Atlassian accounts tied to company email addresses, brought under organizational control through domain claim rather than identity provider integration. There is no automated provisioning or deprovisioning. All account management is performed manually by the administrator.</p>
         <p class="doc-p">One consequence of domain claim: Atlassian populates display names from the email address prefix at account creation, typically in a format like "first.last" rather than "First Last." The administrator corrects display names as part of the onboarding process.</p>
       </div>
 
       <div class="doc-section" id="s4">
         <h2 class="section-h">4. How Access Works: Groups and the Org Level</h2>
-        <p class="doc-p">Access across Jira Software, Jira Service Management, and Confluence is controlled through Groups managed at the Atlassian organization level. When a user is added to a Group, they receive the access that Group grants across all associated projects and spaces automatically — no project lead or space admin needs to add them individually.</p>
+        <p class="doc-p">Access across Jira Software, Jira Service Management, and Confluence is controlled through Groups managed at the Atlassian organization level. When a user is added to a Group, they receive the access that Group grants across all associated projects and spaces automatically. No project lead or space admin needs to add them individually.</p>
         <p class="doc-p">This approach was intentional. Managing access at the org level ensures users have everything they need from day one. Individual project-level access grants create gaps: users end up missing access they should have, often because managers don't know all the places their team works. Org-level Group management eliminates that problem.</p>
         <p class="doc-p">Groups serve two primary purposes:</p>
         <ul class="doc-ul">
@@ -133,14 +133,14 @@
           <li>Position or job title</li>
           <li>Direct manager</li>
         </ul>
-        <p class="doc-p">IT initiates this request as part of their standard new hire process. The Jira administrator does not independently monitor HR activity — the IT request is the trigger.</p>
+        <p class="doc-p">IT initiates this request as part of their standard new hire process. The Jira administrator does not independently monitor HR activity. The IT request is the trigger.</p>
 
         <h3 class="sub-h" id="s62">6.2 Sending the Atlassian Invite</h3>
         <p class="doc-p">Once the request is received, the administrator sends an invitation to the user's work email through the Atlassian Admin console. Because the organization's email domains are claimed, the account is immediately under organizational control when the user accepts.</p>
         <p class="doc-p">After the user claims their account, the administrator corrects the display name. Atlassian defaults to using the email prefix (e.g., "ryan.wolfe") as the display name. The administrator updates this to the user's proper name (e.g., "Ryan Wolfe") so they appear correctly in issue assignments, comments, and user picker fields across all products.</p>
 
         <h3 class="sub-h" id="s63">6.3 Group Assignment</h3>
-        <p class="doc-p">With the account active and the display name corrected, the administrator assigns the user to the appropriate Group(s) based on their position and department. This is the step that grants access — once added to a Group, the user has the correct permissions across all relevant Jira projects, JSM service desks, and Confluence spaces without any further configuration.</p>
+        <p class="doc-p">With the account active and the display name corrected, the administrator assigns the user to the appropriate Group(s) based on their position and department. This is the step that grants access. Once added to a Group, the user has the correct permissions across all relevant Jira projects, JSM service desks, and Confluence spaces without any further configuration.</p>
         <p class="doc-p">Group assignment follows these principles:</p>
         <ul class="doc-ul">
           <li><strong>Position determines the primary access Group.</strong> A standard team member goes into the Group that grants Member-level access for their department. A lead goes into the Lead-level Group.</li>
@@ -161,7 +161,7 @@
 
       <div class="doc-section" id="s8">
         <h2 class="section-h">8. Offboarding</h2>
-        <p class="doc-p">Offboarding is handled entirely by IT. When an employee or contractor leaves, IT deactivates the account at the Atlassian organization level. Deactivation at this level disables access across all Atlassian products simultaneously — Jira, JSM, and Confluence — even without removing individual project or space permissions.</p>
+        <p class="doc-p">Offboarding is handled entirely by IT. When an employee or contractor leaves, IT deactivates the account at the Atlassian organization level. Deactivation at this level disables access across all Atlassian products simultaneously (Jira, JSM, and Confluence) even without removing individual project or space permissions.</p>
         <p class="doc-p">The Jira administrator has no role in the offboarding process. IT manages account deactivation as part of their standard separation procedure, which is kept confidential between IT and HR.</p>
       </div>
 
@@ -169,7 +169,7 @@
         <h2 class="section-h">9. Guiding Principle: Org-Level Access Management</h2>
         <p class="doc-p">Every access decision in this environment is made at the Atlassian organization level, not the project level. This is a deliberate design choice: when access is managed project by project, users end up with incomplete access because no single person has a full picture of everywhere a role needs to work.</p>
         <p class="doc-p">Org-level Group management solves this. When a Group is configured correctly for a role, every user in that Group gets the right access everywhere, immediately, without anyone having to manually add them to individual projects. It also means that when someone leaves and IT deactivates their account, the removal is complete and immediate across the entire platform.</p>
-        <p class="doc-p">The trade-off is that the administrator carries more responsibility than a typical Jira admin role. There is no delegation of access management to project leads or space admins for routine provisioning. That responsibility sits with the administrator, which is why the intake and change request processes exist — to make sure the administrator has the information needed to do that job accurately.</p>
+        <p class="doc-p">The trade-off is that the administrator carries more responsibility than a typical Jira admin role. There is no delegation of access management to project leads or space admins for routine provisioning. That responsibility sits with the administrator, which is why the intake and change request processes exist: to make sure the administrator has the information needed to do that job accurately.</p>
       </div>
 
       <div class="doc-footer-note">Document owner: Jira Administrator &nbsp;·&nbsp; Last reviewed: January 2026 &nbsp;·&nbsp; Next review: April 2026</div>
