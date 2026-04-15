@@ -1013,3 +1013,192 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
   padding: 10px 14px; margin: 20px 0; line-height: 1.6;
   background: rgba(0,212,255,0.03); border-radius: 0 4px 4px 0;
 }
+/* ── About Page ─────────────────────────────────────────────── */
+
+.about-intro {
+  margin-bottom: 48px;
+}
+
+.about-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: .2em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.about-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: var(--accent);
+}
+
+.about-h1 {
+  font-size: clamp(28px, 5vw, 52px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  margin-bottom: 20px;
+}
+
+.about-lead {
+  font-size: 18px;
+  color: var(--text-muted);
+  line-height: 1.75;
+  max-width: 680px;
+}
+
+.about-section {
+  margin-bottom: 64px;
+}
+
+.about-section--last {
+  margin-bottom: 80px;
+}
+
+.about-h2 {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+  margin-bottom: 24px;
+  color: var(--text);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.about-section p {
+  font-size: 16px;
+  line-height: 1.85;
+  color: var(--text);
+  margin-bottom: 22px;
+  max-width: 720px;
+}
+
+.about-section p:last-child {
+  margin-bottom: 0;
+}
+
+/* Wide photo blocks */
+.about-photo-wide {
+  margin: 40px 0 48px;
+}
+
+.about-photo-wide img {
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  filter: grayscale(20%);
+  transition: filter .3s;
+  display: block;
+}
+
+.about-photo-wide:hover img {
+  filter: grayscale(0%);
+}
+
+.about-photo-caption {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--text-dim);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin-top: 10px;
+}
+
+/* Zeke two-column layout */
+.about-zeke-wrap {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.about-zeke-photo img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  filter: grayscale(20%);
+  transition: filter .3s;
+  display: block;
+}
+
+.about-zeke-photo:hover img {
+  filter: grayscale(0%);
+}
+
+.about-zeke-text p {
+  max-width: 100%;
+}
+
+/* CTA buttons */
+.about-cta {
+  display: flex;
+  gap: 16px;
+  margin-top: 40px;
+  flex-wrap: wrap;
+}
+
+/* Active nav link */
+.nav-active {
+  color: var(--accent) !important;
+}
+
+/* Mobile adjustments */
+@media (max-width: 700px) {
+  .about-zeke-wrap {
+    grid-template-columns: 1fr;
+  }
+  .about-zeke-photo {
+    max-width: 240px;
+  }
+  .about-photo-wide img {
+    max-height: 240px;
+  }
+  .about-section p {
+    font-size: 15px;
+  }
+}
+
+/* Two-up photo grid (garden + vineyard) */
+.about-photo-2up {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 32px 0 36px;
+}
+
+.about-photo-2up figure img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  filter: grayscale(15%);
+  transition: filter .3s;
+  display: block;
+}
+
+.about-photo-2up figure:hover img {
+  filter: grayscale(0%);
+}
+
+/* Sacramento wide photo above section text */
+.about-photo-wide--sacramento {
+  margin-top: 0;
+  margin-bottom: 36px;
+}
+
+@media (max-width: 580px) {
+  .about-photo-2up {
+    grid-template-columns: 1fr;
+  }
+  .about-photo-2up figure img {
+    height: 200px;
+  }
+}
