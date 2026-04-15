@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>P-007: Space Design and Rollout — Ryan Wolfe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/css/styles.css">
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+<div class="grid-bg"></div><div class="scanlines"></div><div class="noise"></div>
+<div class="blob blob-1"></div><div class="blob blob-2"></div>
+
+<nav>
+  <a href="../../" class="nav-logo">rw<span>//</span>portfolio</a>
+  <a href="index.html" class="nav-back">← Back to P-007</a>
+</nav>
+
+<div class="page-wrap">
+
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-007</a><span>›</span>
+    <span>Space Design and Rollout</span>
+  </div>
+
+  <div class="doc-header fade-in d2">
+    <div class="doc-eyebrow">P-007 · Architecture Detail</div>
+    <h1 class="doc-title-h1">Space Design and Rollout Detail</h1>
+    <div class="doc-meta-line">Confluence Cloud · ~35 spaces · 300+ users · 20 departments</div>
+    <div class="confidentiality-note" style="margin-top:20px;">
+      Details in this document have been generalized to protect confidential information. The system described is based on work I designed and administered in a production Confluence Cloud environment.
+    </div>
+  </div>
+
+  <div class="toc-mobile fade-in d2">
+    <button class="toc-mobile-toggle" id="tocToggle">Contents <span>▾</span></button>
+    <div class="toc-mobile-list" id="tocList">
+      <a href="#overview">Overview</a>
+      <a href="#space-types">Space types</a>
+      <a href="#hub">Hub space</a>
+      <a href="#permissions">Permission model</a>
+      <a href="#templates">Page templates</a>
+      <a href="#onboarding">Team onboarding</a>
+      <a href="#philosophy">Documentation philosophy</a>
+      <a href="#limitations">What didn't work</a>
+    </div>
+  </div>
+
+  <div class="two-col fade-in d2">
+    <nav class="toc">
+      <div class="toc-label">Contents</div>
+      <ul class="toc-list">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#space-types">Space types</a></li>
+        <li><a href="#hub">Hub space</a></li>
+        <li><a href="#permissions">Permission model</a></li>
+        <li><a href="#templates">Page templates</a></li>
+        <li><a href="#onboarding">Team onboarding</a></li>
+        <li><a href="#philosophy">Documentation philosophy</a></li>
+        <li><a href="#limitations">What didn't work</a></li>
+      </ul>
+    </nav>
+
+    <div class="doc-content">
+
+      <div class="doc-section" id="overview">
+        <h2 class="section-h">Overview</h2>
+        <p class="doc-p">This document covers the design decisions behind the Confluence space architecture, how the permission model worked, and what the rollout actually looked like. The goal wasn't to build something technically impressive. It was to give 300+ users across 20 departments an environment they could navigate, trust, and actually use.</p>
+        <p class="doc-p">The starting point was a mess: 50+ spaces with no consistent naming, auto-generated personal spaces for every user, and no governance over what got created. Cleaning that up required a clear taxonomy, a lockdown on space creation, and a permission model that didn't require manual work every time someone joined or changed roles.</p>
+      </div>
+
+      <div class="doc-section" id="space-types">
+        <h2 class="section-h">Space types</h2>
+        <p class="doc-p">Three space types covered everything the organization needed.</p>
+        <p class="doc-p"><strong>Team spaces</strong> were restricted to the team that owned them. Access was granted through the team's permission group, so only members saw the space. Teams used them for internal procedures, process documentation, exceptions that weren't meant to be org-wide policy, and anything else that needed to stay within the team. The access restriction wasn't bureaucratic. It kept people from being bombarded with spaces they had no reason to look at, and it gave teams a place to document things candidly without worrying about unintended audiences.</p>
+        <p class="doc-p"><strong>Service desk knowledge bases (SDKBs)</strong> were linked to a specific JSM project and visible to everyone with a Confluence account. This is where teams published help articles, process guides, and updates that people submitting tickets needed to find. A well-built SDKB reduced ticket volume by letting users self-serve before submitting a request. The Design team built the strongest example: an SDKB tied to the same intake service desk covered in <a href="../p001/">P-001</a>, with articles covering the full range of request types.</p>
+        <p class="doc-p"><strong>Knowledge bases</strong> were the catch-all. Content that didn't belong in a team space and wasn't tied to a service desk went here. The two main examples were the company space (which housed product documentation, company information, and supervisor-only reporting pages) and the Product Knowledge Base (PKB), which I built and maintained. The PKB documented every product type in the catalog. Complex categories ran to several pages depending on the variation count and technical requirements.</p>
+        <p class="doc-p">Confluence Categories were used to label each space by type. This gave admins and users a quick visual reference for what kind of space they were looking at without having to open it.</p>
+      </div>
+
+      <div class="doc-section" id="hub">
+        <h2 class="section-h">Hub space</h2>
+        <p class="doc-p">I built a hub space to serve as the default landing page when anyone opened Confluence. The organization didn't upgrade to a tier that supported a full intranet. That request was made and agreed to but never acted on. The hub space was the closest practical substitute.</p>
+        <p class="doc-p">The main page included a brief explanation of how Confluence worked and how to navigate it, a link to the Jira and Confluence SDKB so people knew where to go for help, and company product information pulled from existing Word documents. There were also supervisor and leadership-only pages for reporting and dashboards, which were restricted to the relevant groups.</p>
+        <p class="doc-p">The hub space appeared first when users opened Confluence. New users had a starting point. Returning users had a consistent home. It wasn't a full intranet, but it was functional.</p>
+      </div>
+
+      <div class="doc-section" id="permissions">
+        <h2 class="section-h">Permission model</h2>
+        <p class="doc-p">Confluence permissions were driven by the same org-level groups used across Jira and JSM. Groups aren't Jira-specific or Confluence-specific. They're organization-level constructs. Adding a user to a group gave them access to everything that group had permissions for, across all three platforms, with no additional steps required.</p>
+        <p class="doc-p">This meant that when someone joined a team, changed roles, or left the organization, their Confluence access updated automatically as part of the standard onboarding and offboarding process. No separate Confluence permission step was needed.</p>
+        <p class="doc-p">The main structural difference between Confluence and Jira permissions is that Confluence spaces don't have project roles. In Jira, you can define role-based access levels within a project and map groups to those roles. In Confluence, permissions are set directly on each space. Every space had to be configured manually when it was created, and space admins could adjust their own permissions independently after that.</p>
+        <p class="doc-p">That last part caused occasional problems. Space admins had the ability to add individual users directly rather than using the group structure. Some did. When those users changed roles or left, the one-off access they'd been given didn't automatically clean up the way group-based access did. When those situations surfaced as support tickets, I'd explain why the group approach was better and correct the access. Most space admins deferred to me on permission management after that conversation.</p>
+      </div>
+
+      <div class="doc-section" id="templates">
+        <h2 class="section-h">Page templates</h2>
+        <p class="doc-p">I built page templates for two contexts: new product additions in the company knowledge base, and team-specific templates for teams that wanted a consistent page structure in their own spaces.</p>
+        <p class="doc-p">The product addition template was the more structured one. Product documentation followed a predictable format: product type, specifications, variations, and relevant technical details. Having a template meant new product pages started in the right shape instead of being built from scratch every time.</p>
+        <p class="doc-p">Team templates varied based on what each team needed. When a team came on board, I'd work with their leads to understand what kinds of pages they expected to create most often and build a starting template that matched. These were practical, not elaborate. The goal was to reduce the blank-page problem, not to impose a rigid format.</p>
+      </div>
+
+      <div class="doc-section" id="onboarding">
+        <h2 class="section-h">Team onboarding</h2>
+        <p class="doc-p">Getting teams onto Confluence followed a consistent pattern. I built the space, set the permissions, and then met with the team's leads to walk through the basics: how to create pages, how to organize them under parent pages, how macros worked, and how to import existing Word documents. I also pointed them to other spaces as examples of what a well-built Confluence environment looked like in practice.</p>
+        <p class="doc-p">After that first session, I stayed available for questions. Teams that had a strong lead who took ownership of their space built good environments quickly. Teams that didn't usually had some pages and not much structure. That pattern held pretty consistently across every team I brought on.</p>
+        <p class="doc-p">Confluence adoption wasn't mandated from the top. Leadership agreed it was useful and agreed to invest in it, but never made it a formal expectation. That meant adoption came down to individual team leads, and some were more motivated than others. The teams that committed to Confluence treated it as their primary documentation tool and built environments that their teams relied on. The teams that didn't mostly used Jira for everything and never really engaged with Confluence beyond the basics.</p>
+      </div>
+
+      <div class="doc-section" id="philosophy">
+        <h2 class="section-h">Documentation philosophy</h2>
+        <p class="doc-p">The way I thought about documentation in Confluence was the same whether I was writing a help article, a process guide, or a product page: you won't always be there to explain it. If they can't figure it out from the page alone, the page failed.</p>
+        <p class="doc-p">That meant being specific enough that someone with no context could follow the page without needing to ask questions. It meant not leaving gaps on the assumption that the reader would already know something. And it meant writing for the person who would come back to the page six months later with no memory of why it existed.</p>
+        <p class="doc-p">I tried to build that standard into the templates and the onboarding conversations. Whether it stuck depended on the team and their leads. The teams that internalized it built documentation that held up over time. The ones that didn't ended up with pages that were useful right after they were written and confusing shortly after.</p>
+      </div>
+
+      <div class="doc-section" id="limitations">
+        <h2 class="section-h">What didn't work</h2>
+        <p class="doc-p">Two things didn't go the way I wanted.</p>
+        <p class="doc-p">The first was the intranet. I made the case for upgrading Confluence to a tier that supported a proper company intranet: a real home page, news, announcements, HR content, and a centralized place for company information. Leadership agreed to it. The upgrade never happened. The hub space was a reasonable substitute given the constraints, but it wasn't what the organization actually needed.</p>
+        <p class="doc-p">The second was adoption. Not every team used Confluence, and I couldn't make them. Confluence only works as a knowledge management tool if the people who own the knowledge are willing to write it down. Some teams had leads who understood that. Others had leadership that treated documentation as extra work rather than part of the job. Without an org-wide standard set from above, I could build the infrastructure and show people how to use it, but I couldn't force the culture change. The spaces that got used were genuinely useful. The ones that didn't get used were a missed opportunity.</p>
+      </div>
+
+      <div class="doc-footer-note">Document 01 of 01 · P-007 Confluence Space Architecture · Details generalized to protect confidential information.</div>
+
+      <div class="nav-doc">
+        <a href="index.html">← P-007 Overview</a>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-text">© 2026 Ryan Wolfe · Sacramento, CA · Built with GitHub Pages</div>
+  <div class="footer-cert">ACP-620 · ID: 43YQPFE21B4QQYSE</div>
+</footer>
+
+<script>
+  const cursor=document.getElementById('cursor'),ring=document.getElementById('cursorRing');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
+  function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
+  animRing();
+  document.querySelectorAll('a').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
+    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
+  });
+
+  const tocToggle=document.getElementById('tocToggle');
+  const tocList=document.getElementById('tocList');
+  if(tocToggle&&tocList){
+    tocToggle.addEventListener('click',()=>{
+      const open=tocList.classList.toggle('open');
+      tocToggle.classList.toggle('open',open);
+    });
+  }
+
+  const tocLinks=document.querySelectorAll('.toc-list a');
+  const sections=document.querySelectorAll('.doc-section[id]');
+  const onScroll=()=>{
+    let current='';
+    sections.forEach(s=>{if(s.getBoundingClientRect().top<120)current=s.id;});
+    tocLinks.forEach(a=>{a.classList.toggle('active',a.getAttribute('href')==='#'+current);});
+  };
+  window.addEventListener('scroll',onScroll,{passive:true});
+</script>
+</body>
+</html>
