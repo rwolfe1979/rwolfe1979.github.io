@@ -26,38 +26,183 @@
   </div>
 
   <div class="project-header fade-in d2">
-    <div class="project-eyebrow">P-007 · Confluence</div>
+    <div class="project-eyebrow">P-007 · Confluence Administration</div>
     <h1 class="project-title-h1">Confluence Space <span class="accent-word">Architecture</span></h1>
-    <p class="project-summary-text">Confluence only works if people can find things and trust what they find. I designed the space structure, page templates, and permission model for a 300-user environment across 20 departments. This covers how the architecture was planned, how it was rolled out, and what it took to get teams to actually use it.</p>
+    <p class="project-summary-text">Confluence had over 50 spaces with no naming convention, no ownership, and no structure. Most were auto-generated personal spaces nobody used. I locked down space creation, built a three-type taxonomy, and designed a group-based permission model that tied directly into the same access structure as Jira and JSM. This covers the architecture, the rollout, and what adoption actually looked like.</p>
 
     <div class="confidentiality-note fade-in d2">
-      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and built in a production environment.
+      Details in this project have been generalized to protect confidential information. The system described is based on work I designed and administered in a production environment.
     </div>
 
     <div class="project-meta">
-      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge status-building-badge">In Progress</span></div></div>
+      <div><div class="meta-label">Status</div><div class="meta-value"><span class="status-badge">Live</span></div></div>
       <div><div class="meta-label">Environment</div><div class="meta-value">Confluence Cloud</div></div>
       <div><div class="meta-label">Scale</div><div class="meta-value">300+ users · 20 departments</div></div>
+      <div><div class="meta-label">Spaces at handoff</div><div class="meta-value">~35</div></div>
     </div>
-
     <div class="tags">
       <span class="tag">Confluence</span>
       <span class="tag">Space Design</span>
-      <span class="tag">Page Templates</span>
-      <span class="tag">Permissions</span>
+      <span class="tag">Permission Model</span>
       <span class="tag">Knowledge Management</span>
-      <span class="tag">Information Architecture</span>
+      <span class="tag">Page Templates</span>
+      <span class="tag">Team Adoption</span>
+      <span class="tag">Jira Service Management</span>
     </div>
   </div>
 
   <div class="divider"></div>
 
-  <div class="coming-soon-block fade-in d3">
-    <div class="coming-soon-icon">📚</div>
-    <div class="coming-soon-label">This project is being documented.</div>
-    <p class="coming-soon-text">The full write-up — space structure, template design, permission model, and adoption story — is in progress. Check back soon.</p>
-    <a href="../../" class="btn-secondary" style="margin-top:32px;">← Back to Portfolio</a>
+  <div class="section-label fade-in d2">The Problem</div>
+  <div class="context-block fade-in d3">
+    <p>When I inherited Confluence, there were more than 50 spaces. Most were auto-generated personal spaces nobody had touched since the day they were created. The rest had names that gave you no idea what was inside or who owned them. Anyone could create a space, so people did. Teams that actually wanted to use Confluence couldn't navigate it.</p>
+    <p>Nobody owned the platform. Space creation wasn't governed, naming wasn't standardized, and permissions were an afterthought. Before teams could use Confluence for real work, that had to change.</p>
   </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Space Architecture</div>
+  <p class="doc-p fade-in d3" style="margin-bottom:32px;">Three space types, one hub, and a permission model driven by the same groups used across Jira and JSM.</p>
+
+  <div class="fade-in d3" style="margin-bottom:48px;">
+    <svg width="100%" viewBox="0 0 680 270" role="img" style="display:block;">
+      <title>Confluence Space Architecture — Three Space Types</title>
+      <desc>Hierarchy diagram showing the three Confluence space types branching from a central Hub space. Team Spaces are restricted to team members. Service Desk Knowledge Bases have company-wide access. Knowledge Bases are general purpose.</desc>
+      <style>
+        .f-teal-fill   { fill:#0d4f4a; stroke:#00d4ff; stroke-width:0.5; }
+        .f-purple-fill { fill:#2d1f6e; stroke:#7b2fff; stroke-width:0.5; }
+        .f-coral-fill  { fill:#5c2018; stroke:#d4522a; stroke-width:0.5; }
+        .f-gray-fill   { fill:#111827; stroke:rgba(0,212,255,0.25); stroke-width:0.5; }
+        .f-th  { font-family:'Syne',sans-serif; font-size:13px; font-weight:700; fill:#e8edf5; }
+        .f-ts  { font-family:'Syne',sans-serif; font-size:11px; font-weight:400; fill:#6b7a8d; }
+        .f-lbl { font-family:'Space Mono',monospace; font-size:8px; font-weight:700; fill:#6b7a8d; letter-spacing:0.08em; }
+        .f-line  { stroke:rgba(0,212,255,0.4); stroke-width:1; fill:none; }
+        .f-dot   { fill:rgba(0,212,255,0.6); }
+      </style>
+
+      <!-- Hub space (teal) -->
+      <rect x="190" y="20" width="300" height="52" rx="4" class="f-teal-fill"/>
+      <text class="f-th" x="340" y="40" text-anchor="middle" dominant-baseline="central">Hub space</text>
+      <text class="f-ts" x="340" y="60" text-anchor="middle" dominant-baseline="central">Company landing page · navigation · help links</text>
+
+      <!-- Drop from hub to bar -->
+      <line x1="340" y1="72" x2="340" y2="106" class="f-line"/>
+
+      <!-- Horizontal connecting bar -->
+      <line x1="130" y1="106" x2="550" y2="106" class="f-line"/>
+
+      <!-- Junction dots -->
+      <circle cx="130" cy="106" r="3" class="f-dot"/>
+      <circle cx="340" cy="106" r="3" class="f-dot"/>
+      <circle cx="550" cy="106" r="3" class="f-dot"/>
+
+      <!-- Vertical drops to branch boxes -->
+      <line x1="130" y1="106" x2="130" y2="130" class="f-line"/>
+      <line x1="340" y1="106" x2="340" y2="130" class="f-line"/>
+      <line x1="550" y1="106" x2="550" y2="130" class="f-line"/>
+
+      <!-- Team spaces (purple) -->
+      <rect x="35" y="130" width="190" height="110" rx="4" class="f-purple-fill"/>
+      <text class="f-th"  x="130" y="155" text-anchor="middle" dominant-baseline="central">Team spaces</text>
+      <text class="f-ts"  x="130" y="177" text-anchor="middle" dominant-baseline="central">Restricted to team</text>
+      <text class="f-ts"  x="130" y="196" text-anchor="middle" dominant-baseline="central">Procedures · internal docs</text>
+      <text class="f-lbl" x="130" y="228" text-anchor="middle">RESTRICTED</text>
+
+      <!-- Service desk KBs (coral) -->
+      <rect x="245" y="130" width="190" height="110" rx="4" class="f-coral-fill"/>
+      <text class="f-th"  x="340" y="155" text-anchor="middle" dominant-baseline="central">Service desk KBs</text>
+      <text class="f-ts"  x="340" y="177" text-anchor="middle" dominant-baseline="central">Company-wide access</text>
+      <text class="f-ts"  x="340" y="196" text-anchor="middle" dominant-baseline="central">Help articles · guides</text>
+      <text class="f-lbl" x="340" y="228" text-anchor="middle">COMPANY-WIDE</text>
+
+      <!-- Knowledge bases (gray) -->
+      <rect x="455" y="130" width="190" height="110" rx="4" class="f-gray-fill"/>
+      <text class="f-th"  x="550" y="155" text-anchor="middle" dominant-baseline="central">Knowledge bases</text>
+      <text class="f-ts"  x="550" y="177" text-anchor="middle" dominant-baseline="central">General purpose</text>
+      <text class="f-ts"  x="550" y="196" text-anchor="middle" dominant-baseline="central">Company · product docs</text>
+      <text class="f-lbl" x="550" y="228" text-anchor="middle">GENERAL ACCESS</text>
+
+    </svg>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">What I Built</div>
+  <div class="built-list fade-in d3">
+    <div class="built-item">
+      <div class="built-num">01</div>
+      <div>
+        <div class="built-title">Space creation lockdown</div>
+        <div class="built-desc">Removed space creation rights from all non-admin users. Before this, Confluence auto-generated a personal space for every user that touched the platform and there was no review process for team spaces. The first step was stopping the accumulation and deleting the spaces that already existed.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">02</div>
+      <div>
+        <div class="built-title">Three-type space taxonomy</div>
+        <div class="built-desc">Established three distinct space categories. Team spaces are restricted to their team and used for internal procedures, process documentation, and anything that shouldn't be visible org-wide. Service desk knowledge bases (SDKBs) are linked to a JSM project and accessible to everyone with a Confluence account. Knowledge bases are the catch-all: content that doesn't belong in a team space and isn't tied to a service desk. Confluence Categories were used to label and visually identify each type.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">03</div>
+      <div>
+        <div class="built-title">Hub space</div>
+        <div class="built-desc">Built a home space that acts as the default landing page for anyone who opens Confluence. It included navigation guidance, a link to the Jira and Confluence SDKB, and company product information. Teams new to Confluence had a starting point instead of a wall of spaces they didn't recognize.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">04</div>
+      <div>
+        <div class="built-title">Group-based permission model</div>
+        <div class="built-desc">Access was driven by org-level groups shared across Jira, JSM, and Confluence. Adding a user to a group gave them the right access across all three platforms based on their role. Team spaces were restricted to the relevant group. SDKBs were open to all Confluence users. Onboarding and offboarding flowed automatically without any additional configuration.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">05</div>
+      <div>
+        <div class="built-title">Page templates</div>
+        <div class="built-desc">Built templates for new product additions in the company knowledge base and worked with teams to build space-specific templates as they came on board. Templates reduced setup friction and gave new pages a consistent starting structure.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">06</div>
+      <div>
+        <div class="built-title">Team onboarding</div>
+        <div class="built-desc">For each team, I built the space and then met with their leads to walk them through how to create pages, use macros, and import Word docs. I pointed them to other spaces as examples. Teams that leaned into it built real environments. Teams that didn't usually lacked leadership pushing them to.</div>
+      </div>
+    </div>
+    <div class="built-item">
+      <div class="built-num">07</div>
+      <div>
+        <div class="built-title">Jira and Confluence SDKB</div>
+        <div class="built-desc">Built the knowledge base for the Jira and Confluence service desk myself. Covered saved filters, dashboards, commenting guidelines, and how to navigate both tools. The documentation approach behind it: you won't always be there to explain it. If they can't figure it out from the page alone, the page failed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">Space Design Detail</div>
+  <div class="fade-in d3" style="margin-bottom:48px;">
+    <a href="architecture.html" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Full writeup</div>
+        <div class="arrow-link-title">Space Design and Rollout Detail</div>
+        <div class="arrow-link-sub">Read →</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section-label fade-in d2">The Outcome</div>
+  <div class="context-block fade-in d3">
+    <p>By the time I left, the instance had around 35 spaces. Teams with active Confluence environments averaged roughly 50 pages per space. The Design team had over 100 articles in their team space and a detailed SDKB for the same intake service desk covered in <a href="../p001/">P-001</a>. The Product Knowledge Base (PKB), which I built, ran to hundreds of pages. Every product type in the catalog had its own documentation, and complex categories ran to several pages depending on the variation count and technical requirements.</p>
+    <p>Space creation stayed locked down from day one. No dead spaces accumulated after the initial cleanup.</p>
+    <p>Not every team adopted Confluence. Leadership never mandated it, so adoption came down to individual team leads. The teams that committed got real value from it. The ones that didn't usually had leadership that never made documentation a priority. That part was outside my control.</p>
+  </div>
+
+  <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
 
 </div>
 
