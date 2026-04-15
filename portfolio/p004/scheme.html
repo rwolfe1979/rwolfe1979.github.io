@@ -84,14 +84,14 @@
 
       <div class="doc-section" id="scheme">
         <h2 class="section-h">Scheme Design</h2>
-        <p class="doc-p">The universal scheme was built around a principle: permissions should describe intent, not just grant access. Each role tier was named for what it's meant to be used for, so anyone looking at it — a project admin, a manager, a future Jira administrator — could understand the model without needing a technical explanation.</p>
+        <p class="doc-p">The universal scheme was built around a principle: permissions should describe intent, not just grant access. Each role tier was named for what it's meant to be used for, so anyone looking at it (a project admin, a manager, a future Jira administrator) could understand the model without needing a technical explanation.</p>
         <p class="doc-p">The scheme covers all Jira permission categories: issue access, project access, comment and attachment rights, workflow transitions, and project configuration. Role tiers are defined once in the scheme. Every project that references the scheme inherits those definitions automatically.</p>
         <p class="doc-p">When Atlassian adds a new permission type in a platform update, the scheme is updated once. All 55+ projects reflect the change immediately.</p>
       </div>
 
       <div class="doc-section" id="roles">
         <h2 class="section-h">Role Tier Definitions</h2>
-        <p class="doc-p">Six tiers cover the full range of access needed across the organization. The tiers stack — each higher tier includes the capabilities of the one below it plus additional rights.</p>
+        <p class="doc-p">Six tiers cover the full range of access needed across the organization. The tiers stack. Each higher tier includes the capabilities of the one below it plus additional rights.</p>
         <div class="doc-table-wrap">
           <table class="doc-table">
             <thead>
@@ -140,7 +140,7 @@
       <div class="doc-section" id="groups">
         <h2 class="section-h">Permission Groups</h2>
         <p class="doc-p">Permission Groups are the mechanism that connects users to role tiers. Each group is named for the position or team it represents. A group is assigned to one of the six role tiers in the permission scheme. Any user added to that group automatically receives the access that tier defines, across every project where the group is applied.</p>
-        <p class="doc-p">The environment had between 60 and 70 Permission Groups. Groups weren't limited to job titles and departments. Some groups existed to populate user picker fields — dropdowns in forms and issue views that let people select other users. Supervisors, for example, were added to a dedicated supervisor group so their names appeared correctly in approver fields across the environment, even in projects they didn't actively work in.</p>
+        <p class="doc-p">The environment had between 60 and 70 Permission Groups. Groups weren't limited to job titles and departments. Some groups existed to populate user picker fields: dropdowns in forms and issue views that let people select other users. Supervisors, for example, were added to a dedicated supervisor group so their names appeared correctly in approver fields across the environment, even in projects they didn't actively work in.</p>
         <p class="doc-p">Managing permissions at the group level rather than the individual level kept the model maintainable. When a team's access needs changed, the group assignment was updated once. All users in that group reflected the change. No individual user edits were needed.</p>
       </div>
 
@@ -149,7 +149,7 @@
         <p class="doc-p">New user requests came through the IT service desk. When IT processed a new hire, contractor, or returning employee, they submitted a Jira request with the user's name, email, department, position, and manager.</p>
         <p class="doc-p">From there, the provisioning process was:</p>
         <ol class="doc-ol">
-          <li>Invite the user to Atlassian through Atlassian Access and correct their display name. Managed accounts in Atlassian Access sometimes pull in names incorrectly from the identity provider — this was a routine cleanup step.</li>
+          <li>Invite the user to Atlassian through Atlassian Access and correct their display name. Managed accounts in Atlassian Access sometimes pull in names incorrectly from the identity provider. This was a routine cleanup step.</li>
           <li>Grant the appropriate product access (Jira Software, JSM, Confluence, or a combination).</li>
           <li>Add the user to the Permission Group that matched their position.</li>
           <li>Confirm with the requestor once configuration was complete.</li>
@@ -180,7 +180,7 @@
       <div class="doc-section" id="project-admins">
         <h2 class="section-h">Project Admin Assignments</h2>
         <p class="doc-p">Project admins with Lead or Manager-level access could assign individual users directly to any role tier within their own project. That was intentional. Teams have legitimate needs to give someone temporary access, bring in a contractor, or adjust a specific user's rights without going through a formal request.</p>
-        <p class="doc-p">The platform administrator managed the Permission Group structure — the broader organizational model. Project admins managed individual assignments within their own scope. Both operated within the same permission scheme. The scheme's definitions didn't change based on how the assignment was made.</p>
+        <p class="doc-p">The platform administrator managed the Permission Group structure, the broader organizational model. Project admins managed individual assignments within their own scope. Both operated within the same permission scheme. The scheme's definitions didn't change based on how the assignment was made.</p>
         <p class="doc-p">Individual project-level assignments were reviewed during quarterly audits. If an assignment appeared inconsistent with the user's role or no longer had a clear justification, the project lead was contacted for clarification.</p>
         <div class="doc-footer-note">
           Details in this document have been generalized to protect confidential information. Role names, group counts, and process details are representative of the production environment.
