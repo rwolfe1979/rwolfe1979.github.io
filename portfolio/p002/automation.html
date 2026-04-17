@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-002: Automation Architecture — Ryan Wolfe</title>
+<title>P-002: Automation Architecture · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -79,7 +79,7 @@
 
       <div class="doc-section" id="environment">
         <h2 class="section-h">Environment</h2>
-        <p class="doc-p">The SEO team had two dedicated Jira projects. The Jira Software project handled all monthly deliverable work — the kanban board the team operated from day to day. A separate Jira Service Management project handled inbound requests from other teams. This architecture document covers the Software project only.</p>
+        <p class="doc-p">The SEO team had two dedicated Jira projects. The Jira Software project handled all monthly deliverable work, the kanban board the team operated from day to day. A separate Jira Service Management project handled inbound requests from other teams. This architecture document covers the Software project only.</p>
         <div class="doc-table-wrap">
           <table class="doc-table">
             <thead>
@@ -88,7 +88,7 @@
             <tbody>
               <tr><td>Project type</td><td>Jira Software (kanban)</td></tr>
               <tr><td>Instance tier</td><td>Jira Premium</td></tr>
-              <tr><td>Automation limit</td><td>High — no consolidation required</td></tr>
+              <tr><td>Automation limit</td><td>High, no consolidation required</td></tr>
               <tr><td>Clients at go-live</td><td>~10</td></tr>
               <tr><td>Clients at handoff</td><td>45+</td></tr>
               <tr><td>Built</td><td>2023</td></tr>
@@ -100,7 +100,7 @@
       <div class="doc-section" id="issue-types">
         <h2 class="section-h">Issue type setup</h2>
         <p class="doc-p">Jira's default Epic issue type was replaced with three custom epic-level types: PackageA, PackageB, and Custom. These sit at the epic tier of the work item hierarchy and function as the parent for all monthly task work items underneath them.</p>
-        <p class="doc-p">Using custom types instead of the default Epic gave the team an immediate visual signal about the client's service tier when looking at the board or backlog. It also gave the automation rules a clean, unambiguous trigger condition — each automation checks for a specific issue type rather than reading a field value.</p>
+        <p class="doc-p">Using custom types instead of the default Epic gave the team an immediate visual signal about the client's service tier when looking at the board or backlog. It also gave the automation rules a clean, unambiguous trigger condition, each automation checks for a specific issue type rather than reading a field value.</p>
         <p class="doc-p">All child task work items (Blog Post, Keyword Research, On-Page Optimization, etc.) sit at the story level of the hierarchy and are linked to their parent epic via the parent field. This creates the full branching structure: one epic per client per month, with all that client's tasks nested underneath it.</p>
         <div class="callout">
           <p><strong>Note on hierarchy:</strong> Jira's work item hierarchy (Epic → Story → Sub-task) is not strictly enforced by the platform. The parent field is what creates the relationship. This means you can link any issue type to any other as a parent, which is how custom epic-level types like PackageA, PackageB, and Custom can parent standard story-level task types.</p>
@@ -111,8 +111,8 @@
         <h2 class="section-h">Scheduled trigger</h2>
         <p class="doc-p">One automation runs on a scheduled trigger on the first of every month. It creates one epic-level work item per client. Two fields are set at creation time:</p>
         <ul class="doc-ul">
-          <li><strong>Issue type</strong> — set to PackageA, PackageB, or Custom depending on the client's service tier.</li>
-          <li><strong>Client ID</strong> — a custom dropdown field that holds the unique identifier for that client. This is the key that all downstream automations read to determine quantities and assignments.</li>
+          <li><strong>Issue type</strong>, set to PackageA, PackageB, or Custom depending on the client's service tier.</li>
+          <li><strong>Client ID</strong>, a custom dropdown field that holds the unique identifier for that client. This is the key that all downstream automations read to determine quantities and assignments.</li>
         </ul>
         <p class="doc-p">The creation of these epics is what triggers every subsequent automation. PackageA and PackageB task creation automations listen for a new issue of their respective type. Custom task creation automations do the same. Nothing fires until an epic exists.</p>
       </div>
@@ -120,7 +120,7 @@
       <div class="doc-section" id="package-a">
         <h2 class="section-h">PackageA automation</h2>
         <p class="doc-p">Trigger: when a PackageA issue is created at the epic tier.</p>
-        <p class="doc-p">Action: creates the full fixed task set for that client. Every PackageA client gets the same tasks every month — no Client ID check required. The automation generates approximately 10 work items covering a curated blend of SEO task types considered sufficient for the entry-level tier.</p>
+        <p class="doc-p">Action: creates the full fixed task set for that client. Every PackageA client gets the same tasks every month, no Client ID check required. The automation generates approximately 10 work items covering a curated blend of SEO task types considered sufficient for the entry-level tier.</p>
         <p class="doc-p">All child tasks are linked to the parent PackageA epic via the parent field, creating the nested structure visible on the board and in the backlog.</p>
         <div class="callout">
           <p><strong>Why no Client ID check?</strong> PackageA and PackageB are fixed packages. Every client on the tier gets the same deliverables. Client ID only matters for assignment (which team member gets the task) and for Custom clients (how many of each task type to generate). Task creation for standard tiers is entirely uniform.</p>
@@ -130,20 +130,20 @@
       <div class="doc-section" id="package-b">
         <h2 class="section-h">PackageB automation</h2>
         <p class="doc-p">Trigger: when a PackageB issue is created at the epic tier.</p>
-        <p class="doc-p">Action: same pattern as PackageA. One automation generates the full fixed task set — approximately 20 work items covering most or all available task types, with some types appearing multiple times. No Client ID check. Every PackageB client gets an identical task set each month.</p>
-        <p class="doc-p">PackageB is the comprehensive tier. The task set was designed to represent what a full-service SEO engagement looks like when the client has committed to the complete offering.</p>
+        <p class="doc-p">Action: same pattern as PackageA. One automation generates the full fixed task set, approximately 20 work items covering most or all available task types, with some types appearing multiple times. No Client ID check. Every PackageB client gets an identical task set each month.</p>
+        <p class="doc-p">PackageB is the full-service tier. The task set was designed to cover every deliverable type a client could expect when they bought the complete offering.</p>
       </div>
 
       <div class="doc-section" id="custom">
         <h2 class="section-h">Custom automations</h2>
-        <p class="doc-p">Custom clients have bespoke monthly packages — any combination of the available task types, any quantity, built per client. This is where the automation complexity lives.</p>
+        <p class="doc-p">Custom clients have bespoke monthly packages, any combination of the available task types, any quantity, built per client. This is where the automation complexity lives.</p>
         <p class="doc-p">Trigger for all four: when a Custom issue is created at the epic tier. All four automations fire simultaneously in parallel.</p>
 
         <h3 class="sub-h">Why four automations?</h3>
-        <p class="doc-p">One automation hit Jira's object limit — the maximum number of actions a single rule can perform. With 45+ clients, each potentially needing multiple instances of the same task type, a single automation would have run out of capacity. Splitting the logic across four automations kept each one well within the limit and left room to add new task types later without rebuilding anything.</p>
+        <p class="doc-p">One automation hit Jira's object limit, the maximum number of actions a single rule can perform. With 45+ clients, each potentially needing multiple instances of the same task type, a single automation would have run out of capacity. Splitting the logic across four automations kept each one well within the limit and left room to add new task types later without rebuilding anything.</p>
 
         <h3 class="sub-h">How the if/then logic works</h3>
-        <p class="doc-p">Each automation contains a series of if/then statements. The condition checks two things: the Client ID field on the epic, and how many of a given task type that client needs. If a client needs three Blog Posts, the automation has three separate if statements — one for each — and only the Client IDs requiring that many posts will match each condition.</p>
+        <p class="doc-p">Each automation contains a series of if/then statements. The condition checks two things: the Client ID field on the epic, and how many of a given task type that client needs. If a client needs three Blog Posts, the automation has three separate if statements, one for each, and only the Client IDs requiring that many posts will match each condition.</p>
         <p class="doc-p">Tasks with multiples are titled sequentially: Blog Post #1, Blog Post #2, Blog Post #3. This keeps the board readable and makes it obvious which tasks belong to the same deliverable group.</p>
 
         <h3 class="sub-h">Automation split by task type</h3>
@@ -166,8 +166,8 @@
       <div class="doc-section" id="assignment">
         <h2 class="section-h">Assignment automations</h2>
         <p class="doc-p">Once tasks are created, a separate set of automations handles assignment. There are approximately 15 assignment rules, each triggered when a specific issue type is created.</p>
-        <p class="doc-p">Assignment logic is package-agnostic. It does not check whether a task came from PackageA, PackageB, or Custom — it only cares about what the task is (issue type, and sometimes ticket title for variations of the same type) and who the client is (Client ID).</p>
-        <p class="doc-p">Most task types are split across 2-3 team members depending on the client. Each assignment automation uses an if/then/else chain that covers every Client ID, assigning the correct person for that client. The if/then/else structure means every client has exactly one matching condition and gets one assignee — no ambiguity, no fallthrough.</p>
+        <p class="doc-p">Assignment logic is package-agnostic. It does not check whether a task came from PackageA, PackageB, or Custom, it only cares about what the task is (issue type, and sometimes ticket title for variations of the same type) and who the client is (Client ID).</p>
+        <p class="doc-p">Most task types are split across 2-3 team members depending on the client. Each assignment automation uses an if/then/else chain that covers every Client ID, assigning the correct person for that client. The if/then/else structure means every client has exactly one matching condition and gets one assignee, no ambiguity, no fallthrough.</p>
         <p class="doc-p">Keeping assignment separate from task creation was a deliberate decision. It made the rules easier to read, easier to update when team members changed, and easier to troubleshoot if something assigned incorrectly. You could open an assignment automation, find the Client ID, and immediately see who was assigned and why.</p>
       </div>
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-002: SEO Monthly Automation — Ryan Wolfe</title>
+<title>P-002: SEO Monthly Automation · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -52,7 +52,7 @@
 
   <div class="section-label fade-in d2">The Problem</div>
   <div class="context-block fade-in d3">
-    <p>Every month, the SEO team manager manually created every Jira ticket for every client. With around 10 clients at the start, that process took a couple of days — squeezed between their actual work. The task set was predictable: same types, same assignees, same due date logic month after month. The Custom tier added complexity because each client had a different combination of tasks and quantities that changed over time.</p>
+    <p>Every month, the SEO team manager manually created every Jira ticket for every client. With around 10 clients at the start, that process took a couple of days, squeezed between their actual work. The task set was predictable: same types, same assignees, same due date logic month after month. The Custom tier added complexity because each client had a different combination of tasks and quantities that changed over time.</p>
     <p>As the client roster grew, doing this manually would have taken a week or more per month. It was the kind of problem that only gets worse.</p>
   </div>
 
@@ -80,7 +80,7 @@
 
       <!-- TRIGGER -->
       <rect x="190" y="24" width="300" height="44" rx="8" class="f-teal-fill"/>
-      <text class="f-th" x="340" y="51" text-anchor="middle">Scheduled trigger — 1st of month</text>
+      <text class="f-th" x="340" y="51" text-anchor="middle">Scheduled trigger. 1st of month</text>
 
       <line x1="340" y1="68" x2="340" y2="100" class="f-line"/>
 
@@ -192,7 +192,7 @@
       <!-- OUTCOME -->
       <rect x="190" y="694" width="300" height="56" rx="8" class="f-teal-fill"/>
       <text class="f-th" x="340" y="717" text-anchor="middle">All tasks created and assigned</text>
-      <text class="f-ts" x="340" y="737" text-anchor="middle">Work starts day 1 — no manual effort</text>
+      <text class="f-ts" x="340" y="737" text-anchor="middle">Work starts day 1, no manual effort</text>
 
       <!-- LEGEND -->
       <rect x="30" y="784" width="620" height="118" rx="8" class="f-legend-box"/>
@@ -207,7 +207,7 @@
       <text class="f-ts" x="72" y="859">Work items generated</text>
       <polygon points="254,851 268,858 254,865 240,858" class="f-gray-fill"/>
       <text class="f-ts" x="276" y="863">Decision point</text>
-      <text class="f-ts" x="340" y="887" text-anchor="middle">22 total rules — 7 task creation, 15 user assignment</text>
+      <text class="f-ts" x="340" y="887" text-anchor="middle">22 total rules. 7 task creation, 15 user assignment</text>
     </svg>
   </div>
 
@@ -219,7 +219,7 @@
       <div class="built-num">01</div>
       <div>
         <div class="built-title">Custom issue type hierarchy</div>
-        <div class="built-desc">Created three custom epic-level issue types — PackageA, PackageB, and Custom — so team members could see a client's service tier at a glance without opening the issue. Standard Jira "Epic" was replaced with meaningful types that matched how the team actually thought about their work.</div>
+        <div class="built-desc">Created three custom epic-level issue types. PackageA, PackageB, and Custom, so team members could see a client's service tier at a glance without opening the issue. Standard Jira "Epic" was replaced with meaningful types that matched how the team actually thought about their work.</div>
       </div>
     </div>
     <div class="built-item">
@@ -233,7 +233,7 @@
       <div class="built-num">03</div>
       <div>
         <div class="built-title">PackageA and PackageB child task automations</div>
-        <div class="built-desc">One automation per tier. When a PackageA or PackageB epic is created, the corresponding automation fires and generates the full fixed task set. No Client ID logic needed — every client on a standard tier gets the same tasks every month.</div>
+        <div class="built-desc">One automation per tier. When a PackageA or PackageB epic is created, the corresponding automation fires and generates the full fixed task set. No Client ID logic needed, every client on a standard tier gets the same tasks every month.</div>
       </div>
     </div>
     <div class="built-item">
@@ -247,14 +247,14 @@
       <div class="built-num">05</div>
       <div>
         <div class="built-title">User assignment automations</div>
-        <div class="built-desc">About 15 separate automations handle assignment. Each checks issue type (and sometimes the ticket title for variations) and Client ID, then assigns the right team member. Tasks were typically split across 2-3 people per issue type, so each automation used if/then/else chains to cover every client. Assignment logic is package-agnostic — it only cares about what the task is and who the client is.</div>
+        <div class="built-desc">About 15 separate automations handle assignment. Each checks issue type (and sometimes the ticket title for variations) and Client ID, then assigns the right team member. Tasks were typically split across 2-3 people per issue type, so each automation used if/then/else chains to cover every client. Assignment logic is package-agnostic, it only cares about what the task is and who the client is.</div>
       </div>
     </div>
     <div class="built-item">
       <div class="built-num">06</div>
       <div>
         <div class="built-title">Client configuration template</div>
-        <div class="built-desc">The Custom tier required a process for managing changes. When a client's needs shifted, the manager needed a clean way to communicate updates without ambiguity. I built a simple Excel template — one row per Client ID, one column per task type, number in the cell equals tickets to generate. Updates went from frustrating back-and-forth to a five-minute form fill.</div>
+        <div class="built-desc">The Custom tier required a process for managing changes. When a client's needs shifted, the manager needed a clean way to communicate updates without ambiguity. I built a simple Excel template, one row per Client ID, one column per task type, number in the cell equals tickets to generate. Updates went from frustrating back-and-forth to a five-minute form fill.</div>
       </div>
     </div>
   </div>
@@ -276,7 +276,7 @@
 
   <div class="section-label fade-in d2">The Outcome</div>
   <div class="context-block fade-in d3">
-    <p>What had been taking the manager a couple of days each month for 10 clients — and would have scaled to a week or more at 45+ clients — became fully automated. Every month on the first, every client's full task set appeared in Jira already assigned. The team started work the same day with no setup required.</p>
+    <p>What had been taking the manager a couple of days each month for 10 clients, and would have scaled to a week or more at 45+ clients, became fully automated. Every month on the first, every client's full task set appeared in Jira already assigned. The team started work the same day with no setup required.</p>
     <p>The system ran without issues from go-live through my departure. Ongoing maintenance was limited to updating Custom client configurations when service packages changed and adjusting assignment automations when team members joined or left.</p>
   </div>
 
