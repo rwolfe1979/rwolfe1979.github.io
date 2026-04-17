@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-001: Form Design and Automation Logic — Ryan Wolfe</title>
+<title>P-001: Form Design and Automation Logic · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -84,7 +84,7 @@
               <tr><th>Project</th><th>Type</th><th>Purpose</th></tr>
             </thead>
             <tbody>
-              <tr><td>Marketing Intake</td><td>Jira Service Management</td><td>Intake point — submitters interact here</td></tr>
+              <tr><td>Marketing Intake</td><td>Jira Service Management</td><td>Intake point, submitters interact here</td></tr>
               <tr><td>Digital Design</td><td>Jira Software</td><td>Visual asset work management</td></tr>
               <tr><td>Web Design</td><td>Jira Software</td><td>Website and page work management</td></tr>
               <tr><td>Digital Ads</td><td>Jira Software</td><td>Ad campaign work management</td></tr>
@@ -98,7 +98,7 @@
 
       <div class="doc-section" id="form">
         <h2 class="section-h">Intake form design</h2>
-        <p class="doc-p">The intake form was built with Proforma, a third-party form tool that Atlassian later acquired and integrated natively into JSM as Atlassian Forms. The form is large. It had to capture enough information about every possible request type across every team to allow automation to generate tasks without human follow-up.</p>
+        <p class="doc-p">The intake form was built with Atlassian Forms (formerly Proforma), a form tool Atlassian acquired and integrated natively into JSM. The form is large. It had to capture enough information about every possible request type across every team to allow automation to generate tasks without human follow-up.</p>
         <p class="doc-p">The structure is layered. The first question asks which teams need to be involved. Each selection reveals that team's section below. Within each team section, questions branch further based on what's selected.</p>
         <p class="doc-p">Digital Ads illustrates how deep this goes. The team section presents every available ad type: display, performance max, shopping, video, carousel, and others. Each ad type selected reveals a set of specification questions for that format. Some of those questions have their own conditional branches. The form captures the full spec without requiring any back-and-forth after submission.</p>
         <p class="doc-p">Design routing works similarly. Selecting the Design team reveals a list of asset types and design requests. The specific selection determines which project the task goes to. Some request types route to Web Design, others to Digital Design. The submitter doesn't need to know that distinction. The form and automation handle it.</p>
@@ -116,13 +116,13 @@
         <h2 class="section-h">Routing automations</h2>
         <p class="doc-p">When the status changes to "Tasks created," three automations trigger simultaneously. They were split across three rules because a single automation would have hit Atlassian's per-rule item limit given the number of possible task combinations.</p>
 
-        <h3 class="sub-h">Automation 1 — Design teams</h3>
+        <h3 class="sub-h">Automation 1: Design teams</h3>
         <p class="doc-p">Handles all design-related task generation. Uses branched field-value logic to check what was selected in the Design section of the form. Each branch checks for a specific value. If the value is present, a task is created in the appropriate project (Digital Design or Web Design). If the value is absent, the branch is skipped. Multiple design requests in the same submission each generate their own task.</p>
 
-        <h3 class="sub-h">Automation 2 — Digital Ads</h3>
+        <h3 class="sub-h">Automation 2: Digital Ads</h3>
         <p class="doc-p">Handles ad campaign task generation. Each ad type selected in the form generates a separate task in the Digital Ads project. A submission with three ad types selected generates three tasks for that team. The automation checks for each ad type independently, so partial selections work correctly without any special handling.</p>
 
-        <h3 class="sub-h">Automation 3 — Other teams</h3>
+        <h3 class="sub-h">Automation 3: Other teams</h3>
         <p class="doc-p">Handles Video and Social Media task generation. Uses the same branched field-value logic as Automation 1. If the Video section was filled out, a Video task is generated. If Social Media was included, a Social Media task is generated. Teams not selected in the form have no field values present, so their branches are skipped cleanly.</p>
 
         <div class="doc-table-wrap" style="margin-top:24px;">
