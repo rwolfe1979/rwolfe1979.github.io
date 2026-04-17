@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Jira Project Intake & Standards Guide — Ryan Wolfe</title>
+<title>Jira Project Intake & Standards Guide · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -21,8 +21,10 @@
 
 <div class="page-wrap">
 
-  <div class="breadcrumb">
-    <a href="../../">Home</a><span>›</span><a href="index.html">P-006</a><span>›</span><span>Intake & Standards Guide</span>
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-006</a><span>›</span>
+    <span>Intake & Standards Guide</span>
   </div>
 
   <div class="doc-header">
@@ -94,7 +96,7 @@
         <p class="doc-p">Not every workflow needs its own Jira project. Before submitting a request, the requestor should confirm that the work meets at least one of the following criteria:</p>
         <ul class="doc-ul">
           <li>The work involves a distinct team, department, or cross-functional group with its own workflows and ownership</li>
-          <li>The work has a defined lifecycle — requests come in, get assigned, get resolved, and close</li>
+          <li>The work has a defined lifecycle, requests come in, get assigned, get resolved, and close</li>
           <li>There is a need to track status, priority, or accountability that cannot be handled in an existing project</li>
           <li>The team will actively manage and maintain the project on an ongoing basis</li>
         </ul>
@@ -105,7 +107,7 @@
         <h2 class="section-h">4. Intake Process</h2>
 
         <h3 class="sub-h" id="s41">4.1 Submit a Request</h3>
-        <p class="doc-p">All new project requests are submitted through the Jira Request Portal — a dedicated JSM service desk maintained independently by the Jira administrator, separate from the general IT service desk.</p>
+        <p class="doc-p">All new project requests are submitted through the Jira Request Portal, a dedicated JSM service desk maintained independently by the Jira administrator, separate from the general IT service desk.</p>
         <p class="doc-p">The request form collects the following information:</p>
         <div class="doc-table-wrap">
           <table class="doc-table">
@@ -119,12 +121,12 @@
               <tr><td>Customer volume estimate (JSM only)</td><td><span class="req-jsm">JSM only</span></td><td>Approximate number of customers expected. Informs queue structure and SLA design.</td></tr>
               <tr><td>Business purpose</td><td><span class="req-yes">Yes</span></td><td>What problem does this project solve?</td></tr>
               <tr><td>Estimated agent/user count</td><td><span class="req-yes">Yes</span></td><td>Approximate number of people who will actively work in this project</td></tr>
-              <tr><td>Permission level needed</td><td><span class="req-yes">Yes</span></td><td>What level of access do team members need? Options align to the standard permission tiers: View Only, View and Comment, View/Comment/Create, Member (agent), Lead, or Manager/Admin. Access is granted via Permission Groups tied to position — not configured per individual.</td></tr>
+              <tr><td>Permission level needed</td><td><span class="req-yes">Yes</span></td><td>What level of access do team members need? Options align to the standard permission tiers: View Only, View and Comment, View/Comment/Create, Member (agent), Lead, or Manager/Admin. Access is granted via Permission Groups tied to position, not configured per individual.</td></tr>
               <tr><td>Workflow requirements</td><td><span class="req-no">No</span></td><td>Custom statuses, transitions, or approval steps needed</td></tr>
               <tr><td>SLA requirements (JSM only)</td><td><span class="req-jsm">JSM only</span></td><td>Response and resolution targets, business hours calendar, and escalation rules</td></tr>
               <tr><td>Screen and field requirements</td><td><span class="req-no">No</span></td><td>Any fields needed beyond the standard set. Existing custom fields are reused where possible.</td></tr>
               <tr><td>Integration needs</td><td><span class="req-no">No</span></td><td>Links to other projects, Confluence spaces, or external tools</td></tr>
-              <tr><td>Requested go-live date</td><td><span class="req-no">No</span></td><td>Used for scheduling — not a commitment</td></tr>
+              <tr><td>Requested go-live date</td><td><span class="req-no">No</span></td><td>Used for scheduling, not a commitment</td></tr>
             </tbody>
           </table>
         </div>
@@ -152,10 +154,10 @@
           <table class="doc-table">
             <thead><tr><th>Element</th><th>Standard</th><th>Example</th></tr></thead>
             <tbody>
-              <tr><td>Project name — Jira Software</td><td>Department or team name in plain language. No abbreviations unless widely understood by the whole organization.</td><td>Product Roadmap, Marketing Campaigns</td></tr>
-              <tr><td>Project key — Jira Software</td><td>2–5 uppercase letters derived from the project name, unique across the instance.</td><td>PROD, MKT</td></tr>
-              <tr><td>Project name — JSM</td><td>Team or function name followed by "Desk" or "Support" to distinguish from Software projects.</td><td>IT Desk, Finance Support, Facilities Desk</td></tr>
-              <tr><td>Project key — JSM</td><td>Includes "SD" to identify it as a service desk. Format: [abbreviation]SD.</td><td>ITSD, FSD (Facilities), HRSD (HR)</td></tr>
+              <tr><td>Project name. Jira Software</td><td>Department or team name in plain language. No abbreviations unless widely understood by the whole organization.</td><td>Product Roadmap, Marketing Campaigns</td></tr>
+              <tr><td>Project key. Jira Software</td><td>2–5 uppercase letters derived from the project name, unique across the instance.</td><td>PROD, MKT</td></tr>
+              <tr><td>Project name. JSM</td><td>Team or function name followed by "Desk" or "Support" to distinguish from Software projects.</td><td>IT Desk, Finance Support, Facilities Desk</td></tr>
+              <tr><td>Project key. JSM</td><td>Includes "SD" to identify it as a service desk. Format: [abbreviation]SD.</td><td>ITSD, FSD (Facilities), HRSD (HR)</td></tr>
               <tr><td>Keys to avoid</td><td>Keys that duplicate or closely resemble existing keys. Check the key list before submitting.</td><td>If ITSD exists, don't use ITS or ITD</td></tr>
             </tbody>
           </table>
@@ -170,12 +172,12 @@
         <p class="doc-p">Issue types are configured in two steps for both project types, starting with broad categories before defining the specific types within them.</p>
 
         <h4 class="subsub-h" id="s611">Jira Service Management</h4>
-        <p class="doc-p"><strong>Step 1 — Define request categories.</strong> Incoming work is first grouped into broad categories that reflect the types of requests the service desk handles (for example: Access Requests, Hardware, Software, Onboarding, Reporting). Categories make the customer portal easier to navigate and allow issue types to be reused across similar request types.</p>
-        <p class="doc-p"><strong>Step 2 — Assign or build issue types per category.</strong> Each category maps to one or more issue types. A single issue type can back multiple request types within the same category. Standard issue types (Service Request, Incident, Change) are used where they fit. Custom issue types are built when the standard set doesn't match the team's workflow.</p>
+        <p class="doc-p"><strong>Step 1. Define request categories.</strong> Incoming work is first grouped into broad categories that reflect the types of requests the service desk handles (for example: Access Requests, Hardware, Software, Onboarding, Reporting). Categories make the customer portal easier to navigate and allow issue types to be reused across similar request types.</p>
+        <p class="doc-p"><strong>Step 2. Assign or build issue types per category.</strong> Each category maps to one or more issue types. A single issue type can back multiple request types within the same category. Standard issue types (Service Request, Incident, Change) are used where they fit. Custom issue types are built when the standard set doesn't match the team's workflow.</p>
 
         <h4 class="subsub-h" id="s612">Jira Software</h4>
-        <p class="doc-p"><strong>Step 1 — Define work categories.</strong> Work is grouped by type: planned work (features, stories), unplanned work (bugs, incidents), operational tasks, and sub-tasks. Categories reflect how the team actually thinks about their workload.</p>
-        <p class="doc-p"><strong>Step 2 — Assign issue types per category.</strong> Standard issue types (Story, Task, Bug, Sub-task) are used where they fit. Custom issue types are added when the team's workflow requires a type that doesn't map cleanly to the standard set.</p>
+        <p class="doc-p"><strong>Step 1. Define work categories.</strong> Work is grouped by type: planned work (features, stories), unplanned work (bugs, incidents), operational tasks, and sub-tasks. Categories reflect how the team actually thinks about their workload.</p>
+        <p class="doc-p"><strong>Step 2. Assign issue types per category.</strong> Standard issue types (Story, Task, Bug, Sub-task) are used where they fit. Custom issue types are added when the team's workflow requires a type that doesn't map cleanly to the standard set.</p>
         <p class="doc-p">Both project types follow the same principle: categories come first, types come second. This prevents issue type sprawl and makes it easier to build screens and filters that work across similar projects.</p>
 
         <h3 class="sub-h" id="s62">6.2 Screens and Custom Fields</h3>
@@ -198,17 +200,17 @@
           <table class="doc-table">
             <thead><tr><th>Role Tier</th><th>What They Can Do</th></tr></thead>
             <tbody>
-              <tr><td>View Only</td><td>Read access to the project — can see issues and comments but cannot create or edit</td></tr>
+              <tr><td>View Only</td><td>Read access to the project, can see issues and comments but cannot create or edit</td></tr>
               <tr><td>View and Comment</td><td>Can read and add comments to existing issues, but cannot create new issues</td></tr>
-              <tr><td>View, Comment, and Create</td><td>Can read, comment, and create new issues — standard for stakeholders who submit requests</td></tr>
-              <tr><td>Member / Agent</td><td>Full working access — can create, edit, transition, and resolve issues. Standard for team members and JSM agents.</td></tr>
+              <tr><td>View, Comment, and Create</td><td>Can read, comment, and create new issues, standard for stakeholders who submit requests</td></tr>
+              <tr><td>Member / Agent</td><td>Full working access, can create, edit, transition, and resolve issues. Standard for team members and JSM agents.</td></tr>
               <tr><td>Lead</td><td>Member-level access plus the ability to manage components, versions, and basic project configuration. Cannot modify permission schemes or global settings.</td></tr>
-              <tr><td>Manager / Admin</td><td>Full project administration rights within the project scope. Cannot modify global schemes or platform-level settings — those remain with the platform admin.</td></tr>
+              <tr><td>Manager / Admin</td><td>Full project administration rights within the project scope. Cannot modify global schemes or platform-level settings, those remain with the platform admin.</td></tr>
             </tbody>
           </table>
         </div>
         <p class="doc-p">Permission Groups are assigned to these roles at the platform admin level. When a user is onboarded, they are added to the Permission Group that matches their position. This ensures they automatically have the correct access across all relevant projects without requiring individual project-level configuration.</p>
-        <p class="doc-p">Project leads rarely need to touch permissions directly. The administrator manages Permission Group assignments — a broader responsibility than what is typically expected of a project-level admin role.</p>
+        <p class="doc-p">Project leads rarely need to touch permissions directly. The administrator manages Permission Group assignments, a broader responsibility than what is typically expected of a project-level admin role.</p>
 
         <h3 class="sub-h" id="s65">6.5 Notification Scheme</h3>
         <p class="doc-p">All projects use a single universal notification scheme. Notification configuration is not done at the project level. This keeps notification behavior consistent across the environment and prevents the discrepancies that arise when individual teams customize their own schemes.</p>
@@ -219,7 +221,7 @@
         <h2 class="section-h">7. Project Lead Responsibilities</h2>
         <p class="doc-p">The project lead named at intake is accountable for the following on an ongoing basis:</p>
         <ul class="doc-ul">
-          <li>Keeping the project active — requesting archival or closure when the project is no longer in use</li>
+          <li>Keeping the project active, requesting archival or closure when the project is no longer in use</li>
           <li>Flagging access changes to the administrator when team members change roles or leave the team</li>
           <li>Escalating configuration change requests to the Jira administrator through the Jira Request Portal</li>
           <li>Responding to quarterly access audits within the required timeframe</li>
@@ -274,6 +276,4 @@
       }
     });
   },{rootMargin:'-20% 0px -70% 0px'}).observe&&sections.forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){tocLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
-</script>
-</body>
-</html>
+</scr

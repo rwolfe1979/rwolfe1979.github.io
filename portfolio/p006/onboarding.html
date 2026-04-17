@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>User Access & Onboarding Policy — Ryan Wolfe</title>
+<title>User Access & Onboarding Policy · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -21,8 +21,10 @@
 
 <div class="page-wrap">
 
-  <div class="breadcrumb">
-    <a href="../../">Home</a><span>›</span><a href="index.html">P-006</a><span>›</span><span>User Access & Onboarding Policy</span>
+  <div class="breadcrumb fade-in d1">
+    <a href="../../">Home</a><span>›</span>
+    <a href="index.html">P-006</a><span>›</span>
+    <span>User Access & Onboarding Policy</span>
   </div>
 
   <div class="doc-header">
@@ -97,8 +99,8 @@
         <p class="doc-p">This approach was intentional. Managing access at the org level ensures users have everything they need from day one. Individual project-level access grants create gaps: users end up missing access they should have, often because managers don't know all the places their team works. Org-level Group management eliminates that problem.</p>
         <p class="doc-p">Groups serve two primary purposes:</p>
         <ul class="doc-ul">
-          <li><strong>Permission-based access</strong> — Groups are assigned to project roles within the universal permission scheme, granting the appropriate access tier across all projects that use that role.</li>
-          <li><strong>Functional purposes</strong> — Some Groups are used for filtering and display rather than permissions. The most common example is a Supervisors group, which controls who appears in user picker fields so that only relevant users show up when someone is selecting an approver or assignee.</li>
+          <li><strong>Permission-based access</strong>. Groups are assigned to project roles within the universal permission scheme, granting the appropriate access tier across all projects that use that role.</li>
+          <li><strong>Functional purposes</strong>. Some Groups are used for filtering and display rather than permissions. The most common example is a Supervisors group, which controls who appears in user picker fields so that only relevant users show up when someone is selecting an approver or assignee.</li>
         </ul>
         <p class="doc-p">A user can belong to multiple Groups. This is expected. A supervisor, for example, would be in their department's standard access Group and also in the Supervisors Group for user picker visibility.</p>
       </div>
@@ -154,7 +156,7 @@
       </div>
 
       <div class="doc-section" id="s7">
-        <h2 class="section-h">7. Access Changes — Position or Role Updates</h2>
+        <h2 class="section-h">7. Access Changes. Position or Role Updates</h2>
         <p class="doc-p">When an employee changes positions, transfers departments, or takes on expanded responsibilities, their Group assignments need to be updated. The intended process is for IT to submit a change request through the Jira Request Portal with the same information as a new hire request, noting what has changed.</p>
         <p class="doc-p">Regardless of how the change surfaces, the update follows the same logic as initial onboarding: assess the new role, determine the correct Group(s), remove Groups that no longer apply, and add the ones that do.</p>
       </div>
@@ -204,6 +206,4 @@
   const sections=document.querySelectorAll('[id^="s"]');
   const tocLinks=document.querySelectorAll('.toc-list a');
   sections.forEach(s=>new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){tocLinks.forEach(l=>l.classList.remove('active'));const a=document.querySelector(`.toc-list a[href="#${e.target.id}"]`);if(a)a.classList.add('active');}});},{rootMargin:'-20% 0px -70% 0px'}).observe(s));
-</script>
-</body>
-</html>
+</scr

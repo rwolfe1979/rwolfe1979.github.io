@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-006: Platform Governance — Ryan Wolfe</title>
+<title>P-006: Platform Governance · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -54,7 +54,7 @@
   <div class="section-label fade-in d2">Screenshots</div>
   <div class="screenshots fade-in d3">
     <div>
-      <div class="screenshot-label">Space Homepage — Profile & Navigation</div>
+      <div class="screenshot-label">Space Homepage. Profile & Navigation</div>
       <img src="../../assets/images/APG_Home.png" alt="Atlassian Platform Governance space homepage" class="screenshot-img">
       <div class="screenshot-caption">The APG Confluence space homepage, built as a professional profile with navigation to each governance document.</div>
     </div>
@@ -66,50 +66,63 @@
     <div>
       <div class="screenshot-label">Admin Automation Registry Table</div>
       <img src="../../assets/images/APG_Automation_Registry.png" alt="Admin Automation Registry in Confluence" class="screenshot-img">
-      <div class="screenshot-caption">The automation registry table showing admin-owned rules organized by product area. Disabled rules stay in the registry — never deleted.</div>
+      <div class="screenshot-caption">The automation registry table showing admin-owned rules organized by product area. Disabled rules stay in the registry, never deleted.</div>
     </div>
   </div>
 
   <div class="divider"></div>
 
   <div class="section-label fade-in d2">Governance Documents</div>
-  <div class="fade-in d3" style="margin-bottom:48px;">
-    <div class="arrow-link-row">
-      <a href="intake.html" class="arrow-link">
-        <div>
-          <div class="arrow-link-meta">Document 01</div>
-          <div class="arrow-link-title">Jira Project Intake &amp; Standards Guide</div>
-          <div class="arrow-link-sub">Read Online →</div>
-        </div>
-      </a>
-      <a href="../../assets/docs/P006_Jira_Project_Intake_Standards_Guide.pdf" target="_blank" class="arrow-link-pdf">
-        <span class="arrow-link-pdf-label">PDF ↗</span>
-      </a>
-    </div>
-    <div class="arrow-link-row">
-      <a href="onboarding.html" class="arrow-link">
-        <div>
-          <div class="arrow-link-meta">Document 02</div>
-          <div class="arrow-link-title">User Access &amp; Onboarding Policy</div>
-          <div class="arrow-link-sub">Read Online →</div>
-        </div>
-      </a>
-      <a href="../../assets/docs/P006_User_Access_Onboarding_Policy.pdf" target="_blank" class="arrow-link-pdf">
-        <span class="arrow-link-pdf-label">PDF ↗</span>
-      </a>
-    </div>
-    <div class="arrow-link-row">
-      <a href="automation.html" class="arrow-link">
-        <div>
-          <div class="arrow-link-meta">Document 03</div>
-          <div class="arrow-link-title">Automation Rule Registry</div>
-          <div class="arrow-link-sub">Read Online →</div>
-        </div>
-      </a>
-      <a href="../../assets/docs/P006_Automation_Rule_Registry.pdf" target="_blank" class="arrow-link-pdf">
-        <span class="arrow-link-pdf-label">PDF ↗</span>
-      </a>
-    </div>
+
+  <div class="arrow-link-stack fade-in d3">
+    <a href="intake.html" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Document 01 · HTML</div>
+        <div class="arrow-link-title">Jira Project Intake &amp; Standards Guide</div>
+        <div class="arrow-link-sub">Read Online →</div>
+      </div>
+    </a>
+    <a href="../../assets/docs/P006_Jira_Project_Intake_Standards_Guide.pdf" target="_blank" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Document 01 · PDF</div>
+        <div class="arrow-link-title">Jira Project Intake &amp; Standards Guide</div>
+        <div class="arrow-link-sub">Download PDF ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="arrow-link-stack fade-in d3">
+    <a href="onboarding.html" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Document 02 · HTML</div>
+        <div class="arrow-link-title">User Access &amp; Onboarding Policy</div>
+        <div class="arrow-link-sub">Read Online →</div>
+      </div>
+    </a>
+    <a href="../../assets/docs/P006_User_Access_Onboarding_Policy.pdf" target="_blank" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Document 02 · PDF</div>
+        <div class="arrow-link-title">User Access &amp; Onboarding Policy</div>
+        <div class="arrow-link-sub">Download PDF ↗</div>
+      </div>
+    </a>
+  </div>
+
+  <div class="arrow-link-stack fade-in d3">
+    <a href="automation.html" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Document 03 · HTML</div>
+        <div class="arrow-link-title">Automation Rule Registry</div>
+        <div class="arrow-link-sub">Read Online →</div>
+      </div>
+    </a>
+    <a href="../../assets/docs/P006_Automation_Rule_Registry.pdf" target="_blank" class="arrow-link">
+      <div>
+        <div class="arrow-link-meta">Document 03 · PDF</div>
+        <div class="arrow-link-title">Automation Rule Registry</div>
+        <div class="arrow-link-sub">Download PDF ↗</div>
+      </div>
+    </a>
   </div>
 
   <a href="../../" class="back-link fade-in d4">← Back to Portfolio</a>
@@ -126,10 +139,4 @@
   document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px';});
   function animRing(){rx+=(mx-rx)*.15;ry+=(my-ry)*.15;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing);}
   animRing();
-  document.querySelectorAll('a,.doc-card').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(0,212,255,0.8)';});
-    el.addEventListener('mouseleave',()=>{cursor.style.width='8px';cursor.style.height='8px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(0,212,255,0.5)';});
-  });
-</script>
-</body>
-</html>
+  document.querySelectorAll('a,.doc-card').forEach
