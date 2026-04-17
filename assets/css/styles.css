@@ -870,6 +870,17 @@ table.registry-table tr:hover td { background: rgba(0, 212, 255, 0.03); }
   letter-spacing: .1em; text-transform: uppercase;
 }
 
+/* Pattern 4: stacked arrows (Read Online above, PDF below) */
+.arrow-link-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.arrow-link-stack .arrow-link {
+  margin-bottom: 0;
+}
+
 /* ════════════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS
    ════════════════════════════════════════════════════════════ */
