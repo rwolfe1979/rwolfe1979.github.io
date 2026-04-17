@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>P-003: Field Configuration and Dashboard Breakdown — Ryan Wolfe</title>
+<title>P-003: Field Configuration and Dashboard Breakdown · Ryan Wolfe</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/css/styles.css">
@@ -65,7 +65,7 @@
 
       <div class="doc-section" id="overview">
         <h2 class="section-h">Overview</h2>
-        <p class="doc-p">This page covers the field configuration, conditional form logic, and dashboard setup behind the Blocker Priority Dashboard. The project runs across three JSM service desks — Marketing, Catalog, and Development — and a shared Jira dashboard used by leadership.</p>
+        <p class="doc-p">This page covers the field configuration, conditional form logic, and dashboard setup behind the Blocker Priority Dashboard. The project runs across three JSM service desks. Marketing, Catalog, and Development, and a shared Jira dashboard used by leadership.</p>
         <p class="doc-p">The core problem was that blocker priority had no accountability. Adding a required reason field changed that. The dashboard made the data visible. The billing integration made one of the three reason paths financially meaningful. All three pieces depend on each other.</p>
       </div>
 
@@ -86,9 +86,9 @@
           </table>
         </div>
 
-        <p class="doc-p">The Blocker Reason field is the entry point. It's required when Blocker priority is selected — a ticket can't be submitted without it. The downstream fields only appear based on what's selected in Blocker Reason, so customers service reps never see fields that don't apply to their situation.</p>
+        <p class="doc-p">The Blocker Reason field is the entry point. It's required when Blocker priority is selected, a ticket can't be submitted without it. The downstream fields only appear based on what's selected in Blocker Reason, so customers service reps never see fields that don't apply to their situation.</p>
         <p class="doc-p">The Approving Supervisor user picker was scoped to a permission group rather than the full user directory. This meant only names from that group could be selected. It removed the risk of someone entering a non-supervisor name or leaving the field vague.</p>
-        <p class="doc-p">The Error Sub-type field contained a list of error categories that leadership and I identified as the most common causes. If none of those applied, Other was available. Tracking how often Other was selected was intentional — if it became the most common choice, that indicated a gap in the predefined list that needed to be addressed.</p>
+        <p class="doc-p">The Error Sub-type field contained a list of error categories that leadership and I identified as the most common causes. If none of those applied, Other was available. Tracking how often Other was selected was intentional, if it became the most common choice, that indicated a gap in the predefined list that needed to be addressed.</p>
       </div>
 
       <div class="doc-section" id="form">
@@ -96,18 +96,18 @@
         <p class="doc-p">The conditional display was built with Atlassian Forms, which was called Proforma at the time the system was originally built. Atlassian later acquired the tool and integrated it natively into JSM.</p>
         <p class="doc-p">The form uses three tiers of conditional logic:</p>
         <p class="doc-p">First, Blocker priority is a native Jira field that exists on every ticket. The form is configured to watch this field. When the submitter selects Blocker, the Blocker Reason field appears.</p>
-        <p class="doc-p">Second, once Blocker Reason is visible, the submitter makes a selection. Choosing Error reveals the Error Sub-type field. Choosing Supervisor Approved reveals the Approving Supervisor user picker. Choosing Paid Rush reveals nothing — it goes straight to submission.</p>
+        <p class="doc-p">Second, once Blocker Reason is visible, the submitter makes a selection. Choosing Error reveals the Error Sub-type field. Choosing Supervisor Approved reveals the Approving Supervisor user picker. Choosing Paid Rush reveals nothing, it goes straight to submission.</p>
         <p class="doc-p">Third, the conditional fields themselves are not required in isolation. They become required only because the form won't submit while a visible field is empty. If Blocker Reason is set to Error, the Error Sub-type field appears and must be filled before submission is possible.</p>
-        <p class="doc-p">Warning text was added at the Blocker priority selection point. It stated that blocker priority is for situations where all other work must stop, and that patterns of misuse would be reviewed. This wasn't an enforcement mechanism — it was a nudge. It worked.</p>
+        <p class="doc-p">Warning text was added at the Blocker priority selection point. It stated that blocker priority is for situations where all other work must stop, and that patterns of misuse would be reviewed. This wasn't an enforcement mechanism, it was a nudge. It worked.</p>
       </div>
 
       <div class="doc-section" id="dashboard">
         <h2 class="section-h">Dashboard gadgets</h2>
         <p class="doc-p">The dashboard was built as a standard Jira dashboard using native gadgets. The goal was to give leadership a high-level view of blocker activity without requiring them to understand JQL. Every gadget was backed by a saved filter, and any stat could be clicked to open the full ticket list that produced it.</p>
         <p class="doc-p">The gadget layout used a combination of pie charts and 2D filter gadgets:</p>
-        <p class="doc-p">A pie chart showed the distribution of Blocker Reason types across all three service desks — how many tickets in the last 30 days were errors, supervisor-approved, or paid rush. This was the primary view. It answered the question leadership was actually asking: what are people marking as blockers and why?</p>
-        <p class="doc-p">A second pie chart broke down Error Sub-type selections. This was useful for identifying whether any one error category was dominating — which might indicate a systemic issue that deserved its own investigation.</p>
-        <p class="doc-p">A 2D filter gadget showed supervisor usage — which supervisors were appearing as approvers most often. This gave management visibility into approval patterns and a starting point if they needed to follow up on a specific decision.</p>
+        <p class="doc-p">A pie chart showed the distribution of Blocker Reason types across all three service desks, how many tickets in the last 30 days were errors, supervisor-approved, or paid rush. This was the primary view. It answered the question leadership was actually asking: what are people marking as blockers and why?</p>
+        <p class="doc-p">A second pie chart broke down Error Sub-type selections. This was useful for identifying whether any one error category was dominating, which might indicate a systemic issue that deserved its own investigation.</p>
+        <p class="doc-p">A 2D filter gadget showed supervisor usage, which supervisors were appearing as approvers most often. This gave management visibility into approval patterns and a starting point if they needed to follow up on a specific decision.</p>
         <p class="doc-p">A second 2D filter gadget showed summary statistics by service desk, so leadership could see whether the blocker volume was concentrated in one area or distributed across all three.</p>
         <p class="doc-p">I chose pie charts and 2D filters deliberately. They show distribution and allow drill-down. A flat list of tickets wouldn't have given leadership the pattern view they needed. A more complex visualization would have required more maintenance. Simple gadgets backed by solid JQL filters hold up longer than anything custom-built.</p>
 
@@ -144,7 +144,7 @@
           </style>
 
           <div class="jd">
-            <div class="jd-disc">Illustrative data — field names and values generalized to protect confidential information.</div>
+            <div class="jd-disc">Illustrative data, field names and values generalized to protect confidential information.</div>
             <div class="jd-grid">
 
               <div class="jd-col">
@@ -256,7 +256,7 @@
 
       <div class="doc-section" id="jql">
         <h2 class="section-h">JQL filters</h2>
-        <p class="doc-p">Every gadget on the dashboard reads from a saved JQL filter. Saved filters are reusable — they can be shared with the dashboard, used in other dashboards, and referenced in automation rules. Building them as saved filters rather than inline gadget queries meant a single update propagated everywhere the filter was used.</p>
+        <p class="doc-p">Every gadget on the dashboard reads from a saved JQL filter. Saved filters are reusable, they can be shared with the dashboard, used in other dashboards, and referenced in automation rules. Building them as saved filters rather than inline gadget queries meant a single update propagated everywhere the filter was used.</p>
         <p class="doc-p">The filters follow a consistent pattern: scope by project, filter by priority, filter by the relevant custom field value, and apply a date range where appropriate. Examples of the logic used:</p>
         <div class="doc-table-wrap">
           <table class="doc-table">
@@ -277,7 +277,7 @@
       <div class="doc-section" id="billing">
         <h2 class="section-h">Billing integration</h2>
         <p class="doc-p">Paid Rush tickets are pulled monthly using the billing JQL filter. The results give a count of Paid Rush requests per client for the billing period. That data is used to generate charges on the client's invoice.</p>
-        <p class="doc-p">The Client ID field on every ticket connects the Paid Rush record back to the correct client account. This field was already part of the service desk setup before this project — it existed to track which client each request was submitted on behalf of. Tying the billing pull to Client ID meant no new infrastructure was needed. The data was already there.</p>
+        <p class="doc-p">The Client ID field on every ticket connects the Paid Rush record back to the correct client account. This field was already part of the service desk setup before this project, it existed to track which client each request was submitted on behalf of. Tying the billing pull to Client ID meant no new infrastructure was needed. The data was already there.</p>
         <p class="doc-p">The monthly pull is a manual process: run the filter, export or reference the results, hand off to billing. It wasn't automated. The volume was low enough that automation wasn't worth the maintenance overhead, and the manual step gave the team a built-in review point before charges went out.</p>
         <p class="doc-p">This piece of the system wasn't in the original ask. The VP came with the concept of charging for rush requests. I designed the field structure that captured the data cleanly enough to make billing off of it practical. The monthly pull has been running since the system went live.</p>
       </div>
