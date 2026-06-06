@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Drew's Paycheck Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --surface: #151820;
+    --surface2: #1c2030;
+    --border: #2a3048;
+    --accent: #f5a623;
+    --accent2: #4fc3f7;
+    --accent3: #69db7c;
+    --danger: #ff6b6b;
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-mono: 'IBM Plex Mono', monospace;
+    --font-body: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 24px 16px 60px;
+    background-image:
+      radial-gradient(ellipse at 10% 0%, rgba(245,166,35,0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 90% 100%, rgba(79,195,247,0.05) 0%, transparent 50%);
+  }
+
+  header {
+    max-width: 960px;
+    margin: 0 auto 32px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 20px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  header h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    letter-spacing: 2px;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  header span {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .main {
+    max-width: 960px;
+    margin: 0 auto;
+    display: grid;
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 24px;
+  }
+
+  .card-title {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .card-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Settings row */
+  .settings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .field label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .field input[type="number"],
+  .field input[type="text"],
+  .field input[type="time"],
+  .field select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: 10px 12px;
+    width: 100%;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+  }
+
+  .field input:focus,
+  .field select:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  /* Pay period table */
+  .period-header {
+    display: grid;
+    grid-template-columns: 90px 1fr 1fr 1fr 1fr 120px 80px;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--surface2);
+    border-radius: 3px 3px 0 0;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    align-items: center;
+  }
+
+  .day-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 1fr 1fr 1fr 120px 80px;
+    gap: 8px;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    transition: background 0.1s;
+  }
+
+  .day-row:hover { background: rgba(255,255,255,0.02); }
+
+  .day-row:last-child { border-bottom: none; }
+
+  .day-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .day-label.weekend { color: var(--accent2); }
+
+  .day-row input[type="time"] {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .day-row input[type="time"]:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .day-row input[type="time"]:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  /* Checkbox group */
+  .check-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+  }
+
+  .check-group label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .check-group label:hover { color: var(--text); }
+
+  .check-group input[type="checkbox"] {
+    accent-color: var(--accent);
+    width: 13px;
+    height: 13px;
+    cursor: pointer;
+  }
+
+  .skip-btn {
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+    width: 100%;
+    text-align: center;
+  }
+
+  .skip-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .skip-btn.skipped { background: rgba(255,107,107,0.1); border-color: var(--danger); color: var(--danger); }
+
+  /* Hours summary per day */
+  .day-hours {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--accent3);
+    text-align: right;
+  }
+
+  /* Results section */
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 620px) {
+    .results-grid { grid-template-columns: 1fr; }
+    .period-header, .day-row {
+      grid-template-columns: 70px 1fr 1fr 90px 70px;
+    }
+    /* hide lunch on mobile */
+    .period-header .h-lunch,
+    .day-row .lunch-out { display: none; }
+  }
+
+  .result-block {
+    background: var(--surface2);
+    border-radius: 4px;
+    padding: 18px;
+    border: 1px solid var(--border);
+  }
+
+  .result-block.highlight {
+    border-color: var(--accent);
+    background: rgba(245,166,35,0.04);
+  }
+
+  .result-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .result-value {
+    font-family: var(--font-mono);
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .result-value.blue { color: var(--accent2); }
+  .result-value.green { color: var(--accent3); }
+  .result-value.red { color: var(--danger); }
+
+  .line-items {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .line-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 6px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .line-item:last-child { border-bottom: none; }
+
+  .line-item .li-label { color: var(--muted); }
+  .line-item .li-value { color: var(--text); font-weight: 500; }
+  .line-item .li-value.pos { color: var(--accent3); }
+  .line-item .li-value.neg { color: var(--danger); }
+
+  /* OT explainer */
+  .explainer {
+    background: rgba(79,195,247,0.05);
+    border: 1px solid rgba(79,195,247,0.2);
+    border-radius: 4px;
+    padding: 16px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: var(--text);
+  }
+
+  .explainer strong {
+    color: var(--accent2);
+    font-weight: 600;
+  }
+
+  .explainer .formula {
+    background: var(--bg);
+    border-radius: 3px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+
+  /* Flat rate inputs */
+  .flat-inputs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-top: 12px;
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 4px;
+    border: 1px solid var(--border);
+  }
+
+  /* Deductions */
+  .deduct-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+  }
+
+  /* Period toggle */
+  .period-nav {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .period-nav button {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    padding: 6px 14px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.15s;
+  }
+
+  .period-nav button:hover,
+  .period-nav button.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(245,166,35,0.06);
+  }
+
+  .period-nav .period-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  /* Hours tally bar */
+  .hours-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    padding: 16px;
+    background: var(--surface2);
+    border-radius: 4px;
+    margin-bottom: 20px;
+  }
+
+  .hours-pill {
+    text-align: center;
+  }
+
+  .hours-pill .hp-val {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+
+  .hours-pill .hp-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .reg-color { color: var(--text); }
+  .ot-color { color: var(--accent); }
+  .dt-color { color: var(--danger); }
+  .tot-color { color: var(--accent3); }
+
+  /* Info tooltip */
+  .info-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    font-size: 0.6rem;
+    cursor: help;
+    font-family: var(--font-body);
+    font-style: italic;
+    font-weight: 600;
+    margin-left: 4px;
+    position: relative;
+  }
+
+  .calc-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    border-radius: 3px;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    padding: 14px 32px;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+    margin-top: 8px;
+  }
+
+  .calc-btn:hover {
+    background: #f5b84d;
+    transform: translateY(-1px);
+  }
+
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0 20px;
+  }
+
+  .toggle-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .toggle-switch input { display: none; }
+
+  .toggle-track {
+    width: 36px;
+    height: 18px;
+    background: var(--border);
+    border-radius: 9px;
+    position: relative;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .toggle-switch input:checked + .toggle-track { background: var(--accent); }
+
+  .toggle-track::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border-radius: 50%;
+    top: 3px;
+    left: 3px;
+    transition: left 0.2s;
+  }
+
+  .toggle-switch input:checked + .toggle-track::after { left: 21px; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+
+  .badge-ot { background: rgba(245,166,35,0.15); color: var(--accent); }
+  .badge-dt { background: rgba(255,107,107,0.15); color: var(--danger); }
+  .badge-reg { background: rgba(232,234,240,0.08); color: var(--text); }
+
+  .note {
+    font-size: 0.72rem;
+    color: var(--muted);
+    font-family: var(--font-mono);
+    line-height: 1.6;
+    margin-top: 8px;
+  }
+
+  .gross-total {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+    color: var(--accent3);
+    margin: 4px 0;
+  }
+
+  .net-total {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    letter-spacing: 2px;
+    color: var(--accent);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Paycheck Calculator</h1>
+    <div style="font-family:var(--font-mono);font-size:0.7rem;color:var(--muted);letter-spacing:2px;margin-top:2px;">LOOMIS ARMORED · DREW FELIX</div>
+  </div>
+  <span>BIWEEKLY · CA</span>
+</header>
+
+<div class="main">
+
+  <!-- Settings -->
+  <div class="card">
+    <div class="card-title">Pay Settings</div>
+    <div class="settings-grid">
+      <div class="field">
+        <label>Base Hourly Rate ($)</label>
+        <input type="number" id="baseRate" value="30.66" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>Daily OT Threshold (hrs)</label>
+        <input type="number" id="dailyOT" value="8" step="0.5" min="1">
+      </div>
+      <div class="field">
+        <label>Daily DT Threshold (hrs)</label>
+        <input type="number" id="dailyDT" value="12" step="0.5" min="1">
+      </div>
+      <div class="field">
+        <label>Period OT Threshold (hrs)</label>
+        <input type="number" id="periodOT" value="40" step="1" min="1">
+      </div>
+    </div>
+    <div style="margin-top:16px;display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+      <label class="toggle-switch">
+        <input type="checkbox" id="useBlended" checked>
+        <span class="toggle-track"></span>
+        Show FLSA Blended OT Rate
+      </label>
+      <label class="toggle-switch">
+        <input type="checkbox" id="caMode" checked>
+        <span class="toggle-track"></span>
+        California OT Rules (daily + 7th day)
+      </label>
+    </div>
+    <div class="note" style="margin-top:12px;">
+      CA rule: OT after 8 hrs/day, DT after 12 hrs/day. 7th consecutive day: OT for first 8 hrs, DT after 8 hrs.
+      Period OT applies if total hours exceed 40 even without hitting daily threshold.
+    </div>
+  </div>
+
+  <!-- Deductions -->
+  <div class="card">
+    <div class="card-title">Pre-Tax Deductions (Per Period)</div>
+    <div class="deduct-grid">
+      <div class="field">
+        <label>401(k) % of Gross</label>
+        <input type="number" id="k401pct" value="10" step="0.5" min="0" max="100">
+      </div>
+      <div class="field">
+        <label>Medical ($)</label>
+        <input type="number" id="dedMedical" value="51.00" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>Dental ($)</label>
+        <input type="number" id="dedDental" value="12.31" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>Vision ($)</label>
+        <input type="number" id="dedVision" value="1.98" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>HSA ($)</label>
+        <input type="number" id="dedHSA" value="75.00" step="0.01" min="0">
+      </div>
+    </div>
+    <div class="card-title" style="margin-top:20px;">Post-Tax Deductions (Per Period)</div>
+    <div class="deduct-grid">
+      <div class="field">
+        <label>Vol AD&D ($)</label>
+        <input type="number" id="dedADD" value="8.22" step="0.01" min="0">
+      </div>
+      <div class="field">
+        <label>Vol Life ($)</label>
+        <input type="number" id="dedLife" value="16.25" step="0.01" min="0">
+      </div>
+    </div>
+  </div>
+
+  <!-- Special Pay -->
+  <div class="card">
+    <div class="card-title">Special / Flat Rate Pay (This Period)</div>
+    <div class="flat-inputs">
+      <div class="field">
+        <label>On-Call Flat Pay ($)</label>
+        <input type="number" id="oncallFlat" value="0" step="25" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Holiday Hours</label>
+        <input type="number" id="holidayHrs" value="0" step="1" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>PTO Hours</label>
+        <input type="number" id="ptoHrs" value="0" step="1" min="0" placeholder="0">
+      </div>
+      <div class="field">
+        <label>Other Flat Pay ($)</label>
+        <input type="number" id="otherFlat" value="0" step="1" min="0" placeholder="0">
+      </div>
+    </div>
+    <div class="note">On-Call flat pay is included in the FLSA blended rate calculation, which is why Drew's OT rate changes each period.</div>
+  </div>
+
+  <!-- Time Entry -->
+  <div class="card">
+    <div class="card-title">Time Entry — Pay Period</div>
+
+    <div class="period-nav">
+      <span class="period-label">Week:</span>
+      <button class="active" onclick="showWeek(1,this)">Week 1</button>
+      <button onclick="showWeek(2,this)">Week 2</button>
+    </div>
+
+    <!-- Week 1 -->
+    <div id="week1">
+      <div class="period-header">
+        <div>Day</div>
+        <div>Clock In</div>
+        <div>Lunch Out</div>
+        <div>Lunch In</div>
+        <div>Clock Out</div>
+        <div>Extras</div>
+        <div style="text-align:right">Hours</div>
+      </div>
+      <div id="daysW1"></div>
+    </div>
+
+    <!-- Week 2 -->
+    <div id="week2" style="display:none;">
+      <div class="period-header">
+        <div>Day</div>
+        <div>Clock In</div>
+        <div>Lunch Out</div>
+        <div>Lunch In</div>
+        <div>Clock Out</div>
+        <div>Extras</div>
+        <div style="text-align:right">Hours</div>
+      </div>
+      <div id="daysW2"></div>
+    </div>
+
+    <!-- Hours summary -->
+    <div class="hours-bar" style="margin-top:16px;margin-bottom:0;">
+      <div class="hours-pill">
+        <div class="hp-val reg-color" id="totReg">0.00</div>
+        <div class="hp-label">Regular</div>
+      </div>
+      <div class="hours-pill">
+        <div class="hp-val ot-color" id="totOT">0.00</div>
+        <div class="hp-label">Overtime</div>
+      </div>
+      <div class="hours-pill">
+        <div class="hp-val dt-color" id="totDT">0.00</div>
+        <div class="hp-label">Double Time</div>
+      </div>
+      <div class="hours-pill">
+        <div class="hp-val tot-color" id="totAll">0.00</div>
+        <div class="hp-label">Total Worked</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calculate button -->
+  <button class="calc-btn" onclick="calculate()">CALCULATE PAYCHECK</button>
+
+  <!-- Results -->
+  <div class="card" id="resultsCard" style="display:none;">
+    <div class="card-title">Paycheck Breakdown</div>
+
+    <div class="hours-bar" style="margin-bottom:20px;">
+      <div class="hours-pill">
+        <div class="hp-val reg-color" id="res-reg-hrs">0.00</div>
+        <div class="hp-label">Reg Hours</div>
+      </div>
+      <div class="hours-pill">
+        <div class="hp-val ot-color" id="res-ot-hrs">0.00</div>
+        <div class="hp-label">OT Hours</div>
+      </div>
+      <div class="hours-pill">
+        <div class="hp-val dt-color" id="res-dt-hrs">0.00</div>
+        <div class="hp-label">DT Hours</div>
+      </div>
+      <div class="hours-pill">
+        <div class="hp-val tot-color" id="res-tot-hrs">0.00</div>
+        <div class="hp-label">Total</div>
+      </div>
+    </div>
+
+    <div class="results-grid">
+      <div>
+        <div class="result-label">Gross Earnings</div>
+        <div class="gross-total" id="res-gross">$0.00</div>
+
+        <div class="line-items" id="earningsLines"></div>
+      </div>
+
+      <div>
+        <div class="result-label">Estimated Net Pay</div>
+        <div class="net-total" id="res-net">$0.00</div>
+        <div class="note" style="margin-bottom:12px;">Taxes are estimated. Actual withholding depends on W-4 settings.</div>
+
+        <div class="line-items" id="deductLines"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OT Explainer -->
+  <div class="card" id="otExplainer" style="display:none;">
+    <div class="card-title">Why Drew's OT Rate Changes Every Period</div>
+    <div class="explainer" id="otExplainerText"></div>
+  </div>
+
+</div>
+
+<script>
+// ─── DATA SETUP ───────────────────────────────────────────────────────────────
+const WEEK_DAYS = [
+  ['Mon','weekday'],['Tue','weekday'],['Wed','weekday'],['Thu','weekday'],
+  ['Fri','weekday'],['Sat','weekend'],['Sun','weekend']
+];
+
+const ALL_DAYS = [
+  ...WEEK_DAYS.map(([d,t],i) => ({label:`W1 ${d}`, type:t, week:1, idx:i})),
+  ...WEEK_DAYS.map(([d,t],i) => ({label:`W2 ${d}`, type:t, week:2, idx:i+7}))
+];
+
+let dayStates = ALL_DAYS.map(() => ({
+  skipped: false,
+  oncall: false,
+  holiday: false,
+  seventhDay: false
+}));
+
+function buildDayRow(day, globalIdx, containerId) {
+  const container = document.getElementById(containerId);
+  const row = document.createElement('div');
+  row.className = 'day-row';
+  row.id = `row-${globalIdx}`;
+
+  const isWeekend = day.type === 'weekend';
+  const labelClass = isWeekend ? 'day-label weekend' : 'day-label';
+
+  // Default times
+  const defIn = isWeekend ? '' : '07:00';
+  const defLOut = isWeekend ? '' : '11:00';
+  const defLIn = isWeekend ? '' : '11:30';
+  const defOut = isWeekend ? '' : '15:30';
+
+  row.innerHTML = `
+    <div class="${labelClass}">${day.label}</div>
+    <input type="time" id="ci-${globalIdx}" value="${defIn}" onchange="recalcHours(${globalIdx})">
+    <input type="time" id="lo-${globalIdx}" value="${defLOut}" onchange="recalcHours(${globalIdx})">
+    <input type="time" id="li-${globalIdx}" value="${defLIn}" onchange="recalcHours(${globalIdx})">
+    <input type="time" id="co-${globalIdx}" value="${defOut}" onchange="recalcHours(${globalIdx})">
+    <div class="check-group">
+      <label><input type="checkbox" id="oc-${globalIdx}" onchange="recalcHours(${globalIdx})"> On-Call</label>
+      <label><input type="checkbox" id="hol-${globalIdx}" onchange="recalcHours(${globalIdx})"> Holiday</label>
+      ${globalIdx >= 6 && globalIdx <= 6 || globalIdx === 13 ? `<label><input type="checkbox" id="s7-${globalIdx}" onchange="recalcHours(${globalIdx})"> 7th Day</label>` : ''}
+    </div>
+    <div class="day-hours" id="dh-${globalIdx}">--</div>
+  `;
+
+  container.appendChild(row);
+
+  // Skip button
+  const skipBtn = document.createElement('div');
+  skipBtn.style.cssText = 'padding:4px 10px;border-bottom:1px solid var(--border);';
+  skipBtn.innerHTML = `<button class="skip-btn" id="skip-${globalIdx}" onclick="toggleSkip(${globalIdx})">DAY OFF</button>`;
+  container.appendChild(skipBtn);
+}
+
+// Build rows
+ALL_DAYS.forEach((day, i) => {
+  buildDayRow(day, i, day.week === 1 ? 'daysW1' : 'daysW2');
+});
+
+function showWeek(n, btn) {
+  document.getElementById('week1').style.display = n === 1 ? '' : 'none';
+  document.getElementById('week2').style.display = n === 2 ? '' : 'none';
+  document.querySelectorAll('.period-nav button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function toggleSkip(idx) {
+  dayStates[idx].skipped = !dayStates[idx].skipped;
+  const btn = document.getElementById(`skip-${idx}`);
+  const row = document.getElementById(`row-${idx}`);
+  if (dayStates[idx].skipped) {
+    btn.classList.add('skipped');
+    btn.textContent = 'SKIPPED';
+    row.querySelectorAll('input').forEach(i => { i.disabled = true; });
+    document.getElementById(`dh-${idx}`).textContent = '--';
+  } else {
+    btn.classList.remove('skipped');
+    btn.textContent = 'DAY OFF';
+    row.querySelectorAll('input').forEach(i => { i.disabled = false; });
+    recalcHours(idx);
+  }
+  updateTotals();
+}
+
+function timeToMins(t) {
+  if (!t) return null;
+  const [h, m] = t.split(':').map(Number);
+  return h * 60 + m;
+}
+
+function getWorkedHours(idx) {
+  if (dayStates[idx].skipped) return { reg: 0, ot: 0, dt: 0, total: 0 };
+
+  const ci = timeToMins(document.getElementById(`ci-${idx}`)?.value);
+  const co = timeToMins(document.getElementById(`co-${idx}`)?.value);
+  const lo = timeToMins(document.getElementById(`lo-${idx}`)?.value);
+  const li = timeToMins(document.getElementById(`li-${idx}`)?.value);
+
+  if (ci === null || co === null) return { reg: 0, ot: 0, dt: 0, total: 0 };
+  if (co <= ci) return { reg: 0, ot: 0, dt: 0, total: 0 };
+
+  let totalMins = co - ci;
+
+  // Subtract lunch if both set and valid
+  if (lo !== null && li !== null && li > lo && lo > ci && lo < co) {
+    totalMins -= (li - lo);
+  }
+
+  const totalHrs = totalMins / 60;
+  const dailyOT = parseFloat(document.getElementById('dailyOT').value) || 8;
+  const dailyDT = parseFloat(document.getElementById('dailyDT').value) || 12;
+  const caMode = document.getElementById('caMode').checked;
+
+  // Check 7th day
+  const s7el = document.getElementById(`s7-${idx}`);
+  const is7th = s7el && s7el.checked;
+
+  let reg = 0, ot = 0, dt = 0;
+
+  if (caMode) {
+    if (is7th) {
+      // 7th consecutive day: OT for ALL hours up to 8, DT after 8
+      ot = Math.min(totalHrs, 8);
+      dt = Math.max(0, totalHrs - 8);
+      reg = 0;
+    } else {
+      reg = Math.min(totalHrs, dailyOT);
+      ot = Math.max(0, Math.min(totalHrs - dailyOT, dailyDT - dailyOT));
+      dt = Math.max(0, totalHrs - dailyDT);
+    }
+  } else {
+    // Simple: weekly OT only (handled in calculate())
+    reg = totalHrs;
+  }
+
+  return { reg, ot, dt, total: totalHrs };
+}
+
+function recalcHours(idx) {
+  const { reg, ot, dt, total } = getWorkedHours(idx);
+  const el = document.getElementById(`dh-${idx}`);
+  if (total === 0) { el.textContent = '--'; return; }
+
+  let label = `${total.toFixed(2)}h`;
+  if (ot > 0 || dt > 0) {
+    label += ` <span class="badge badge-reg">${reg.toFixed(1)}R</span>`;
+    if (ot > 0) label += ` <span class="badge badge-ot">${ot.toFixed(1)}OT</span>`;
+    if (dt > 0) label += ` <span class="badge badge-dt">${dt.toFixed(1)}DT</span>`;
+  }
+  el.innerHTML = label;
+  updateTotals();
+}
+
+function updateTotals() {
+  let tReg = 0, tOT = 0, tDT = 0, tAll = 0;
+  ALL_DAYS.forEach((_, i) => {
+    const h = getWorkedHours(i);
+    tReg += h.reg;
+    tOT += h.ot;
+    tDT += h.dt;
+    tAll += h.total;
+  });
+
+  // Apply period-level OT if not CA mode
+  const caMode = document.getElementById('caMode').checked;
+  if (!caMode) {
+    const periodOT = parseFloat(document.getElementById('periodOT').value) || 40;
+    if (tAll > periodOT) {
+      tOT = tAll - periodOT;
+      tReg = periodOT;
+    } else {
+      tReg = tAll;
+      tOT = 0;
+    }
+    tDT = 0;
+  }
+
+  document.getElementById('totReg').textContent = tReg.toFixed(2);
+  document.getElementById('totOT').textContent = tOT.toFixed(2);
+  document.getElementById('totDT').textContent = tDT.toFixed(2);
+  document.getElementById('totAll').textContent = tAll.toFixed(2);
+}
+
+function fmt(n) {
+  return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function calculate() {
+  const baseRate = parseFloat(document.getElementById('baseRate').value) || 30.66;
+  const caMode = document.getElementById('caMode').checked;
+  const useBlended = document.getElementById('useBlended').checked;
+  const periodOTHrs = parseFloat(document.getElementById('periodOT').value) || 40;
+
+  // Gather hours
+  let totalReg = 0, totalOT = 0, totalDT = 0, totalWorked = 0;
+  ALL_DAYS.forEach((_, i) => {
+    const h = getWorkedHours(i);
+    totalReg += h.reg;
+    totalOT += h.ot;
+    totalDT += h.dt;
+    totalWorked += h.total;
+  });
+
+  // Non-CA: apply period-level OT
+  if (!caMode) {
+    if (totalWorked > periodOTHrs) {
+      totalOT = totalWorked - periodOTHrs;
+      totalReg = periodOTHrs;
+    } else {
+      totalReg = totalWorked;
+      totalOT = 0;
+    }
+    totalDT = 0;
+  }
+
+  // Special pay
+  const oncallFlat = parseFloat(document.getElementById('oncallFlat').value) || 0;
+  const holidayHrs = parseFloat(document.getElementById('holidayHrs').value) || 0;
+  const ptoHrs = parseFloat(document.getElementById('ptoHrs').value) || 0;
+  const otherFlat = parseFloat(document.getElementById('otherFlat').value) || 0;
+
+  const holidayPay = holidayHrs * baseRate;
+  const ptoPay = ptoHrs * baseRate;
+
+  // Regular earnings (before OT)
+  const regularPay = totalReg * baseRate;
+
+  // FLSA blended rate calculation
+  // Regular rate = (all straight-time pay + flat rate pay) / total hours
+  const straightTimePay = totalWorked * baseRate;
+  const totalFlatPay = oncallFlat + holidayPay + ptoPay + otherFlat;
+  const totalHoursForBlend = totalWorked + holidayHrs + ptoHrs;
+
+  let regularRate = baseRate;
+  let blendedRate = baseRate;
+
+  if (totalHoursForBlend > 0 && useBlended) {
+    // FLSA: regular rate includes all remuneration / all hours
+    blendedRate = (straightTimePay + totalFlatPay) / totalHoursForBlend;
+    regularRate = blendedRate;
+  }
+
+  const otRate = regularRate * 1.5;
+  const dtRate = regularRate * 2.0;
+  const simpleOTRate = baseRate * 1.5;
+  const simpleDTRate = baseRate * 2.0;
+
+  // Premium pay (OT/DT is already paid at base rate; premium = the extra 0.5x or 1x)
+  // Standard paycheck method: pay base for all hours, then add OT/DT premium on top
+  const otPremium = totalOT * (regularRate * 0.5);
+  const dtPremium = totalDT * (regularRate * 1.0);
+
+  const grossEarnings = regularPay + (totalOT * baseRate) + (totalDT * baseRate)
+                      + otPremium + dtPremium
+                      + oncallFlat + holidayPay + ptoPay + otherFlat;
+
+  // More accurate: just pay everything at correct rate
+  const grossSimple =
+    (totalReg * baseRate) +
+    (totalOT * otRate) +
+    (totalDT * dtRate) +
+    oncallFlat + holidayPay + ptoPay + otherFlat;
+
+  const grossFinal = grossSimple;
+
+  // Deductions
+  const k401pct = parseFloat(document.getElementById('k401pct').value) || 0;
+  const k401 = grossFinal * (k401pct / 100);
+  const medical = parseFloat(document.getElementById('dedMedical').value) || 0;
+  const dental = parseFloat(document.getElementById('dedDental').value) || 0;
+  const vision = parseFloat(document.getElementById('dedVision').value) || 0;
+  const hsa = parseFloat(document.getElementById('dedHSA').value) || 0;
+  const addLife = (parseFloat(document.getElementById('dedADD').value) || 0) +
+                  (parseFloat(document.getElementById('dedLife').value) || 0);
+
+  const totalPreTax = k401 + medical + dental + vision + hsa;
+  const taxableIncome = grossFinal - totalPreTax;
+
+  // Rough federal + CA tax estimate (single, biweekly)
+  // These are approximate marginal estimates
+  const fedWH = estimateFederal(taxableIncome);
+  const ssTax = Math.min(taxableIncome, 160200 / 26) * 0.062;
+  const medicare = taxableIncome * 0.0145;
+  const caWH = estimateCA(taxableIncome);
+  const caDI = taxableIncome * 0.009;
+  const totalTax = fedWH + ssTax + medicare + caWH + caDI;
+
+  const netPay = grossFinal - totalPreTax - totalTax - addLife;
+
+  // ── Render results
+  document.getElementById('resultsCard').style.display = '';
+  document.getElementById('otExplainer').style.display = '';
+
+  document.getElementById('res-reg-hrs').textContent = totalReg.toFixed(2);
+  document.getElementById('res-ot-hrs').textContent = totalOT.toFixed(2);
+  document.getElementById('res-dt-hrs').textContent = totalDT.toFixed(2);
+  document.getElementById('res-tot-hrs').textContent = totalWorked.toFixed(2);
+
+  document.getElementById('res-gross').textContent = fmt(grossFinal);
+  document.getElementById('res-net').textContent = fmt(Math.max(0, netPay));
+
+  // Earnings lines
+  const eLines = document.getElementById('earningsLines');
+  eLines.innerHTML = '';
+
+  function addLine(label, value, cls='') {
+    const div = document.createElement('div');
+    div.className = 'line-item';
+    div.innerHTML = `<span class="li-label">${label}</span><span class="li-value ${cls}">${fmt(value)}</span>`;
+    return div;
+  }
+
+  eLines.appendChild(addLine(`Regular (${totalReg.toFixed(2)} hrs @ ${fmt(baseRate)})`, totalReg * baseRate, 'pos'));
+  if (totalOT > 0) eLines.appendChild(addLine(`OT (${totalOT.toFixed(2)} hrs @ ${fmt(otRate)})`, totalOT * otRate, 'pos'));
+  if (totalDT > 0) eLines.appendChild(addLine(`Double Time (${totalDT.toFixed(2)} hrs @ ${fmt(dtRate)})`, totalDT * dtRate, 'pos'));
+  if (oncallFlat > 0) eLines.appendChild(addLine('On-Call Flat Pay', oncallFlat, 'pos'));
+  if (holidayPay > 0) eLines.appendChild(addLine(`Holiday (${holidayHrs} hrs)`, holidayPay, 'pos'));
+  if (ptoPay > 0) eLines.appendChild(addLine(`PTO (${ptoHrs} hrs)`, ptoPay, 'pos'));
+  if (otherFlat > 0) eLines.appendChild(addLine('Other Flat Pay', otherFlat, 'pos'));
+
+  // Deduction lines
+  const dLines = document.getElementById('deductLines');
+  dLines.innerHTML = '';
+  dLines.appendChild(addLine(`401(k) ${k401pct}% pre-tax`, k401, 'neg'));
+  if (medical > 0) dLines.appendChild(addLine('Medical', medical, 'neg'));
+  if (dental > 0) dLines.appendChild(addLine('Dental', dental, 'neg'));
+  if (vision > 0) dLines.appendChild(addLine('Vision', vision, 'neg'));
+  if (hsa > 0) dLines.appendChild(addLine('HSA', hsa, 'neg'));
+  dLines.appendChild(addLine('Fed Withholding (est.)', fedWH, 'neg'));
+  dLines.appendChild(addLine('SS Tax (6.2%)', ssTax, 'neg'));
+  dLines.appendChild(addLine('Medicare (1.45%)', medicare, 'neg'));
+  dLines.appendChild(addLine('CA Withholding (est.)', caWH, 'neg'));
+  dLines.appendChild(addLine('CA SDI (0.9%)', caDI, 'neg'));
+  if (addLife > 0) dLines.appendChild(addLine('Vol AD&D + Life', addLife, 'neg'));
+
+  const totalDed = totalPreTax + totalTax + addLife;
+  dLines.appendChild(addLine('TOTAL DEDUCTIONS', totalDed, 'neg'));
+
+  // OT Explainer
+  const simpleOT = baseRate * 1.5;
+  document.getElementById('otExplainerText').innerHTML = `
+    <strong>The short answer:</strong> Federal law (FLSA) says overtime must be paid at 1.5× the "regular rate of pay" — and that regular rate isn't just Drew's base hourly rate. It has to include ALL earnings divided by ALL hours in the workweek.
+    <br><br>
+    <strong>Here's how it works for Drew:</strong>
+    <br><br>
+    When Loomis pays a flat on-call amount (like $150 or $225 for the weekend), that money gets added to the total earnings pool for the period. Then total earnings are divided by total hours worked to get the "regular rate." The OT multiplier (1.5×) is applied to THAT number, not just $30.66.
+    <div class="formula">
+      Simple OT rate (base only): $${simpleOT.toFixed(4)}/hr<br>
+      Blended regular rate (this period): $${regularRate.toFixed(4)}/hr<br>
+      Blended OT rate (1.5×): $${otRate.toFixed(4)}/hr<br>
+      Blended DT rate (2.0×): $${dtRate.toFixed(4)}/hr
+    </div>
+    <strong>Why does it shift?</strong> The flat pay amount changes (some periods $150 on-call, others $225), holiday pay varies, PTO hours vary — so the blended rate shifts slightly every period. A period with more flat pay + the same hours = higher blended rate = higher OT rate. This is completely <strong>legal and required by FLSA</strong> when non-hourly supplements are included.
+    <br><br>
+    <strong>Verify Drew's check:</strong> If the employer is using simple 1.5× base ($${simpleOT.toFixed(4)}), that's actually a wage violation — the FLSA blended method ($${otRate.toFixed(4)}) results in higher OT pay when flat pay pushes the regular rate up.
+  `;
+
+  // Scroll to results
+  document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// Rough federal withholding estimate (Single, biweekly, standard deduction)
+function estimateFederal(biweeklyTaxable) {
+  // Annualize
+  const annual = biweeklyTaxable * 26;
+  // 2024 single standard deduction = 14600
+  const agi = Math.max(0, annual - 14600);
+  let tax = 0;
+  const brackets = [
+    [11600, 0.10],
+    [33550, 0.12],
+    [50475, 0.22],
+    [86350, 0.24],
+    [91900, 0.32],
+    [197300, 0.35],
+    [Infinity, 0.37]
+  ];
+  let prev = 0;
+  for (const [ceiling, rate] of brackets) {
+    if (agi <= prev) break;
+    tax += (Math.min(agi, ceiling) - prev) * rate;
+    prev = ceiling;
+  }
+  return tax / 26;
+}
+
+// Rough CA withholding estimate (Single, biweekly)
+function estimateCA(biweeklyTaxable) {
+  const annual = biweeklyTaxable * 26;
+  let tax = 0;
+  const brackets = [
+    [10412, 0.01],
+    [24684, 0.02],
+    [38959, 0.04],
+    [54081, 0.06],
+    [68350, 0.08],
+    [349137, 0.093],
+    [418961, 0.103],
+    [698274, 0.113],
+    [Infinity, 0.123]
+  ];
+  let prev = 0;
+  for (const [ceiling, rate] of brackets) {
+    if (annual <= prev) break;
+    tax += (Math.min(annual, ceiling) - prev) * rate;
+    prev = ceiling;
+  }
+  return tax / 26;
+}
+
+// Initial calc on load
+updateTotals();
+</script>
+</body>
+</html>
